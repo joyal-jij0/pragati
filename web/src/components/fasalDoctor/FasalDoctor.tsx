@@ -155,12 +155,10 @@ export default function FasalDoctorPage() {
   return (
     <div className="h-[calc(100vh-4rem)] max-w-7xl mx-auto px-4 py-4 flex flex-col animate-fadeIn">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-4 border p-4 bg-gradient-to-r from-green-600 to-emerald-500 text-white">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Fasal Doctor</h1>
-          <p className="text-gray-600 text-sm">
-            AI-powered pest & disease diagnosis
-          </p>
+          <h1 className="text-2xl font-bold">Fasal Doctor</h1>
+          <p className=" text-sm">AI-powered pest & disease diagnosis</p>
         </div>
         <div className="flex items-center gap-2">
           <Badge
@@ -192,8 +190,8 @@ export default function FasalDoctorPage() {
 
             <TabsContent value="diagnosis" className="space-y-4">
               {/* Image Upload Card */}
-              <Card className="overflow-hidden border-green-100">
-                <CardHeader className="pb-3 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-green-100">
+              <Card className="overflow-hidden border-green-100 p-0">
+                <CardHeader className="py-6 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-green-100 ">
                   <CardTitle className="flex items-center gap-2">
                     <FaCamera className="h-4 w-4 text-green-600" />
                     Upload Crop Image
@@ -391,8 +389,8 @@ export default function FasalDoctorPage() {
                   onOpenChange={setIsOpen}
                   className="w-full"
                 >
-                  <Card className="border-green-100 overflow-hidden">
-                    <CardHeader className="pb-2 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-green-100">
+                  <Card className="border-green-100 overflow-hidden p-0">
+                    <CardHeader className="py-4 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-green-100">
                       <div className="flex items-center justify-between">
                         <CardTitle className="flex items-center gap-2">
                           <FaSeedling className="h-4 w-4 text-green-600" />
@@ -504,8 +502,8 @@ export default function FasalDoctorPage() {
               {/* Expert Connect and Quick Tips moved below diagnostic results */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Expert Connect */}
-                <Card className="border-purple-100 overflow-hidden">
-                  <CardHeader className="pb-3 bg-gradient-to-r from-purple-50 to-indigo-50 border-b border-purple-100">
+                <Card className="border-purple-100 overflow-hidden p-0">
+                  <CardHeader className="py-6 bg-gradient-to-r from-purple-50 to-indigo-50 border-b border-purple-100">
                     <CardTitle className="flex items-center gap-2">
                       <FaUsers className="h-4 w-4 text-purple-600" />
                       Expert Connect
@@ -567,8 +565,8 @@ export default function FasalDoctorPage() {
                 </Card>
 
                 {/* Quick Tips */}
-                <Card className="border-amber-100 overflow-hidden">
-                  <CardHeader className="pb-3 bg-gradient-to-r from-amber-50 to-yellow-50 border-b border-amber-100">
+                <Card className="border-amber-100 overflow-hidden p-0">
+                  <CardHeader className="py-6 bg-gradient-to-r from-amber-50 to-yellow-50 border-b border-amber-100 ">
                     <CardTitle className="flex items-center gap-2">
                       <FaLeaf className="w-4 h-4 text-amber-600" />
                       Quick Tips
@@ -742,8 +740,8 @@ export default function FasalDoctorPage() {
 
         {/* AI Assistant - Right Column (Full Height) */}
         <div className="lg:col-span-4 h-full">
-          <Card className="h-full flex flex-col border-blue-100 overflow-hidden">
-            <CardHeader className="pb-3 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100">
+          <Card className="h-full flex flex-col border-blue-100 overflow-hidden p-0">
+            <CardHeader className="py-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100 p-o">
               <CardTitle className="flex items-center gap-2">
                 <FaComments className="h-4 w-4 text-blue-600" />
                 AI Assistant
