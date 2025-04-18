@@ -27,6 +27,12 @@ jobs:
       - name: Build Docker image
         run: docker build -t pragati -f backend/Dockerfile backend
 
+      - name: Create deployment package
+        run: |
+          cd backend 
+          zip -r ../deploy.zip .
+          cd .. 
+
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v21
         with:
@@ -36,4 +42,4 @@ jobs:
           environment_name: pragati-env
           version_label: ${{ github.sha }}
           region: ap-southeast-1
-          deployment_package: .
+          deployment_package: deploy.zip
