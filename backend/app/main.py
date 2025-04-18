@@ -1,11 +1,10 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 from fastapi.requests import Request
 from contextlib import asynccontextmanager
-from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.utils.api_models import ApiError
 from app.db.session import create_db_and_tables
-from app.api.v1.endpoints import healthcheck, users
+from app.api.v1.endpoints import healthcheck, users, weather
 
 
 @asynccontextmanager
@@ -26,5 +25,6 @@ async def global_exception_handler(request:Request, exc: Exception):
     )
     return error.to_response()
 
-app.include_router(healthcheck, prefix="/api/v1")
-app.include_router(users, prefix="/api/v1/users")
+app.include_router(healthcheck, prefix="/api/v1", tags=["Health"])
+app.include_router(users, prefix="/api/v1/users", tags=["Users"])
+app.include_router(weather, prefix="/api/v1", tags=["Weather"])

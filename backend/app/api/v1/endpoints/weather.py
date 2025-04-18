@@ -1,33 +1,16 @@
-from fastapi import APIRouter, HTTPException
-import requests
-from typing import Optional
-from pydantic import BaseModel
+from fastapi import APIRouter, status
+from app.schemas.weather import WeatherResponse
+from app.services import weather_service 
+from app.utils.api_models import ApiResponse
 
 router = APIRouter()
 
-API_KEY = "MM67VSRYJ8KN3Z88YXJUQS27D"
-BASE_URL = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline"
-
-class WeatherResponse(BaseModel):
-    location: str
-    current: dict
-    forecast: list
-
-@router.get("/weather/{location}")
+@router.get("/weather/{location}", response_model=ApiResponse[WeatherResponse])
 async def get_weather(location: str):
-    try:
-        url = f"{BASE_URL}/{location}?unitGroup=us&key={API_KEY}&contentType=json"
-        response = requests.get(url)
-        
-        if response.status_code != 200:
-            raise HTTPException(status_code=404, detail="Location not found")
-            
-        data = response.json()
-        
-        return WeatherResponse(
-            location=data.get('resolvedAddress', ''),
-            current=data.get('currentConditions', {}),
-            forecast=data.get('days', [])[:7]  # Get 7 days forecast
-        )
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    weather_data = await weather_service.fetch_weather_data(location)
+
+    return ApiResponse(
+        status_code=status.HTTP_200_OK,
+        data=weather_data,
+        message="Weather data retrieved successfully"
+    )
