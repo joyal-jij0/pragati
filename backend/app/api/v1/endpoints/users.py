@@ -123,4 +123,4 @@ async def read_users_me(current_user: User = Depends(get_current_active_user)):
     user_public_data = UserPublic(id=current_user.id, email=current_user.email, createdAt=current_user.createdAt)
     return ApiResponse(status_code=status.HTTP_200_OK, data=user_public_data)
 
-## Testing comment 
+## Testing comment sdf

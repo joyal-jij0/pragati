@@ -25,7 +25,7 @@ jobs:
           pip install -r backend/requirements.txt
 
       - name: Build Docker image
-        run: docker build -t pragati .
+        run: docker build -t pragati -f backend/Dockerfile backend
 
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v21
