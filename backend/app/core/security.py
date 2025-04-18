@@ -51,7 +51,7 @@ def create_refresh_token(subject: Union[str, Any], expires_delta: timedelta | No
 def verify_access_token(token: str, credentials_exception: Exception) -> TokenPayload: 
     try: 
         payload = jwt.decode(token, ACCESS_TOKEN_SECRET, algorithms=[ALGORITHM]) 
-        if payload.get("token_type") != "refresh": 
+        if payload.get("token_type") != "access": 
             raise credentials_exception
         token_data = TokenPayload(**payload) 
         
