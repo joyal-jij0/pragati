@@ -5,3 +5,6 @@ sqlmodel
 asyncpg 
 python-dotenv
 greenlet
+python-jose[cryptography] 
+passlib[bcrypt]
+email-validator

@@ -27,4 +27,4 @@ async def global_exception_handler(request:Request, exc: Exception):
     return error.to_response()
 
 app.include_router(healthcheck, prefix="/api/v1")
-app.include_router(users, prefix="/api/v1")
+app.include_router(users, prefix="/api/v1/users")
