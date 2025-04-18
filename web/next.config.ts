@@ -1,0 +1,33 @@
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  webpack: (config) => {
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+      path: false,
+    };
+
+    config.module.rules.push({
+      test: /\.node$/,
+      use: 'node-loader',
+      // OR use 'file-loader' as an alternative:
+      // use: 'file-loader',
+    });
+
+    return config;
+  },
+  serverExternalPackages: ['sharp', '@huggingface/transformers'],
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        port: "",
+        pathname: "/**",
+      },
+    ],
+  },
+};
+
+export default nextConfig;
