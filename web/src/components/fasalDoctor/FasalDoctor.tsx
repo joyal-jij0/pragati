@@ -153,7 +153,7 @@ export default function FasalDoctorPage() {
   };
 
   return (
-    <div className="h-[calc(100vh-4rem)] max-w-7xl mx-auto px-4 py-4 flex flex-col animate-fadeIn">
+    <div className="h-[calc(100vh-4rem)] max-w-7xl mx-auto px-4 py-4 flex flex-col animate-fadeIn my-10">
       {/* Header */}
       <div className="flex items-center justify-between mb-4 border p-4 bg-gradient-to-r from-green-600 to-emerald-500 text-white">
         <div>
@@ -741,7 +741,7 @@ export default function FasalDoctorPage() {
         {/* AI Assistant - Right Column (Full Height) */}
         <div className="lg:col-span-4 h-full">
           <Card className="h-full flex flex-col border-blue-100 overflow-hidden p-0">
-            <CardHeader className="py-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100 p-o">
+            <CardHeader className="py-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100 p-0">
               <CardTitle className="flex items-center gap-2">
                 <FaComments className="h-4 w-4 text-blue-600" />
                 AI Assistant
@@ -813,45 +813,45 @@ export default function FasalDoctorPage() {
                 </div>
               )}
 
-              {/* Add image upload and chat input */}
+              {/* Input with embedded image upload */}
               <div className="p-3 border-t border-blue-100">
-                <div className="flex gap-2 mb-2">
+                <div className="relative flex items-center gap-2">
+                  {/* File Input (Hidden) */}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    id="chat-image-upload"
+                    className="hidden"
+                    ref={chatFileInputRef}
+                    onChange={handleChatImageUpload}
+                  />
+
+                  {/* Label as icon inside input */}
+                  <label
+                    htmlFor="chat-image-upload"
+                    className="absolute left-3 cursor-pointer"
+                    title="Upload image"
+                  >
+                    <FaImage className="w-4 h-4 text-gray-500" />
+                  </label>
+
+                  {/* Text Input */}
                   <input
                     type="text"
                     value={inputMessage}
                     onChange={(e) => setInputMessage(e.target.value)}
                     onKeyDown={handleKeyPress}
                     placeholder="Ask about your crop..."
-                    className="flex-grow px-3 py-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
+                    className="flex-grow pl-10 pr-10 py-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
                   />
+
+                  {/* Send Button */}
                   <Button
                     className="bg-green-600 hover:bg-green-700 flex-shrink-0"
                     onClick={handleSendMessage}
                   >
                     <FaPaperPlane className="w-4 h-4" />
                   </Button>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <div className="relative flex-grow">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      id="chat-image-upload"
-                      className="hidden"
-                      ref={chatFileInputRef}
-                      onChange={handleChatImageUpload}
-                    />
-                    <label
-                      htmlFor="chat-image-upload"
-                      className="flex items-center justify-center gap-2 w-full py-2 px-3 text-xs border border-gray-200 rounded-md cursor-pointer hover:bg-gray-50"
-                    >
-                      <FaImage className="w-3 h-3 text-gray-500" />
-                      <span className="text-gray-600">
-                        Upload image to chat
-                      </span>
-                    </label>
-                  </div>
                 </div>
               </div>
             </CardContent>
