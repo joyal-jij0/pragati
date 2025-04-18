@@ -6,3 +6,4 @@ app/schemas/__pycache__
 app/api/v1/__pycache__
 app/__pycache__
 app/services/__pycache__
+app/utils/__pycache__
