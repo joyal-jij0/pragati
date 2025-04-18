@@ -7,3 +7,6 @@ app/api/v1/__pycache__
 app/__pycache__
 app/services/__pycache__
 app/utils/__pycache__
+app/db/__pycache__ 
+app/db/models/__pycache__
+app/core/__pycache__
