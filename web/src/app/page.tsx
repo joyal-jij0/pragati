@@ -3,8 +3,6 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import DashboardHeader from "@/components/DashboardHeader";
-import Sidebar from "@/components/Sidebar";
 import { 
   Sun, Cloud, CloudRain, Droplets, Wind, 
   TrendingUp, TrendingDown, AlertTriangle, 
@@ -262,14 +260,13 @@ export default function Home() {
 
   return (
     <>
-      <DashboardHeader />
       <div className="bg-gray-50 min-h-screen">
-        <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="max-w-7xl mx-auto px-4 pb-4 pt-16">
           {/* Welcome header with gradient background */}
           <div className="bg-gradient-to-r from-green-50 via-emerald-50 to-green-50 rounded-2xl p-6 shadow-sm border border-green-100 mb-8">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div className="space-y-2">
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-green-800 to-green-600 bg-clip-text text-transparent">
+                <h1 className="text-3xl leading-11 font-bold bg-gradient-to-r from-green-800 to-green-600 bg-clip-text text-transparent">
                   नमस्ते, किसान मित्र!
                 </h1>
                 <p className="text-gray-600">Welcome to your personalized farming dashboard</p>
