@@ -18,77 +18,7 @@ export default function Home() {
   return (
     <div className="flex h-screen bg-white text-black pt-10">
       {/* Left Sidebar */}
-      <div className="w-64 bg-green-50 border-r border-green-100 flex flex-col">
-        {/* Navigation items */}
-        <div className="flex-1 overflow-y-auto">
-          <div className="p-2">
-            <div className="flex items-center p-2 rounded-lg hover:bg-green-100 cursor-pointer">
-              <div className="w-6 h-6 flex items-center justify-center mr-2">
-                <FaSeedling className="text-green-600" />
-              </div>
-              <span>AI Farming Assistant</span>
-            </div>
-
-            <div className="flex items-center p-2 rounded-lg bg-green-200 cursor-pointer">
-              <div className="w-6 h-6 flex items-center justify-center mr-2">
-                <GiWheat className="text-green-600" />
-              </div>
-              <span>Content translation</span>
-            </div>
-
-            <div className="flex items-center p-2 rounded-lg hover:bg-green-100 cursor-pointer">
-              <div className="w-6 h-6 flex items-center justify-center mr-2 text-green-600">
-                <TbPlant />
-              </div>
-              <span>FarmGPT Classic</span>
-            </div>
-
-            <div className="flex items-center p-2 rounded-lg hover:bg-green-100 cursor-pointer">
-              <div className="w-6 h-6 flex items-center justify-center mr-2">
-                <BsShield className="text-green-600" />
-              </div>
-              <span>Pest Checker</span>
-            </div>
-          </div>
-
-          {/* Yesterday section */}
-          <div className="mt-4 px-4 py-2">
-            <div className="text-xs text-gray-500 mb-2">Yesterday</div>
-            <div className="text-sm py-1 hover:bg-green-100 cursor-pointer rounded px-2">
-              Crop Rotation Guide
-            </div>
-            <div className="text-sm py-1 hover:bg-green-100 cursor-pointer rounded px-2">
-              Soil nutrient response
-            </div>
-            <div className="text-sm py-1 hover:bg-green-100 cursor-pointer rounded px-2">
-              Pests and disease risk
-            </div>
-            <div className="text-sm py-1 hover:bg-green-100 cursor-pointer rounded px-2">
-              Organic farming Request
-            </div>
-            <div className="text-sm py-1 hover:bg-green-100 cursor-pointer rounded px-2">
-              Irrigation Routine
-            </div>
-          </div>
-
-          {/* Previous 7 Days section */}
-          <div className="mt-4 px-4 py-2">
-            <div className="text-xs text-gray-500 mb-2">Previous 7 Days</div>
-            <div className="text-sm py-1 hover:bg-green-100 cursor-pointer rounded px-2">
-              Crop Journey Chart
-            </div>
-            <div className="text-sm py-1 hover:bg-green-100 cursor-pointer rounded px-2">
-              Greenhouse Design
-            </div>
-            <div className="text-sm py-1 hover:bg-green-100 cursor-pointer rounded px-2">
-              Enhance Soil Fertility
-            </div>
-            <div className="text-sm py-1 hover:bg-green-100 cursor-pointer rounded px-2">
-              Creating Sheets in Onshape
-            </div>
-          </div>
-        </div>
-      </div>
+      
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
@@ -175,6 +105,78 @@ export default function Home() {
                   <FaSearch />
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="w-52 bg-green-50/50 border-r border-green-100 flex flex-col">
+        {/* Navigation items */}
+        <div className="flex-1 overflow-y-auto">
+          {/* <div className="p-2">
+            <div className="flex items-center p-2 rounded-lg hover:bg-green-100 cursor-pointer">
+              <div className="w-6 h-6 flex items-center justify-center mr-2">
+                <FaSeedling className="text-green-600" />
+              </div>
+              <span>AI Farming Assistant</span>
+            </div>
+
+            <div className="flex items-center p-2 rounded-lg bg-green-200 cursor-pointer">
+              <div className="w-6 h-6 flex items-center justify-center mr-2">
+                <GiWheat className="text-green-600" />
+              </div>
+              <span>Content translation</span>
+            </div>
+
+            <div className="flex items-center p-2 rounded-lg hover:bg-green-100 cursor-pointer">
+              <div className="w-6 h-6 flex items-center justify-center mr-2 text-green-600">
+                <TbPlant />
+              </div>
+              <span>FarmGPT Classic</span>
+            </div>
+
+            <div className="flex items-center p-2 rounded-lg hover:bg-green-100 cursor-pointer">
+              <div className="w-6 h-6 flex items-center justify-center mr-2">
+                <BsShield className="text-green-600" />
+              </div>
+              <span>Pest Checker</span>
+            </div>
+          </div> */}
+
+          {/* Yesterday section */}
+          <div className="mt-4 px-4 py-2">
+            <div className="text-xs text-gray-500 mb-2">Yesterday</div>
+            <div className="text-sm py-1 hover:bg-green-100 cursor-pointer rounded px-2">
+              Crop Rotation Guide
+            </div>
+            <div className="text-sm py-1 hover:bg-green-100 cursor-pointer rounded px-2">
+              Soil nutrient response
+            </div>
+            <div className="text-sm py-1 hover:bg-green-100 cursor-pointer rounded px-2">
+              Pests and disease risk
+            </div>
+            <div className="text-sm py-1 hover:bg-green-100 cursor-pointer rounded px-2">
+              Organic farming Request
+            </div>
+            <div className="text-sm py-1 hover:bg-green-100 cursor-pointer rounded px-2">
+              Irrigation Routine
+            </div>
+          </div>
+
+          {/* Previous 7 Days section */}
+          <div className="mt-4 px-4 py-2">
+            <div className="text-xs text-gray-500 mb-2">Previous 7 Days</div>
+            <div className="text-sm py-1 hover:bg-green-100 cursor-pointer rounded px-2">
+              Crop Journey Chart
+            </div>
+            <div className="text-sm py-1 hover:bg-green-100 cursor-pointer rounded px-2">
+              Greenhouse Design
+            </div>
+            <div className="text-sm py-1 hover:bg-green-100 cursor-pointer rounded px-2">
+              Enhance Soil Fertility
+            </div>
+            <div className="text-sm py-1 hover:bg-green-100 cursor-pointer rounded px-2">
+              Creating Sheets in Onshape
             </div>
           </div>
         </div>
