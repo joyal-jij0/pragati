@@ -3,23 +3,12 @@ import { useState } from 'react'
 import {
   FaSeedling,
   FaLeaf,
-  FaBookmark,
   FaSearch,
   FaPlus,
   FaChevronDown,
 } from 'react-icons/fa'
-import {
-  BsChevronLeft,
-  BsChevronRight,
-  BsArrowRepeat,
-  BsBookmark,
-  BsGrid,
-  BsShield,
-  BsFileEarmark,
-  BsLink45Deg,
-  BsThreeDots,
-} from 'react-icons/bs'
-import { GiWheat, GiCorn, GiPlantRoots } from 'react-icons/gi'
+import { BsShield, BsThreeDots } from 'react-icons/bs'
+import { GiWheat, GiCorn } from 'react-icons/gi'
 import { MdOutlineWaterDrop } from 'react-icons/md'
 import { TbPlant } from 'react-icons/tb'
 
@@ -27,17 +16,9 @@ export default function Home() {
   const [inputValue, setInputValue] = useState('')
 
   return (
-    <div className="flex h-screen bg-white text-black">
+    <div className="flex h-screen bg-white text-black pt-10">
       {/* Left Sidebar */}
       <div className="w-64 bg-green-50 border-r border-green-100 flex flex-col">
-        {/* Top section */}
-        <div className="p-2 flex items-center border-b border-green-100">
-          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-green-600 text-white mr-2">
-            <FaSeedling size={16} />
-          </div>
-          <span className="font-medium">FarmGPT</span>
-        </div>
-
         {/* Navigation items */}
         <div className="flex-1 overflow-y-auto">
           <div className="p-2">
@@ -45,14 +26,14 @@ export default function Home() {
               <div className="w-6 h-6 flex items-center justify-center mr-2">
                 <FaSeedling className="text-green-600" />
               </div>
-              <span>FarmGPT</span>
+              <span>AI Farming Assistant</span>
             </div>
 
             <div className="flex items-center p-2 rounded-lg bg-green-200 cursor-pointer">
               <div className="w-6 h-6 flex items-center justify-center mr-2">
                 <GiWheat className="text-green-600" />
               </div>
-              <span>Farming</span>
+              <span>Content translation</span>
             </div>
 
             <div className="flex items-center p-2 rounded-lg hover:bg-green-100 cursor-pointer">
@@ -67,23 +48,6 @@ export default function Home() {
                 <BsShield className="text-green-600" />
               </div>
               <span>Pest Checker</span>
-            </div>
-
-            <div className="flex items-center p-2 rounded-lg hover:bg-green-100 cursor-pointer">
-              <div className="w-6 h-6 flex items-center justify-center mr-2">
-                <BsGrid className="text-green-600" />
-              </div>
-              <span>Explore GPTs</span>
-            </div>
-
-            <div className="flex items-center justify-between p-2 rounded-lg hover:bg-green-100 cursor-pointer">
-              <div className="flex items-center">
-                <div className="w-6 h-6 flex items-center justify-center mr-2">
-                  <BsFileEarmark className="text-green-600" />
-                </div>
-                <span>Library</span>
-              </div>
-              <span className="text-xs text-gray-500">51</span>
             </div>
           </div>
 
@@ -124,57 +88,10 @@ export default function Home() {
             </div>
           </div>
         </div>
-
-        {/* Upgrade plan */}
-        <div className="p-3 border-t border-green-100">
-          <div className="flex items-center">
-            <div className="w-6 h-6 flex items-center justify-center mr-2 bg-green-600 text-white rounded-full text-xs">
-              3
-            </div>
-            <div>
-              <div className="text-sm font-medium">Upgrade plan</div>
-              <div className="text-xs text-gray-500">
-                More access to the best models
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
-        {/* Top navigation */}
-        <div className="flex items-center p-2 border-b border-green-100">
-          <div className="flex items-center space-x-2">
-            <button className="p-2 rounded-md hover:bg-green-100">
-              <BsChevronLeft />
-            </button>
-            <button className="p-2 rounded-md hover:bg-green-100">
-              <BsChevronRight />
-            </button>
-            <button className="p-2 rounded-md hover:bg-green-100">
-              <BsArrowRepeat />
-            </button>
-          </div>
-
-          <div className="mx-2 flex-1 flex items-center px-3 py-1 bg-green-50 rounded-md">
-            <BsBookmark className="text-green-600 mr-2" />
-            <span className="text-sm">farmgpt.com/g/g-YQOyMNw1e-farming</span>
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <button className="p-2 rounded-md hover:bg-green-100">
-              <BsLink45Deg />
-            </button>
-            <button className="p-2 rounded-md hover:bg-green-100 text-green-600">
-              <FaBookmark />
-            </button>
-            <button className="p-2 rounded-md hover:bg-green-100 text-red-500">
-              <BsShield />
-            </button>
-          </div>
-        </div>
-
         {/* Main content area */}
         <div className="flex-1 overflow-y-auto bg-white p-4">
           <div className="max-w-3xl mx-auto">
@@ -192,10 +109,7 @@ export default function Home() {
 
               <h1 className="text-3xl font-bold mb-2">Farming</h1>
               <div className="text-sm text-gray-600 mb-2 flex items-center">
-                By Andrew Bell{' '}
-                <span className="ml-2 bg-green-100 text-green-600 px-1 rounded text-xs">
-                  PRO
-                </span>
+                By Krishi Sahayak Team
               </div>
 
               <p className="text-center text-sm max-w-lg mb-6">
@@ -207,46 +121,31 @@ export default function Home() {
               </p>
 
               {/* Action cards */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-3xl">
+              <div className="grid grid-cols-3 gap-4 w-full max-w-3xl">
                 <div className="border border-green-200 rounded-lg p-4 hover:bg-green-50 cursor-pointer">
-                  <div className="flex items-start mb-2">
+                  <div className="flex items-start">
                     <div className="p-1 bg-green-100 rounded mr-2">
                       <GiCorn className="text-green-600" />
                     </div>
-                    <div className="text-sm">Write a crop plan for corn</div>
+                    <div className="text-sm">Crop plan for corn</div>
                   </div>
                 </div>
 
                 <div className="border border-green-200 rounded-lg p-4 hover:bg-green-50 cursor-pointer">
-                  <div className="flex items-start mb-2">
+                  <div className="flex items-start">
                     <div className="p-1 bg-green-100 rounded mr-2">
                       <FaLeaf className="text-green-600" />
                     </div>
-                    <div className="text-sm">
-                      Write organic pest control methods
-                    </div>
+                    <div className="text-sm">Pest control methods</div>
                   </div>
                 </div>
 
                 <div className="border border-green-200 rounded-lg p-4 hover:bg-green-50 cursor-pointer">
-                  <div className="flex items-start mb-2">
+                  <div className="flex items-start">
                     <div className="p-1 bg-green-100 rounded mr-2">
                       <MdOutlineWaterDrop className="text-green-600" />
                     </div>
-                    <div className="text-sm">
-                      Generate an irrigation schedule
-                    </div>
-                  </div>
-                </div>
-
-                <div className="border border-green-200 rounded-lg p-4 hover:bg-green-50 cursor-pointer">
-                  <div className="flex items-start mb-2">
-                    <div className="p-1 bg-green-100 rounded mr-2">
-                      <GiPlantRoots className="text-green-600" />
-                    </div>
-                    <div className="text-sm">
-                      Create an infographic of 10 Soil Types
-                    </div>
+                    <div className="text-sm">Generate irrigation schedule</div>
                   </div>
                 </div>
               </div>
