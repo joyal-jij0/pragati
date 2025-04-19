@@ -1370,7 +1370,7 @@ export default function SamudayShaktiPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                    
+                     
 
                       <div className="mt-6">
                         <h4 className="font-medium text-gray-800 mb-3">Upcoming Activities</h4>
