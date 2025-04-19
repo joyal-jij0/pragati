@@ -264,7 +264,7 @@ export default function Home() {
                 <Card
                   className={`bg-gradient-to-r ${card.bgGradient} transition-all duration-200 hover:shadow-md hover:border-${card.color}-200 group`}
                 >
-                  <CardContent className="p-5">
+                  <CardContent className="px-4 py-0">
                     <div className="flex justify-between items-start">
                       <div>
                         <p className="text-sm font-medium text-gray-500">
