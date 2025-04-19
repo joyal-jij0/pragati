@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import {
@@ -13,9 +13,6 @@ import {
   TrendingDown,
   AlertTriangle,
   BarChart2,
-  PieChart,
-  LineChart,
-  Activity,
   Calendar,
   Clock,
   MapPin,
@@ -25,15 +22,12 @@ import {
   Sprout,
   Thermometer,
   Droplet,
-  CloudLightning,
   ShoppingBag,
   CreditCard,
   Shield,
   HelpCircle,
   ChevronRight,
   ExternalLink,
-  ArrowRight,
-  Plus,
 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import {
@@ -42,10 +36,7 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
-  Tooltip,
   ResponsiveContainer,
-  BarChart,
-  Bar,
   PieChart as RePieChart,
   Pie,
   Cell,
@@ -57,6 +48,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Badge } from '@/components/ui/badge'
+import { Tooltip } from '@/components/ui/tooltip'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 // Weather forecast data
 const weatherData = [
@@ -344,42 +341,47 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
-                className={`bg-gradient-to-r ${card.bgGradient} rounded-xl shadow-sm border border-gray-100 p-5 transition-all duration-200 hover:shadow-md hover:border-${card.color}-200 group`}
               >
-                <div className="flex justify-between items-start">
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">
-                      {card.title}
-                    </p>
-                    <h3
-                      className={`text-2xl font-bold ${card.textColor} mt-1 group-hover:text-${card.color}-800 transition-colors`}
-                    >
-                      {card.value}
-                    </h3>
-                    <div
-                      className={`flex items-center mt-1 text-sm ${
-                        card.trend === 'up'
-                          ? 'text-green-600'
-                          : card.trend === 'down'
-                          ? 'text-red-600'
-                          : 'text-gray-600'
-                      }`}
-                    >
-                      {card.trend === 'up' && (
-                        <TrendingUp className="w-4 h-4 mr-1" />
-                      )}
-                      {card.trend === 'down' && (
-                        <TrendingDown className="w-4 h-4 mr-1" />
-                      )}
-                      <span>{card.change}</span>
+                <Card
+                  className={`bg-gradient-to-r ${card.bgGradient} transition-all duration-200 hover:shadow-md hover:border-${card.color}-200 group`}
+                >
+                  <CardContent className="p-5">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <p className="text-sm font-medium text-gray-500">
+                          {card.title}
+                        </p>
+                        <h3
+                          className={`text-2xl font-bold ${card.textColor} mt-1 group-hover:text-${card.color}-800 transition-colors`}
+                        >
+                          {card.value}
+                        </h3>
+                        <div
+                          className={`flex items-center mt-1 text-sm ${
+                            card.trend === 'up'
+                              ? 'text-green-600'
+                              : card.trend === 'down'
+                              ? 'text-red-600'
+                              : 'text-gray-600'
+                          }`}
+                        >
+                          {card.trend === 'up' && (
+                            <TrendingUp className="w-4 h-4 mr-1" />
+                          )}
+                          {card.trend === 'down' && (
+                            <TrendingDown className="w-4 h-4 mr-1" />
+                          )}
+                          <span>{card.change}</span>
+                        </div>
+                      </div>
+                      <div
+                        className={`w-12 h-12 rounded-full ${card.iconBg} bg-opacity-20 flex items-center justify-center text-white group-hover:bg-opacity-30 transition-colors`}
+                      >
+                        {card.icon}
+                      </div>
                     </div>
-                  </div>
-                  <div
-                    className={`w-12 h-12 rounded-full ${card.iconBg} bg-opacity-20 flex items-center justify-center text-white group-hover:bg-opacity-30 transition-colors`}
-                  >
-                    {card.icon}
-                  </div>
-                </div>
+                  </CardContent>
+                </Card>
               </motion.div>
             ))}
           </div>
@@ -413,36 +415,38 @@ export default function Home() {
                 </CardHeader>
 
                 <CardContent>
-                  <div className="flex flex-nowrap overflow-x-auto pb-4 gap-4 scrollbar-hide">
-                    {weatherData.map((item, index) => (
-                      <div
-                        key={index}
-                        className={`flex-shrink-0 w-24 rounded-lg p-3 flex flex-col items-center ${
-                          index === 0
-                            ? 'bg-blue-50 border border-blue-100'
-                            : 'bg-gray-50 border border-gray-100'
-                        }`}
-                      >
-                        <p className="text-sm font-medium text-gray-700">
-                          {item.day}
-                        </p>
+                  <ScrollArea className="pb-4">
+                    <div className="flex space-x-4 pb-4">
+                      {weatherData.map((item, index) => (
                         <div
-                          className={`my-2 text-${
-                            index === 0 ? 'blue' : 'gray'
-                          }-500`}
+                          key={index}
+                          className={`flex-shrink-0 w-24 rounded-lg p-3 flex flex-col items-center ${
+                            index === 0
+                              ? 'bg-blue-50 border border-blue-100'
+                              : 'bg-gray-50 border border-gray-100'
+                          }`}
                         >
-                          {item.icon}
+                          <p className="text-sm font-medium text-gray-700">
+                            {item.day}
+                          </p>
+                          <div
+                            className={`my-2 text-${
+                              index === 0 ? 'blue' : 'gray'
+                            }-500`}
+                          >
+                            {item.icon}
+                          </div>
+                          <p className="text-lg font-bold text-gray-800">
+                            {item.temp}°C
+                          </p>
+                          <div className="flex items-center mt-1 text-xs text-gray-500">
+                            <Droplets className="w-3 h-3 mr-1" />
+                            <span>{item.humidity}%</span>
+                          </div>
                         </div>
-                        <p className="text-lg font-bold text-gray-800">
-                          {item.temp}°C
-                        </p>
-                        <div className="flex items-center mt-1 text-xs text-gray-500">
-                          <Droplets className="w-3 h-3 mr-1" />
-                          <span>{item.humidity}%</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  </ScrollArea>
 
                   <div className="w-full bottom-0 border-t border-gray-100">
                     <div className="flex justify-between items-center">
@@ -460,10 +464,13 @@ export default function Home() {
                           <span>45%</span>
                         </div>
                       </div>
-                      <button className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1">
+                      <Button
+                        variant="ghost"
+                        className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
+                      >
                         Detailed Forecast
                         <ChevronRight className="w-4 h-4" />
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </CardContent>
@@ -490,12 +497,15 @@ export default function Home() {
                     irrigation window starts tomorrow.
                   </p>
                   <div className="mt-4 flex flex-wrap gap-2">
-                    <button className="px-3 py-1.5 bg-gradient-to-r from-green-600 to-green-500 text-white rounded-lg text-sm font-medium hover:from-green-700 hover:to-green-600 transition-colors shadow-sm">
+                    <Button className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600">
                       Take Action
-                    </button>
-                    <button className="px-3 py-1.5 bg-white text-gray-700 rounded-lg text-sm font-medium border border-gray-200 hover:bg-gray-50 transition-colors shadow-sm">
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="bg-white text-gray-700"
+                    >
                       Details
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -513,9 +523,12 @@ export default function Home() {
                   <Leaf className="w-5 h-5 mr-2 text-green-500" />
                   Crop Health
                 </h3>
-                <button className="text-sm text-green-600 hover:text-green-700">
+                <Button
+                  variant="ghost"
+                  className="text-sm text-green-600 hover:text-green-700"
+                >
                   View All
-                </button>
+                </Button>
               </div>
 
               <div className="h-[180px]">
@@ -561,68 +574,84 @@ export default function Home() {
               transition={{ duration: 0.3, delay: 0.4 }}
               className="md:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all duration-200"
             >
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-800 flex items-center">
-                    <BarChart2 className="w-5 h-5 mr-2 text-amber-500" />
-                    Market Price Trends
-                  </h3>
-                  <p className="text-sm text-gray-500 mt-1">
-                    Wheat price trends over the past year
-                  </p>
-                </div>
-                <div className="flex gap-2">
-                  <button className="px-3 py-1 bg-amber-50 text-amber-700 rounded-lg text-sm font-medium border border-amber-100">
-                    Wheat
-                  </button>
-                  <button className="px-3 py-1 bg-gray-50 text-gray-700 rounded-lg text-sm font-medium border border-gray-100">
-                    Rice
-                  </button>
-                </div>
-              </div>
-
-              <div className="h-[200px]">
-                {isClient && (
-                  <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart
-                      data={marketPriceData}
-                      margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+              <Tabs defaultValue="wheat" className="w-full">
+                <div className="flex justify-between items-start mb-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-800 flex items-center">
+                      <BarChart2 className="w-5 h-5 mr-2 text-amber-500" />
+                      Market Price Trends
+                    </h3>
+                    <p className="text-sm text-gray-500 mt-1">
+                      Price trends over the past year
+                    </p>
+                  </div>
+                  <TabsList>
+                    <TabsTrigger
+                      value="wheat"
+                      className="data-[state=active]:bg-amber-50 data-[state=active]:text-amber-700 data-[state=active]:border-amber-100"
                     >
-                      <defs>
-                        <linearGradient
-                          id="colorPrice"
-                          x1="0"
-                          y1="0"
-                          x2="0"
-                          y2="1"
+                      Wheat
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="rice"
+                      className="data-[state=active]:bg-amber-50 data-[state=active]:text-amber-700 data-[state=active]:border-amber-100"
+                    >
+                      Rice
+                    </TabsTrigger>
+                  </TabsList>
+                </div>
+
+                <TabsContent value="wheat" className="mt-0">
+                  <div className="h-[200px]">
+                    {isClient && (
+                      <ResponsiveContainer width="100%" height="100%">
+                        <AreaChart
+                          data={marketPriceData}
+                          margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
                         >
-                          <stop
-                            offset="5%"
-                            stopColor="#f59e0b"
-                            stopOpacity={0.8}
+                          <defs>
+                            <linearGradient
+                              id="colorPrice"
+                              x1="0"
+                              y1="0"
+                              x2="0"
+                              y2="1"
+                            >
+                              <stop
+                                offset="5%"
+                                stopColor="#f59e0b"
+                                stopOpacity={0.8}
+                              />
+                              <stop
+                                offset="95%"
+                                stopColor="#f59e0b"
+                                stopOpacity={0}
+                              />
+                            </linearGradient>
+                          </defs>
+                          <XAxis dataKey="month" />
+                          <YAxis />
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <Tooltip />
+                          <Area
+                            type="monotone"
+                            dataKey="price"
+                            stroke="#f59e0b"
+                            fillOpacity={1}
+                            fill="url(#colorPrice)"
                           />
-                          <stop
-                            offset="95%"
-                            stopColor="#f59e0b"
-                            stopOpacity={0}
-                          />
-                        </linearGradient>
-                      </defs>
-                      <XAxis dataKey="month" />
-                      <YAxis />
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <Tooltip />
-                      <Area
-                        type="monotone"
-                        dataKey="price"
-                        stroke="#f59e0b"
-                        fillOpacity={1}
-                        fill="url(#colorPrice)"
-                      />
-                    </AreaChart>
-                  </ResponsiveContainer>
-                )}
-              </div>
+                        </AreaChart>
+                      </ResponsiveContainer>
+                    )}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="rice" className="mt-0">
+                  <div className="h-[200px] flex items-center justify-center text-gray-500">
+                    Rice price data will appear here
+                  </div>
+                </TabsContent>
+              </Tabs>
 
               <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-100">
                 <div className="flex items-center gap-4">
@@ -639,10 +668,13 @@ export default function Home() {
                     </span>
                   </div>
                 </div>
-                <button className="text-sm text-amber-600 hover:text-amber-700 font-medium flex items-center gap-1">
+                <Button
+                  variant="ghost"
+                  className="text-sm text-amber-600 hover:text-amber-700 font-medium flex items-center gap-1"
+                >
                   View Price History
                   <ChevronRight className="w-4 h-4" />
-                </button>
+                </Button>
               </div>
             </motion.div>
 
@@ -697,9 +729,12 @@ export default function Home() {
                   <AlertTriangle className="w-5 h-5 mr-2 text-amber-500" />
                   News & Advisories
                 </h3>
-                <button className="text-sm text-amber-600 hover:text-amber-700">
+                <Button
+                  variant="ghost"
+                  className="text-sm text-amber-600 hover:text-amber-700"
+                >
                   View All
-                </button>
+                </Button>
               </div>
 
               <div className="space-y-4">
@@ -718,9 +753,12 @@ export default function Home() {
                         <span className="text-xs text-gray-500">
                           Oct 12, 2023
                         </span>
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
+                        <Badge
+                          variant="outline"
+                          className="bg-amber-100 text-amber-800 hover:bg-amber-200 border-amber-200"
+                        >
                           Weather
-                        </span>
+                        </Badge>
                       </div>
                     </div>
                   </div>
@@ -741,9 +779,12 @@ export default function Home() {
                         <span className="text-xs text-gray-500">
                           Oct 10, 2023
                         </span>
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        <Badge
+                          variant="outline"
+                          className="bg-green-100 text-green-800 hover:bg-green-200 border-green-200"
+                        >
                           Crop
-                        </span>
+                        </Badge>
                       </div>
                     </div>
                   </div>
@@ -764,9 +805,12 @@ export default function Home() {
                         <span className="text-xs text-gray-500">
                           Oct 8, 2023
                         </span>
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        <Badge
+                          variant="outline"
+                          className="bg-blue-100 text-blue-800 hover:bg-blue-200 border-blue-200"
+                        >
                           Market
-                        </span>
+                        </Badge>
                       </div>
                     </div>
                   </div>
@@ -786,16 +830,21 @@ export default function Home() {
                   <Award className="w-5 h-5 mr-2 text-indigo-500" />
                   Community Insights
                 </h3>
-                <button className="text-sm text-indigo-600 hover:text-indigo-700">
+                <Button
+                  variant="ghost"
+                  className="text-sm text-indigo-600 hover:text-indigo-700"
+                >
                   Join Community
-                </button>
+                </Button>
               </div>
 
               <div className="space-y-4">
                 <div className="flex items-start gap-3 pb-4 border-b border-gray-100">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-400 to-indigo-600 flex items-center justify-center text-white font-medium text-sm">
-                    RS
-                  </div>
+                  <Avatar className="w-10 h-10 border-0">
+                    <AvatarFallback className="bg-gradient-to-br from-indigo-400 to-indigo-600 text-white">
+                      RS
+                    </AvatarFallback>
+                  </Avatar>
                   <div>
                     <div className="flex items-center gap-2">
                       <h4 className="text-sm font-medium text-gray-800">
@@ -808,7 +857,10 @@ export default function Home() {
                       for feedback before purchasing seeds.
                     </p>
                     <div className="flex items-center gap-4 mt-2">
-                      <button className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700">
+                      <Button
+                        variant="ghost"
+                        className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700"
+                      >
                         <svg
                           className="w-4 h-4"
                           fill="none"
@@ -823,8 +875,11 @@ export default function Home() {
                           />
                         </svg>
                         12
-                      </button>
-                      <button className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700">
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700"
+                      >
                         <svg
                           className="w-4 h-4"
                           fill="none"
@@ -839,15 +894,17 @@ export default function Home() {
                           />
                         </svg>
                         8 replies
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-3 pb-4 border-b border-gray-100">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white font-medium text-sm">
-                    PK
-                  </div>
+                  <Avatar className="w-10 h-10 border-0">
+                    <AvatarFallback className="bg-gradient-to-br from-green-400 to-green-600 text-white">
+                      PK
+                    </AvatarFallback>
+                  </Avatar>
                   <div>
                     <div className="flex items-center gap-2">
                       <h4 className="text-sm font-medium text-gray-800">
@@ -860,7 +917,10 @@ export default function Home() {
                       water usage by 40% and increased yield by 15%!
                     </p>
                     <div className="flex items-center gap-4 mt-2">
-                      <button className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700">
+                      <Button
+                        variant="ghost"
+                        className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700"
+                      >
                         <svg
                           className="w-4 h-4"
                           fill="none"
@@ -875,8 +935,11 @@ export default function Home() {
                           />
                         </svg>
                         24
-                      </button>
-                      <button className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700">
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700"
+                      >
                         <svg
                           className="w-4 h-4"
                           fill="none"
@@ -891,15 +954,18 @@ export default function Home() {
                           />
                         </svg>
                         15 replies
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </div>
 
                 <div className="flex items-center justify-center">
-                  <button className="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg text-sm font-medium hover:bg-indigo-100 transition-colors">
+                  <Button
+                    variant="ghost"
+                    className="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg text-sm font-medium hover:bg-indigo-100 transition-colors"
+                  >
                     View More Discussions
-                  </button>
+                  </Button>
                 </div>
               </div>
             </motion.div>
@@ -918,14 +984,14 @@ export default function Home() {
                 </p>
               </div>
               <div className="flex flex-wrap gap-3">
-                <button className="px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors shadow-sm flex items-center gap-2">
-                  <HelpCircle className="w-4 h-4" />
+                <Button className="bg-green-600 hover:bg-green-700">
+                  <HelpCircle className="w-4 h-4 mr-2" />
                   Contact Support
-                </button>
-                <button className="px-4 py-2 bg-white text-gray-700 rounded-lg text-sm font-medium border border-gray-200 hover:bg-gray-50 transition-colors shadow-sm flex items-center gap-2">
-                  <ExternalLink className="w-4 h-4" />
+                </Button>
+                <Button variant="outline" className="bg-white text-gray-700">
+                  <ExternalLink className="w-4 h-4 mr-2" />
                   Knowledge Base
-                </button>
+                </Button>
               </div>
             </div>
           </div>
