@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart as RePieChart, Pie, Cell } from 'recharts';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 // Weather forecast data
 const weatherData = [
@@ -326,44 +327,60 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: 0.1 }}
-              className="md:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all duration-200"
+              className="md:col-span-2 bg-white rounded-xl transition-all duration-200"
             >
-              <div className="flex justify-between items-start mb-6">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-800 flex items-center">
-                    <Sun className="w-5 h-5 mr-2 text-amber-500" />
+              <Card className="relative col-span-2">
+              <CardHeader>
+                <CardTitle className="text-lg font-semibold flex w-full justify-between items-center">
+                  <div className="flex items-center">
+                    <Sun className="size-5 mr-2 text-amber-500" />
                     Weather Forecast
-                  </h3>
-                  <p className="text-sm text-gray-500 mt-1">7-day forecast for your location</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-gray-400" />
-                  <span className="text-sm font-medium text-gray-600">Sonipat, Haryana</span>
-                </div>
-              </div>
-              
-              <div className="flex flex-nowrap overflow-x-auto pb-4 gap-4 scrollbar-hide">
-                {weatherData.map((item, index) => (
-                  <div 
-                    key={index} 
-                    className={`flex-shrink-0 w-24 rounded-lg p-3 flex flex-col items-center ${
-                      index === 0 ? 'bg-blue-50 border border-blue-100' : 'bg-gray-50 border border-gray-100'
-                    }`}
-                  >
-                    <p className="text-sm font-medium text-gray-700">{item.day}</p>
-                    <div className={`my-2 text-${index === 0 ? 'blue' : 'gray'}-500`}>
-                      {item.icon}
-                    </div>
-                    <p className="text-lg font-bold text-gray-800">{item.temp}°C</p>
-                    <div className="flex items-center mt-1 text-xs text-gray-500">
-                      <Droplets className="w-3 h-3 mr-1" />
-                      <span>{item.humidity}%</span>
-                    </div>
                   </div>
-                ))}
-              </div>
-              
-              <div className="mt-4 pt-4 border-t border-gray-100">
+                  <div className="flex items-center gap-2">
+                    <MapPin className="w-4 h-4 text-gray-400" />
+                    <span className="text-sm font-medium text-gray-600">
+                      Sonipat, Haryana
+                    </span>
+                  </div>
+                </CardTitle>
+                <CardDescription>
+                  <span>7-day forecast for your location</span>
+                </CardDescription>
+              </CardHeader>
+
+              <CardContent>
+                <div className="flex flex-nowrap overflow-x-auto pb-4 gap-4 scrollbar-hide">
+                  {weatherData.map((item, index) => (
+                    <div
+                      key={index}
+                      className={`flex-shrink-0 w-24 rounded-lg p-3 flex flex-col items-center ${
+                        index === 0
+                          ? 'bg-blue-50 border border-blue-100'
+                          : 'bg-gray-50 border border-gray-100'
+                      }`}
+                    >
+                      <p className="text-sm font-medium text-gray-700">
+                        {item.day}
+                      </p>
+                      <div
+                        className={`my-2 text-${
+                          index === 0 ? 'blue' : 'gray'
+                        }-500`}
+                      >
+                        {item.icon}
+                      </div>
+                      <p className="text-lg font-bold text-gray-800">
+                        {item.temp}°C
+                      </p>
+                      <div className="flex items-center mt-1 text-xs text-gray-500">
+                        <Droplets className="w-3 h-3 mr-1" />
+                        <span>{item.humidity}%</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="w-full bottom-0 border-t border-gray-100">
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-4">
                     <div className="flex items-center gap-1 text-sm text-gray-600">
@@ -385,6 +402,8 @@ export default function Home() {
                   </button>
                 </div>
               </div>
+              </CardContent>
+            </Card>
             </motion.div>
             
             {/* AI Recommendation */}
@@ -392,7 +411,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: 0.2 }}
-              className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-6 border border-green-100 shadow-sm hover:shadow-md transition-all duration-200"
+              className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-6 border shadow-sm hover:shadow-md transition-all duration-200"
             >
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white flex-shrink-0 shadow-sm">
