@@ -107,7 +107,7 @@ export default function Sidebar() {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="p-5 border-b border-green-100">
+      <div className="p-4 border-b border-green-100">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center shadow-md shadow-green-200 transform transition-transform duration-300 hover:scale-105">
             <span className="text-white font-bold text-lg">KS</span>
