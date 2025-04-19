@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import {
   Sun,
@@ -193,86 +192,6 @@ const featureModules = [
     color: 'rose',
     bgGradient: 'from-rose-500/10 to-rose-600/5',
   },
-]
-
-// Recent activity data
-const recentActivities = [
-  {
-    id: 1,
-    title: 'You checked weather forecast for Sonipat region',
-    time: 'Today, 10:30 AM',
-    icon: <Cloud className="w-4 h-4" />,
-    color: 'blue',
-  },
-  {
-    id: 2,
-    title: 'You uploaded a crop image for disease detection',
-    time: 'Yesterday, 4:45 PM',
-    icon: <Image className="w-4 h-4" />,
-    color: 'green',
-  },
-  {
-    id: 3,
-    title: 'You checked market prices for wheat in Karnal mandi',
-    time: 'Yesterday, 2:15 PM',
-    icon: <BarChart2 className="w-4 h-4" />,
-    color: 'amber',
-  },
-  {
-    id: 4,
-    title: 'You applied for crop insurance for your wheat field',
-    time: '2 days ago, 11:20 AM',
-    icon: <Shield className="w-4 h-4" />,
-    color: 'rose',
-  },
-  {
-    id: 5,
-    title: 'You received a new advisory about pest control',
-    time: '3 days ago, 9:15 AM',
-    icon: <AlertTriangle className="w-4 h-4" />,
-    color: 'purple',
-  },
-]
-
-// Upcoming tasks data
-const upcomingTasks = [
-  {
-    id: 1,
-    title: 'Apply fertilizer to wheat field',
-    date: 'Today',
-    priority: 'high',
-    completed: false,
-  },
-  {
-    id: 2,
-    title: 'Irrigation for rice paddy',
-    date: 'Tomorrow',
-    priority: 'medium',
-    completed: false,
-  },
-  {
-    id: 3,
-    title: 'Check for pest infestation in corn',
-    date: 'Oct 15',
-    priority: 'medium',
-    completed: false,
-  },
-  {
-    id: 4,
-    title: 'Harvest soybean crop',
-    date: 'Oct 20',
-    priority: 'high',
-    completed: false,
-  },
-]
-
-// Soil health data
-const soilHealthData = [
-  { name: 'Nitrogen', value: 75, fullMark: 100 },
-  { name: 'Phosphorus', value: 60, fullMark: 100 },
-  { name: 'Potassium', value: 85, fullMark: 100 },
-  { name: 'pH Level', value: 70, fullMark: 100 },
-  { name: 'Organic Matter', value: 65, fullMark: 100 },
 ]
 
 export default function Home() {
@@ -493,8 +412,8 @@ export default function Home() {
                     AI Recommendation
                   </h3>
                   <p className="text-sm text-gray-600 mt-2">
-                    Based on the forecast and your wheat's growth stage, optimal
-                    irrigation window starts tomorrow.
+                    Based on the forecast and your wheat&apos;s growth stage,
+                    optimal irrigation window starts tomorrow.
                   </p>
                   <div className="mt-4 flex flex-wrap gap-2">
                     <Button className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600">
