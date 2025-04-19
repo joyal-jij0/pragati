@@ -41,5 +41,5 @@ jobs:
           application_name: pragati
           environment_name: Pragati-env
           version_label: ${{ github.sha }}
-          region: ap-southeast-1
+          region: ap-south-1
           deployment_package: deploy.zip
