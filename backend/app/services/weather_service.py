@@ -1,63 +1,149 @@
-import httpx
-from fastapi import HTTPException, status
-from app.schemas.weather import WeatherResponse
-from app.core.config import WEATHER_API_KEY
+import aiohttp
+import logging
+from fastapi import HTTPException
+from app.core.config import settings
+from app.schemas.weather import WeatherResponse, CurrentWeather, Forecast, ForecastDay, Hour, Day, Condition, Astro
 
-BASE_URL = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline"
+logger = logging.getLogger(__name__)
 
 async def fetch_weather_data(location: str) -> WeatherResponse:
+    """
+    Fetch weather data from the Visual Crossing Weather API for a given location.
 
-    if not WEATHER_API_KEY:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Weather API key is not configured."
-        )
-    
-    url = f"{BASE_URL}/{location}?unitGroup=us&key={WEATHER_API_KEY}&contentType=json"
-    
-    async with httpx.AsyncClient() as client:
-        try:
-            response = await client.get(url)
-            response.raise_for_status() 
+    Args:
+        location (str): The location to fetch weather data for (e.g., "Delhi").
 
-            data = response.json()
+    Returns:
+        WeatherResponse: Parsed and structured weather data.
 
-            if 'resolvedAddress' not in data or 'currentConditions' not in data or 'days' not in data:
-                raise HTTPException(
-                    status_code=status.HTTP_502_BAD_GATEWAY,
-                    detail="Unexpected response format from weather API."
-                )
+    Raises:
+        HTTPException: If the API request fails or data parsing fails.
+    """
+    if not location or location.strip() == "":
+        logger.warning("Received empty or invalid location")
+        raise HTTPException(status_code=400, detail="Location cannot be empty")
 
-            return WeatherResponse(
-                location=data.get('resolvedAddress', ''),
-                current=data.get('currentConditions', {}),
-                forecast=data.get('days', [])[:7]  # Get 7 days forecast
-            )
-        
-        except httpx.HTTPStatusError as http_err:
-            if http_err.response.status_code == 404 or http_err.response.status_code == 400: # 400 can mean invalid location
-                raise HTTPException(
-                    status_code=status.HTTP_404_NOT_FOUND,
-                    detail=f"Weather data not found for location: {location}"
-                ) from http_err
-            
-            else:
-                print(f"HTTP error fetching weather: {http_err}")
-                raise HTTPException(
-                    status_code=status.HTTP_502_BAD_GATEWAY,
-                    detail="Error communicating with the weather service."
-                ) from http_err
+    # Construct the API URL
+    api_key = settings.WEATHER_API_KEY
+    if not api_key:
+        logger.error("Weather API key is not configured")
+        raise HTTPException(status_code=500, detail="Weather API key is not configured")
 
-        except httpx.RequestError as req_err:
-            print(f"Request error fetching weather: {req_err}")
-            raise HTTPException(
-                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-                detail="Could not connect to the weather service."
-            ) from req_err
+    base_url = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline"
+    url = f"{base_url}/{location}?key={api_key}&unitGroup=metric&include=days,hours,current"
+    logger.info(f"Fetching weather data for '{location}' from {url}")
 
-        except Exception as e:
-            print(f"Unexpected error fetching weather: {e}")
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail="An internal error occurred while fetching weather data."
-            ) from e
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, timeout=10) as response:
+                if response.status != 200:
+                    logger.error(f"API request failed with status {response.status}: {await response.text()}")
+                    raise HTTPException(
+                        status_code=response.status,
+                        detail=f"Weather API request failed with status {response.status}"
+                    )
+
+                data = await response.json()
+                logger.debug(f"Raw API response: {data}")
+
+                # Map Visual Crossing response to WeatherResponse schema
+                try:
+                    # Map currentConditions to CurrentWeather
+                    current_conditions = data.get('currentConditions', {})
+                    current_weather = CurrentWeather(
+                        last_updated=current_conditions.get('datetime'),
+                        last_updated_epoch=current_conditions.get('datetimeEpoch'),
+                        temp_c=current_conditions.get('temp'),
+                        feelslike_c=current_conditions.get('feelslike'),
+                        condition=Condition(
+                            text=current_conditions.get('conditions'),
+                            icon=current_conditions.get('icon')
+                        ),
+                        wind_kph=float(current_conditions.get('windspeed', 0)) * 3.6,  # Convert mph to kph
+                        wind_dir=current_conditions.get('winddir'),
+                        humidity=current_conditions.get('humidity'),
+                        precip_mm=current_conditions.get('precip'),
+                        uv=current_conditions.get('uvindex'),
+                        temp_f=current_conditions.get('temp') * 9/5 + 32 if current_conditions.get('temp') else None,
+                        feelslike_f=current_conditions.get('feelslike') * 9/5 + 32 if current_conditions.get('feelslike') else None
+                    )
+
+                    # Map days to Forecast.forecastday
+                    forecast_days = []
+                    for day_data in data.get('days', []):
+                        # Map hourly data
+                        hours = [
+                            Hour(
+                                time_epoch=hour.get('datetimeEpoch'),
+                                time=hour.get('datetime'),
+                                temp_c=hour.get('temp'),
+                                is_day=1 if hour.get('icon').endswith('-day') else 0,
+                                condition=Condition(
+                                    text=hour.get('conditions'),
+                                    icon=hour.get('icon')
+                                ),
+                                wind_kph=float(hour.get('windspeed', 0)) * 3.6,
+                                humidity=hour.get('humidity'),
+                                precip_mm=hour.get('precip'),
+                                feelslike_c=hour.get('feelslike'),
+                                uv=hour.get('uvindex')
+                            )
+                            for hour in day_data.get('hours', [])
+                        ]
+
+                        # Map day data
+                        day = Day(
+                            maxtemp_c=day_data.get('tempmax'),
+                            mintemp_c=day_data.get('tempmin'),
+                            avgtemp_c=day_data.get('temp'),
+                            condition=Condition(
+                                text=day_data.get('conditions'),
+                                icon=day_data.get('icon')
+                            ),
+                            daily_chance_of_rain=day_data.get('precipprob'),
+                            totalprecip_mm=day_data.get('precip'),
+                            maxwind_kph=float(day_data.get('windspeed', 0)) * 3.6,
+                            avghumidity=day_data.get('humidity'),
+                            uv=day_data.get('uvindex')
+                        )
+
+                        # Map astro data
+                        astro = Astro(
+                            sunrise=day_data.get('sunrise'),
+                            sunset=day_data.get('sunset')
+                        )
+
+                        forecast_day = ForecastDay(
+                            date=day_data.get('datetime'),
+                            date_epoch=day_data.get('datetimeEpoch'),
+                            day=day,
+                            astro=astro,
+                            hour=hours
+                        )
+                        forecast_days.append(forecast_day)
+
+                    forecast = Forecast(forecastday=forecast_days)
+
+                    # Create WeatherResponse
+                    weather_response = WeatherResponse(
+                        resolvedAddress=data.get('resolvedAddress', location),
+                        current=current_weather,
+                        forecast=forecast
+                    )
+
+                    logger.debug(f"Processed WeatherResponse: {weather_response.dict()}")
+                    return weather_response
+
+                except Exception as e:
+                    logger.error(f"Failed to parse weather data: {str(e)}")
+                    raise HTTPException(
+                        status_code=500,
+                        detail=f"Failed to process weather data structure for {location}: {str(e)}"
+                    )
+
+    except aiohttp.ClientError as e:
+        logger.error(f"Network error while fetching weather data for '{location}': {str(e)}")
+        raise HTTPException(status_code=503, detail=f"Weather service unavailable: {str(e)}")
+    except Exception as e:
+        logger.error(f"Unexpected error while fetching weather data for '{location}': {str(e)}")
+        raise HTTPException(status_code=500, detail=f"An unexpected error occurred: {str(e)}")
