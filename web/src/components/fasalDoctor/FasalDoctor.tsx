@@ -155,7 +155,7 @@ export default function FasalDoctorPage() {
   return (
     <div className="h-[calc(100vh-4rem)] max-w-7xl mx-auto px-4 py-4 flex flex-col animate-fadeIn my-10">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4 border p-4 bg-gradient-to-r from-green-600 to-emerald-500 text-white">
+      <div className="flex items-center justify-between rounded-lg mb-4 border p-4 bg-gradient-to-r from-green-600 to-emerald-500 text-white">
         <div>
           <h1 className="text-2xl font-bold">Fasal Doctor</h1>
           <p className=" text-sm">AI-powered pest & disease diagnosis</p>
