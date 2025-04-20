@@ -1,30 +1,37 @@
+import logging
 from fastapi import FastAPI
-from fastapi.requests import Request
-from contextlib import asynccontextmanager
+from fastapi.middleware.cors import CORSMiddleware
+from app.api.v1.endpoints import weather
 
-from app.utils.api_models import ApiError
-from app.db.session import create_db_and_tables
-from app.api.v1.endpoints import healthcheck, users, weather
+# Configure logging
+logging.basicConfig(
+    level=logging.DEBUG,  # Set to DEBUG to see detailed logs
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+logger = logging.getLogger(__name__)
 
+app = FastAPI(
+    title="Pragati Backend API",
+    description="Backend API for the Pragati platform, providing weather and other services.",
+    version="1.0.0"
+)
 
-@asynccontextmanager
-async def lifespan(app:FastAPI):
-    print("Creating database tables...") 
-    await create_db_and_tables() 
-    print("Database tables created.") 
-    yield 
-    print("Shutting down...") 
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # Allow frontend origin
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-app = FastAPI(lifespan=lifespan) 
+# Include API routers
+app.include_router(weather, prefix="/api/v1/weather", tags=["weather"])
 
-@app.exception_handler(Exception)
-async def global_exception_handler(request:Request, exc: Exception):
-    error = ApiError(
-        status_code=500,
-        message=str(exc)
-    )
-    return error.to_response()
+@app.on_event("startup")
+async def startup_event():
+    logger.info("Starting up Pragati Backend API...")
 
-app.include_router(healthcheck, prefix="/api/v1", tags=["Health"])
-app.include_router(users, prefix="/api/v1/users", tags=["Users"])
-app.include_router(weather, prefix="/api/v1", tags=["Weather"])
+@app.on_event("shutdown")
+async def shutdown_event():
+    logger.info("Shutting down Pragati Backend API...")
