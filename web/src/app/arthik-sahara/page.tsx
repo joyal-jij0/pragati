@@ -1,1537 +1,409 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import DashboardHeader from "@/components/DashboardHeader";
-import {
-  TrendingUp, TrendingDown, AlertTriangle,
-  BarChart2, PieChart, LineChart, Activity,
-  Calendar, Clock, MapPin, Zap, Award,
-  Leaf, Sprout, Thermometer, Droplet, CloudLightning,
-  ShoppingBag, CreditCard, Shield, HelpCircle,
-  ChevronRight, ExternalLink, ArrowRight, Plus,
-  Check, X, Info, FileText, Percent, DollarSign,
-  Umbrella, Sun, Cloud, CloudRain, Coins, Calculator,
-  BarChart, PieChart as PieChartIcon, Users, User,
-  Smartphone, Layers, Lock, Unlock, Eye, EyeOff,
-  FileCheck, FilePlus, Star, StarHalf, Tractor,
-  Droplets, Wind, Landmark, Building, Home, Camera
-} from "lucide-react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart as ReBarChart, Bar, PieChart as RePieChart, Pie, Cell, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend } from 'recharts';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { Slider } from "@/components/ui/slider";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { 
+  MapPin, 
+  Search, 
+  Bell, 
+  Menu, 
+  CreditCard, 
+  TrendingUp, 
+  FileText, 
+  Umbrella, 
+  BarChart2, 
+  AlertTriangle 
+} from "lucide-react";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
-// Credit Score Data
-const creditScoreData = [
-  { name: 'Farm Activity', value: 85, fullMark: 100 },
-  { name: 'Payment History', value: 70, fullMark: 100 },
-  { name: 'App Engagement', value: 90, fullMark: 100 },
-  { name: 'Market Activity', value: 65, fullMark: 100 },
-  { name: 'Input Purchases', value: 75, fullMark: 100 },
-];
-
-// Credit Score History
-const creditScoreHistory = [
-  { month: 'Jan', score: 620 },
-  { month: 'Feb', score: 635 },
-  { month: 'Mar', score: 650 },
-  { month: 'Apr', score: 645 },
-  { month: 'May', score: 660 },
-  { month: 'Jun', score: 675 },
-  { month: 'Jul', score: 690 },
-  { month: 'Aug', score: 705 },
-  { month: 'Sep', score: 720 },
-  { month: 'Oct', score: 735 },
-  { month: 'Nov', score: 750 },
-  { month: 'Dec', score: 765 },
-];
-
-// Loan Options
-const loanOptions = [
-  {
-    id: 1,
-    name: "Kisan Credit Card",
-    provider: "State Bank of India",
-    amount: "₹50,000 - ₹3,00,000",
-    interest: "7% p.a.",
-    tenure: "12 months",
-    eligibility: "Alternative Credit Score > 650",
-    purpose: "Crop inputs, equipment rental",
-    logo: "/images/sbi-logo.png",
-    match: 95,
-    features: [
-      "No collateral required for loans up to ₹1,60,000",
-      "Interest subvention of 2% for prompt repayment",
-      "Flexible withdrawal and repayment",
-      "Accident insurance cover"
-    ]
-  },
-  {
-    id: 2,
-    name: "Agri Equipment Loan",
-    provider: "HDFC Bank",
-    amount: "₹1,00,000 - ₹10,00,000",
-    interest: "8.5% p.a.",
-    tenure: "1-5 years",
-    eligibility: "Alternative Credit Score > 700",
-    purpose: "Purchase of farm equipment",
-    logo: "/images/hdfc-logo.png",
-    match: 85,
-    features: [
-      "Up to 85% of equipment value financed",
-      "Quick processing within 3 days",
-      "Flexible repayment options",
-      "No foreclosure charges after 12 months"
-    ]
-  },
-  {
-    id: 3,
-    name: "Micro Irrigation Loan",
-    provider: "NABARD via Local Cooperative",
-    amount: "₹25,000 - ₹2,00,000",
-    interest: "6% p.a.",
-    tenure: "3-5 years",
-    eligibility: "Alternative Credit Score > 600",
-    purpose: "Drip/sprinkler irrigation systems",
-    logo: "/images/nabard-logo.png",
-    match: 90,
-    features: [
-      "Subsidy of 40-55% available through government schemes",
-      "Moratorium period of 6 months",
-      "Technical assistance provided",
-      "Water conservation focus gives priority approval"
-    ]
-  },
-  {
-    id: 4,
-    name: "Warehouse Receipt Financing",
-    provider: "Axis Bank",
-    amount: "Up to 75% of commodity value",
-    interest: "9% p.a.",
-    tenure: "Up to 12 months",
-    eligibility: "Alternative Credit Score > 680",
-    purpose: "Post-harvest financing against stored produce",
-    logo: "/images/axis-logo.png",
-    match: 75,
-    features: [
-      "No additional collateral required",
-      "Flexibility to sell when prices are favorable",
-      "Warehouse receipt as security",
-      "Avoid distress sales immediately after harvest"
-    ]
-  },
-  {
-    id: 5,
-    name: "FPO Member Loan",
-    provider: "Small Finance Bank",
-    amount: "₹20,000 - ₹1,00,000",
-    interest: "10% p.a. (reducing)",
-    tenure: "6-12 months",
-    eligibility: "Alternative Credit Score > 620, FPO Membership",
-    purpose: "Seasonal crop inputs",
-    logo: "/images/sfb-logo.png",
-    match: 88,
-    features: [
-      "Group guarantee from FPO members",
-      "Faster processing for repeat borrowers",
-      "Flexible repayment aligned with harvest cycle",
-      "Financial literacy training included"
-    ]
-  }
-];
-
-// Insurance Options
-const insuranceOptions = [
-  {
-    id: 1,
-    name: "Weather Index Insurance - Wheat",
-    provider: "Agriculture Insurance Company",
-    premium: "₹1,200 per acre",
-    coverage: "₹30,000 per acre",
-    triggers: "Rainfall deficit, excess rainfall, temperature extremes",
-    claimProcess: "Automatic based on weather data",
-    logo: "/images/aic-logo.png",
-    match: 98,
-    features: [
-      "No claim filing needed - automatic triggers",
-      "Premium subsidy of 50% available",
-      "Hyperlocal weather data from nearest AWS",
-      "Payout within 15 days of trigger event"
-    ]
-  },
-  {
-    id: 2,
-    name: "Multi-Peril Crop Insurance",
-    provider: "HDFC ERGO",
-    premium: "₹1,800 per acre",
-    coverage: "₹40,000 per acre",
-    triggers: "Yield loss, natural calamities, pest/disease outbreaks",
-    claimProcess: "Simplified claim with mobile app photo evidence",
-    logo: "/images/hdfc-ergo-logo.png",
-    match: 85,
-    features: [
-      "Comprehensive coverage against multiple risks",
-      "Simplified claim process via app",
-      "Coverage from sowing to harvest",
-      "Additional coverage for post-harvest losses (7 days)"
-    ]
-  },
-  {
-    id: 3,
-    name: "Parametric Drought Protection",
-    provider: "ICICI Lombard",
-    premium: "₹900 per acre",
-    coverage: "₹25,000 per acre",
-    triggers: "NDVI index below threshold, soil moisture deficit",
-    claimProcess: "Automatic based on satellite data",
-    logo: "/images/icici-lombard-logo.png",
-    match: 92,
-    features: [
-      "Satellite-based monitoring - no manual inspection",
-      "Partial payouts possible for moderate drought",
-      "Early warning alerts when conditions approach trigger levels",
-      "Transparent trigger thresholds shared in advance"
-    ]
-  },
-  {
-    id: 4,
-    name: "Horticulture Crop Protection",
-    provider: "Bajaj Allianz",
-    premium: "₹2,200 per acre",
-    coverage: "₹60,000 per acre",
-    triggers: "Weather events, market price drop below threshold",
-    claimProcess: "Hybrid - automatic for weather, simplified for other claims",
-    logo: "/images/bajaj-allianz-logo.png",
-    match: 78,
-    features: [
-      "Specialized for high-value horticultural crops",
-      "Price protection component included",
-      "Coverage for quality deterioration",
-      "Extended coverage for cold storage period (30 days)"
-    ]
-  },
-  {
-    id: 5,
-    name: "Livestock Weather Protection",
-    provider: "New India Assurance",
-    premium: "₹800 per animal",
-    coverage: "₹25,000 per animal",
-    triggers: "Heat stress index, cold wave, disease outbreaks in region",
-    claimProcess: "Automatic for weather triggers, simplified for disease",
-    logo: "/images/nia-logo.png",
-    match: 65,
-    features: [
-      "Covers productivity loss due to weather stress",
-      "Preventive healthcare advisory included",
-      "Vaccination subsidy included",
-      "Optional add-on for permanent disability"
-    ]
-  }
-];
-
-// Credit Score Improvement Tips
-const improvementTips = [
-  {
-    id: 1,
-    title: "Regular App Engagement",
-    description: "Log into the app at least 3 times per week to record farm activities and check advisories.",
-    impact: "Medium",
-    difficulty: "Easy",
-    icon: <Smartphone className="w-5 h-5 text-green-500" />
-  },
-  {
-    id: 2,
-    title: "Complete Farm Profile",
-    description: "Ensure all sections of your farm profile are complete with accurate information.",
-    impact: "High",
-    difficulty: "Easy",
-    icon: <FileCheck className="w-5 h-5 text-green-500" />
-  },
-  {
-    id: 3,
-    title: "Follow Weather Advisories",
-    description: "Implement recommended actions from weather advisories and mark them as completed.",
-    impact: "Medium",
-    difficulty: "Medium",
-    icon: <Cloud className="w-5 h-5 text-blue-500" />
-  },
-  {
-    id: 4,
-    title: "Record All Transactions",
-    description: "Use the app to record all farm-related purchases and sales, even small ones.",
-    impact: "High",
-    difficulty: "Medium",
-    icon: <FileText className="w-5 h-5 text-amber-500" />
-  },
-  {
-    id: 5,
-    title: "Join an FPO",
-    description: "Become an active member of a Farmer Producer Organization through the platform.",
-    impact: "High",
-    difficulty: "Medium",
-    icon: <Users className="w-5 h-5 text-indigo-500" />
-  },
-  {
-    id: 6,
-    title: "Use Digital Payments",
-    description: "Make and receive payments through the platform's integrated payment system.",
-    impact: "Medium",
-    difficulty: "Easy",
-    icon: <CreditCard className="w-5 h-5 text-purple-500" />
-  }
-];
-
-// Recent Financial Activities
-const recentActivities = [
-  {
-    id: 1,
-    title: "Applied for Kisan Credit Card",
-    time: "Today, 10:30 AM",
-    status: "pending",
-    icon: <CreditCard className="w-4 h-4" />,
-    color: "blue",
-  },
-  {
-    id: 2,
-    title: "Weather Index Insurance premium paid",
-    time: "Yesterday, 4:45 PM",
-    status: "completed",
-    amount: "₹1,200",
-    icon: <Shield className="w-4 h-4" />,
-    color: "green",
-  },
-  {
-    id: 3,
-    title: "Received insurance payout for rainfall deficit",
-    time: "3 days ago, 2:15 PM",
-    status: "completed",
-    amount: "₹8,500",
-    icon: <Umbrella className="w-4 h-4" />,
-    color: "amber",
-  },
-  {
-    id: 4,
-    title: "Loan EMI payment",
-    time: "7 days ago, 11:20 AM",
-    status: "completed",
-    amount: "₹3,200",
-    icon: <Landmark className="w-4 h-4" />,
-    color: "purple",
-  },
-  {
-    id: 5,
-    title: "Credit score updated",
-    time: "10 days ago, 9:15 AM",
-    status: "info",
-    change: "+15 points",
-    icon: <TrendingUp className="w-4 h-4" />,
-    color: "green",
-  },
-];
-
-// Weather risk data for insurance
-const weatherRiskData = [
-  { month: 'Jan', rainfall: 20, temperature: 15, risk: 30 },
-  { month: 'Feb', rainfall: 25, temperature: 18, risk: 25 },
-  { month: 'Mar', rainfall: 30, temperature: 22, risk: 20 },
-  { month: 'Apr', rainfall: 20, temperature: 28, risk: 40 },
-  { month: 'May', rainfall: 15, temperature: 32, risk: 60 },
-  { month: 'Jun', rainfall: 40, temperature: 30, risk: 70 },
-  { month: 'Jul', rainfall: 80, temperature: 28, risk: 50 },
-  { month: 'Aug', rainfall: 100, temperature: 27, risk: 40 },
-  { month: 'Sep', rainfall: 60, temperature: 26, risk: 30 },
-  { month: 'Oct', rainfall: 30, temperature: 24, risk: 25 },
-  { month: 'Nov', rainfall: 20, temperature: 20, risk: 20 },
-  { month: 'Dec', rainfall: 15, temperature: 16, risk: 30 },
-];
+// Import components
+import CreditDashboard from "@/components/arthikSahara/CreditDashboard";
+import LoanMarketplace from "@/components/arthikSahara/LoanMarketplace";
+import ApplicationStatus from "@/components/arthikSahara/ApplicationStatus";
+import CreditImprovement from "@/components/arthikSahara/CreditImprovement";
+import InsuranceDashboard from "@/components/arthikSahara/InsuranceDashboard";
+import InsuranceProducts from "@/components/arthikSahara/InsuranceProducts";
+import ClaimStatus from "@/components/arthikSahara/ClaimStatus";
+import FinancialEducation from "@/components/arthikSahara/FinancialEducation";
 
 export default function ArthikSaharaPage() {
-  const [currentTime, setCurrentTime] = useState(new Date());
-  const [isClient, setIsClient] = useState(false);
-  const [activeTab, setActiveTab] = useState("credit");
-  const [loanAmount, setLoanAmount] = useState(100000);
-  const [loanTenure, setLoanTenure] = useState(12);
-  const [cropType, setCropType] = useState("wheat");
-  const [landArea, setLandArea] = useState(2);
-  const [showAllLoans, setShowAllLoans] = useState(false);
-  const [showAllInsurance, setShowAllInsurance] = useState(false);
-  const [creditScore, setCreditScore] = useState(765);
+  const [location, setLocation] = useState("सोनीपत, हरियाणा");
+  const [activeTab, setActiveTab] = useState("creditDashboard");
+  const [showAIAssistant, setShowAIAssistant] = useState(false);
 
-  useEffect(() => {
-    setIsClient(true);
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  // Format date for display
-  const formattedDate = new Intl.DateTimeFormat('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  }).format(currentTime);
-
-  // Format time for display
-  const formattedTime = new Intl.DateTimeFormat('en-US', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: true
-  }).format(currentTime);
-
-  // Calculate EMI for loan amount
-  const calculateEMI = (principal: number, rate: number, time: number) => {
-    rate = rate / (12 * 100); // monthly interest rate
-    time = time; // time in months
-    return (principal * rate * Math.pow(1 + rate, time)) / (Math.pow(1 + rate, time) - 1);
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
   };
 
-  // Get credit score color
-  const getCreditScoreColor = (score: number) => {
-    if (score < 600) return "text-red-500";
-    if (score < 650) return "text-orange-500";
-    if (score < 700) return "text-yellow-500";
-    if (score < 750) return "text-green-500";
-    return "text-emerald-500";
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: { type: "spring", stiffness: 100 }
+    }
   };
-
-  // Get credit score label
-  const getCreditScoreLabel = (score: number) => {
-    if (score < 600) return "Poor";
-    if (score < 650) return "Fair";
-    if (score < 700) return "Good";
-    if (score < 750) return "Very Good";
-    return "Excellent";
-  };
-
-  // Filter loans based on credit score
-  const filteredLoans = loanOptions.filter(loan => {
-    const matches = loan.eligibility.match(/\d+/);
-    const requiredScore = matches ? parseInt(matches[0]) : 0;
-    return creditScore >= requiredScore;
-  });
-
-  // Sort loans by match percentage
-  const sortedLoans = [...filteredLoans].sort((a, b) => b.match - a.match);
-  const displayLoans = showAllLoans ? sortedLoans : sortedLoans.slice(0, 3);
-
-  // Filter insurance options
-  const sortedInsurance = [...insuranceOptions].sort((a, b) => b.match - a.match);
-  const displayInsurance = showAllInsurance ? sortedInsurance : sortedInsurance.slice(0, 3);
 
   return (
-    <div>
-      <DashboardHeader />
-      <div className="bg-gray-50 min-h-screen">
-        <div className="max-w-7xl mx-auto px-4 py-8">
-          {/* Page Header with gradient background */}
-          <div className="bg-gradient-to-r from-purple-50 via-indigo-50 to-blue-50 rounded-2xl p-6 shadow-sm border border-indigo-100 mb-8">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div className="space-y-2">
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-800 to-purple-600 bg-clip-text text-transparent">
-                  आर्थिक सहारा (Arthik Sahara)
-                </h1>
-                <p className="text-gray-600">Financial support tailored for your farming needs</p>
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-green-50">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-green-700 to-amber-600 text-white mt-10 shadow-lg">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <Menu className="h-6 w-6 md:hidden" />
+              <h1 className="text-xl font-bold">आर्थिक सहारा</h1>
+              <span className="hidden md:inline text-sm opacity-75">| वित्तीय सेवाएँ और सुरक्षा</span>
+            </div>
+            
+            <div className="flex items-center space-x-3">
+              <div className="flex items-center bg-white/20 rounded-full px-3 py-1.5 text-sm">
+                <MapPin className="h-4 w-4 mr-1" />
+                <span>{location}</span>
               </div>
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-indigo-100 text-gray-700 shadow-sm">
-                  <Calendar className="w-4 h-4 text-indigo-600" />
-                  <span className="text-sm font-medium">{formattedDate}</span>
+              <button className="p-2 rounded-full bg-white/20 hover:bg-white/30">
+                <Search className="h-5 w-5" />
+              </button>
+              <button className="p-2 rounded-full bg-white/20 hover:bg-white/30 relative">
+                <Bell className="h-5 w-5" />
+                <span className="absolute top-0 right-0 h-2 w-2 bg-amber-400 rounded-full"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Navigation Tabs */}
+      <div className="bg-white shadow-sm sticky top-0 z-10">
+        <div className="container mx-auto px-4">
+          <div className="flex overflow-x-auto hide-scrollbar">
+            {/* Credit Scoring Tabs */}
+            <button 
+              className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 flex items-center gap-1 ${activeTab === 'creditDashboard' ? 'border-green-600 text-green-700' : 'border-transparent text-gray-600 hover:text-gray-800'}`}
+              onClick={() => setActiveTab('creditDashboard')}
+            >
+              <CreditCard size={16} />
+              <span>क्रेडिट प्रोफाइल</span>
+            </button>
+            <button 
+              className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 flex items-center gap-1 ${activeTab === 'loanMarketplace' ? 'border-green-600 text-green-700' : 'border-transparent text-gray-600 hover:text-gray-800'}`}
+              onClick={() => setActiveTab('loanMarketplace')}
+            >
+              <BarChart2 size={16} />
+              <span>ऋण बाज़ार</span>
+            </button>
+            <button 
+              className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 flex items-center gap-1 ${activeTab === 'applications' ? 'border-green-600 text-green-700' : 'border-transparent text-gray-600 hover:text-gray-800'}`}
+              onClick={() => setActiveTab('applications')}
+            >
+              <FileText size={16} />
+              <span>आवेदन स्थिति</span>
+            </button>
+            <button 
+              className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 flex items-center gap-1 ${activeTab === 'improve' ? 'border-green-600 text-green-700' : 'border-transparent text-gray-600 hover:text-gray-800'}`}
+              onClick={() => setActiveTab('improve')}
+            >
+              <TrendingUp size={16} />
+              <span>स्कोर सुधारें</span>
+            </button>
+            
+            {/* Divider */}
+            <div className="border-r border-gray-200 mx-2"></div>
+            
+            {/* Insurance Tabs */}
+            <button 
+              className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 flex items-center gap-1 ${activeTab === 'insuranceDashboard' ? 'border-green-600 text-green-700' : 'border-transparent text-gray-600 hover:text-gray-800'}`}
+              onClick={() => setActiveTab('insuranceDashboard')}
+            >
+              <Umbrella size={16} />
+              <span>बीमा डैशबोर्ड</span>
+            </button>
+            <button 
+              className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 flex items-center gap-1 ${activeTab === 'insuranceProducts' ? 'border-green-600 text-green-700' : 'border-transparent text-gray-600 hover:text-gray-800'}`}
+              onClick={() => setActiveTab('insuranceProducts')}
+            >
+              <AlertTriangle size={16} />
+              <span>बीमा योजनाएँ</span>
+            </button>
+            <button 
+              className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 flex items-center gap-1 ${activeTab === 'claims' ? 'border-green-600 text-green-700' : 'border-transparent text-gray-600 hover:text-gray-800'}`}
+              onClick={() => setActiveTab('claims')}
+            >
+              <FileText size={16} />
+              <span>दावा स्थिति</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="container mx-auto px-4 py-6">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+        >
+
+          <motion.div 
+            variants={itemVariants}
+            className="lg:col-span-2 space-y-6"
+          >
+         
+            {activeTab === 'creditDashboard' && <CreditDashboard />}
+            {activeTab === 'loanMarketplace' && <LoanMarketplace />}
+            {activeTab === 'applications' && <ApplicationStatus />}
+            {activeTab === 'improve' && <CreditImprovement />}
+            
+            {/* Insurance Feature Tabs */}
+            {activeTab === 'insuranceDashboard' && <InsuranceDashboard />}
+            {activeTab === 'insuranceProducts' && <InsuranceProducts />}
+            {activeTab === 'claims' && <ClaimStatus />}
+          </motion.div>
+
+          {/* Right Sidebar - Always visible */}
+          <motion.div 
+            variants={itemVariants}
+            className="space-y-6"
+          >
+            {/* Financial Education Section */}
+            <FinancialEducation />
+            
+            {/* AI Financial Assistant */}
+            <div className="bg-white rounded-lg shadow-md overflow-hidden">
+              <div className="bg-gradient-to-r from-green-600 to-green-700 px-4 py-3">
+                <h3 className="text-white font-medium flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                    <path d="M16.5 7.5h-9v9h9v-9z" />
+                    <path fillRule="evenodd" d="M8.25 2.25A.75.75 0 019 3v.75h2.25V3a.75.75 0 011.5 0v.75H15V3a.75.75 0 011.5 0v.75h.75a3 3 0 013 3v.75H21A.75.75 0 0121 9h-.75v2.25H21a.75.75 0 010 1.5h-.75V15H21a.75.75 0 010 1.5h-.75v.75a3 3 0 01-3 3h-.75V21a.75.75 0 01-1.5 0v-.75h-2.25V21a.75.75 0 01-1.5 0v-.75H9V21a.75.75 0 01-1.5 0v-.75h-.75a3 3 0 01-3-3v-.75H3A.75.75 0 013 15h.75v-2.25H3a.75.75 0 010-1.5h.75V9H3a.75.75 0 010-1.5h.75v-.75a3 3 0 013-3h.75V3a.75.75 0 01.75-.75zM6 6.75A.75.75 0 016.75 6h10.5a.75.75 0 01.75.75v10.5a.75.75 0 01-.75.75H6.75a.75.75 0 01-.75-.75V6.75z" clipRule="evenodd" />
+                  </svg>
+                  वित्तीय सहायक AI
+                </h3>
+              </div>
+              <div className="p-4">
+                <p className="text-sm text-gray-600 mb-3">आपके वित्तीय प्रश्नों के उत्तर पाएं या ऋण और बीमा के बारे में जानकारी प्राप्त करें।</p>
+                <button 
+                  onClick={() => setShowAIAssistant(true)}
+                  className="w-full bg-green-100 hover:bg-green-200 text-green-800 py-2 rounded-md text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                    <path d="M4.913 2.658c2.075-.27 4.19-.408 6.337-.408 2.147 0 4.262.139 6.337.408 1.922.25 3.291 1.861 3.405 3.727a4.403 4.403 0 00-1.032-.211 50.89 50.89 0 00-8.42 0c-2.358.196-4.04 2.19-4.04 4.434v4.286a4.47 4.47 0 002.433 3.984L7.28 21.53A.75.75 0 016 21v-4.03a48.527 48.527 0 01-1.087-.128C2.905 16.58 1.5 14.833 1.5 12.862V6.638c0-1.97 1.405-3.718 3.413-3.979z" />
+                    <path d="M15.75 7.5c-1.376 0-2.739.057-4.086.169C10.124 7.797 9 9.103 9 10.609v4.285c0 1.507 1.128 2.814 2.67 2.94 1.243.102 2.5.157 3.768.165l2.782 2.781a.75.75 0 001.28-.53v-2.39l.33-.026c1.542-.125 2.67-1.433 2.67-2.94v-4.286c0-1.505-1.125-2.811-2.664-2.94A49.392 49.392 0 0015.75 7.5z" />
+                  </svg>
+                  सहायक से बात करें
+                </button>
+              </div>
+            </div>
+            
+            {/* Personalized Recommendations */}
+            <div className="bg-white rounded-lg shadow-md overflow-hidden">
+              <div className="bg-gradient-to-r from-amber-500 to-amber-600 px-4 py-3">
+                <h3 className="text-white font-medium flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                    <path fillRule="evenodd" d="M9 4.5a.75.75 0 01.721.544l.813 2.846a3.75 3.75 0 002.576 2.576l2.846.813a.75.75 0 010 1.442l-2.846.813a3.75 3.75 0 00-2.576 2.576l-.813 2.846a.75.75 0 01-1.442 0l-.813-2.846a3.75 3.75 0 00-2.576-2.576l-2.846-.813a.75.75 0 010-1.442l2.846-.813A3.75 3.75 0 007.466 7.89l.813-2.846A.75.75 0 019 4.5zM18 1.5a.75.75 0 01.728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 010 1.456l-1.036.258c-.94.236-1.674.97-1.91 1.91l-.258 1.036a.75.75 0 01-1.456 0l-.258-1.036a2.625 2.625 0 00-1.91-1.91l-1.036-.258a.75.75 0 010-1.456l1.036-.258a2.625 2.625 0 001.91-1.91l.258-1.036A.75.75 0 0118 1.5zM16.5 15a.75.75 0 01.712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 010 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 01-1.422 0l-.395-1.183a1.5 1.5 0 00-.948-.948l-1.183-.395a.75.75 0 010-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0116.5 15z" clipRule="evenodd" />
+                  </svg>
+                  आपके लिए अनुशंसाएँ
+                </h3>
+              </div>
+              <div className="p-4 space-y-3">
+                <div className="flex items-start gap-3 pb-3 border-b border-gray-100">
+                  <div className="bg-green-100 p-2 rounded-full">
+                    <CreditCard size={16} className="text-green-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800">फसल ऋण के लिए पात्र</p>
+                    <p className="text-xs text-gray-500">आपका क्रेडिट स्कोर अब फसल ऋण के लिए पात्र है</p>
+                    <button className="mt-1 text-green-600 text-xs font-medium">देखें →</button>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-indigo-100 text-gray-700 shadow-sm">
-                  <Clock className="w-4 h-4 text-indigo-600" />
-                  <span className="text-sm font-medium">{isClient ? formattedTime : "Loading..."}</span>
+                <div className="flex items-start gap-3">
+                  <div className="bg-amber-100 p-2 rounded-full">
+                    <Umbrella size={16} className="text-amber-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800">मौसम आधारित बीमा</p>
+                    <p className="text-xs text-gray-500">आने वाले मानसून के लिए फसल बीमा करवाएं</p>
+                    <button className="mt-1 text-amber-600 text-xs font-medium">जानकारी पाएं →</button>
+                  </div>
                 </div>
               </div>
             </div>
+          </motion.div>
+        </motion.div>
+      </div>
+      
+      {/* AI Assistant Modal */}
+      {showAIAssistant && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end md:items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-t-lg md:rounded-lg max-w-lg w-full max-h-[80vh] flex flex-col">
+            <div className="bg-gradient-to-r from-green-600 to-green-700 px-4 py-3 rounded-t-lg flex justify-between items-center">
+              <h3 className="text-white font-medium flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                  <path d="M4.913 2.658c2.075-.27 4.19-.408 6.337-.408 2.147 0 4.262.139 6.337.408 1.922.25 3.291 1.861 3.405 3.727a4.403 4.403 0 00-1.032-.211 50.89 50.89 0 00-8.42 0c-2.358.196-4.04 2.19-4.04 4.434v4.286a4.47 4.47 0 002.433 3.984L7.28 21.53A.75.75 0 016 21v-4.03a48.527 48.527 0 01-1.087-.128C2.905 16.58 1.5 14.833 1.5 12.862V6.638c0-1.97 1.405-3.718 3.413-3.979z" />
+                  <path d="M15.75 7.5c-1.376 0-2.739.057-4.086.169C10.124 7.797 9 9.103 9 10.609v4.285c0 1.507 1.128 2.814 2.67 2.94 1.243.102 2.5.157 3.768.165l2.782 2.781a.75.75 0 001.28-.53v-2.39l.33-.026c1.542-.125 2.67-1.433 2.67-2.94v-4.286c0-1.505-1.125-2.811-2.664-2.94A49.392 49.392 0 0015.75 7.5z" />
+                </svg>
+                वित्तीय सहायक AI
+              </h3>
+              <button 
+                onClick={() => setShowAIAssistant(false)}
+                className="text-white hover:text-gray-200"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+              {/* AI Messages */}
+              <div className="flex items-start gap-3">
+                <div className="bg-green-100 p-2 rounded-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-green-600">
+                    <path d="M16.5 7.5h-9v9h9v-9z" />
+                    <path fillRule="evenodd" d="M8.25 2.25A.75.75 0 019 3v.75h2.25V3a.75.75 0 011.5 0v.75H15V3a.75.75 0 011.5 0v.75h.75a3 3 0 013 3v.75H21A.75.75 0 0121 9h-.75v2.25H21a.75.75 0 010 1.5h-.75V15H21a.75.75 0 010 1.5h-.75v.75a3 3 0 01-3 3h-.75V21a.75.75 0 01-1.5 0v-.75h-2.25V21a.75.75 0 01-1.5 0v-.75H9V21a.75.75 0 01-1.5 0v-.75h-.75a3 3 0 01-3-3v-.75H3A.75.75 0 013 15h.75v-2.25H3a.75.75 0 010-1.5h.75V9H3a.75.75 0 010-1.5h.75v-.75a3 3 0 013-3h.75V3a.75.75 0 01.75-.75zM6 6.75A.75.75 0 016.75 6h10.5a.75.75 0 01.75.75v10.5a.75.75 0 01-.75.75H6.75a.75.75 0 01-.75-.75V6.75z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="bg-gray-100 rounded-lg p-3 text-sm text-gray-700 max-w-[85%]">
+                  नमस्ते! मैं आपका वित्तीय सहायक हूँ। मैं आपको ऋण, बीमा, या आपके क्रेडिट स्कोर के बारे में जानकारी दे सकता हूँ। आप मुझसे क्या पूछना चाहेंगे?
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-3 justify-end">
+                <div className="bg-green-600 rounded-lg p-3 text-sm text-white max-w-[85%]">
+                  मुझे फसल ऋण के बारे में जानकारी चाहिए
+                </div>
+                <div className="bg-green-100 p-2 rounded-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-green-600">
+                    <path fillRule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clipRule="evenodd" />
+                  </svg>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-3">
+                <div className="bg-green-100 p-2 rounded-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-green-600">
+                    <path d="M16.5 7.5h-9v9h9v-9z" />
+                    <path fillRule="evenodd" d="M8.25 2.25A.75.75 0 019 3v.75h2.25V3a.75.75 0 011.5 0v.75H15V3a.75.75 0 011.5 0v.75h.75a3 3 0 013 3v.75H21A.75.75 0 0121 9h-.75v2.25H21a.75.75 0 010 1.5h-.75V15H21a.75.75 0 010 1.5h-.75v.75a3 3 0 01-3 3h-.75V21a.75.75 0 01-1.5 0v-.75h-2.25V21a.75.75 0 01-1.5 0v-.75H9V21a.75.75 0 01-1.5 0v-.75h-.75a3 3 0 01-3-3v-.75H3A.75.75 0 013 15h.75v-2.25H3a.75.75 0 010-1.5h.75V9H3a.75.75 0 010-1.5h.75v-.75a3 3 0 013-3h.75V3a.75.75 0 01.75-.75zM6 6.75A.75.75 0 016.75 6h10.5a.75.75 0 01.75.75v10.5a.75.75 0 01-.75.75H6.75a.75.75 0 01-.75-.75V6.75z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="bg-gray-100 rounded-lg p-3 text-sm text-gray-700 max-w-[85%]">
+                  <p>फसल ऋण किसानों के लिए विशेष रूप से डिज़ाइन किए गए ऋण हैं जो फसल उत्पादन के लिए आवश्यक खर्चों को कवर करते हैं।</p>
+                  <p className="mt-2">हमारे प्लेटफॉर्म पर उपलब्ध फसल ऋण:</p>
+                  <ul className="list-disc pl-5 mt-1 space-y-1">
+                    <li>किसान क्रेडिट कार्ड (KCC) - 7% ब्याज दर</li>
+                    <li>फसल उत्पादन ऋण - 9.5% ब्याज दर</li>
+                    <li>छोटे किसान विकास ऋण - 8.75% ब्याज दर</li>
+                  </ul>
+                  <p className="mt-2">आपका वर्तमान क्रेडिट स्कोर 68/100 है, जो आपको इन ऋणों के लिए पात्र बनाता है।</p>
+                  <div className="mt-3 flex gap-2">
+                    <button className="bg-green-600 text-white text-xs px-3 py-1 rounded-full">ऋण बाज़ार देखें</button>
+                    <button className="bg-white border border-gray-300 text-gray-700 text-xs px-3 py-1 rounded-full">पात्रता जांचें</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="p-4 border-t">
+              <div className="flex gap-2">
+                <input 
+                  type="text" 
+                  placeholder="अपना प्रश्न यहां टाइप करें..."
+                  className="flex-1 border border-gray-300 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                />
+                <button className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-full transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                    <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
+                  </svg>
+                </button>
+              </div>
+            </div>
           </div>
+        </div>
+      )}
 
-          {/* Main Tabs */}
-          <Tabs defaultValue="insurance" className="mb-8" onValueChange={setActiveTab}>
-            <TabsList className="grid grid-cols-2 w-full max-w-md mx-auto mb-6">
-            <TabsTrigger value="insurance" className="text-base">
-                <Shield className="w-4 h-4 mr-2" />
-                Crop Insurance
-              </TabsTrigger>
-              <TabsTrigger value="credit" className="text-base">
-                <CreditCard className="w-4 h-4 mr-2" />
-                Credit & Loans
-              </TabsTrigger>
-            </TabsList>
-
-            {/* Credit & Loans Tab Content */}
-            <TabsContent value="credit" className="space-y-6">
-              {/* Credit Score Overview */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-                className="grid grid-cols-1 md:grid-cols-3 gap-6"
-              >
-                {/* Credit Score Card */}
-                <Card className="md:col-span-1">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-lg flex items-center justify-between">
-                      <span>Alternative Credit Score</span>
-                      <Info className="w-4 h-4 text-gray-400 cursor-help" />
-                    </CardTitle>
-                    <CardDescription>Based on your farming activities</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex flex-col items-center justify-center py-4">
-                      <div className="relative w-36 h-36 flex items-center justify-center">
-                        <svg className="w-full h-full" viewBox="0 0 100 100">
-                          <circle
-                            cx="50"
-                            cy="50"
-                            r="45"
-                            fill="none"
-                            stroke="#e5e7eb"
-                            strokeWidth="10"
-                          />
-                          <circle
-                            cx="50"
-                            cy="50"
-                            r="45"
-                            fill="none"
-                            stroke={creditScore >= 750 ? "#10b981" : creditScore >= 700 ? "#22c55e" : creditScore >= 650 ? "#eab308" : creditScore >= 600 ? "#f97316" : "#ef4444"}
-                            strokeWidth="10"
-                            strokeDasharray="283"
-                            strokeDashoffset={283 - (283 * (creditScore / 850))}
-                            strokeLinecap="round"
-                            transform="rotate(-90 50 50)"
-                          />
-                        </svg>
-                        <div className="absolute flex flex-col items-center justify-center">
-                          <span className={`text-3xl font-bold ${getCreditScoreColor(creditScore)}`}>{creditScore}</span>
-                          <span className="text-sm text-gray-500">{getCreditScoreLabel(creditScore)}</span>
-                        </div>
-                      </div>
-                      <div className="mt-4 text-center">
-                        <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                          <TrendingUp className="w-3 h-3 mr-1" />
-                          +15 points this month
-                        </Badge>
-                      </div>
-                    </div>
-                  </CardContent>
-                  <CardFooter className="flex justify-center pt-0">
-                    <Button variant="outline" className="w-full">
-                      <FileText className="w-4 h-4 mr-2" />
-                      View Detailed Report
-                    </Button>
-                  </CardFooter>
-                </Card>
-
-                {/* Credit Score Factors */}
-                <Card className="md:col-span-2">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-lg">Score Factors</CardTitle>
-                    <CardDescription>Key components affecting your credit score</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="h-[250px]">
-                      {isClient && (
-                        <ResponsiveContainer width="100%" height="100%">
-                          <RadarChart outerRadius={90} data={creditScoreData}>
-                            <PolarGrid />
-                            <PolarAngleAxis dataKey="name" />
-                            <PolarRadiusAxis domain={[0, 100]} />
-                            <Radar
-                              name="Credit Factors"
-                              dataKey="value"
-                              stroke="#6366f1"
-                              fill="#6366f1"
-                              fillOpacity={0.5}
-                            />
-                            <Tooltip />
-                          </RadarChart>
-                        </ResponsiveContainer>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-
-              {/* Credit Score History */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.1 }}
-              >
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-lg">Score History</CardTitle>
-                    <CardDescription>Your credit score trend over the past year</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="h-[200px]">
-                      {isClient && (
-                        <ResponsiveContainer width="100%" height="100%">
-                          <AreaChart
-                            data={creditScoreHistory}
-                            margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-                          >
-                            <defs>
-                              <linearGradient id="colorScore" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#6366f1" stopOpacity={0.8} />
-                                <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
-                              </linearGradient>
-                            </defs>
-                            <XAxis dataKey="month" />
-                            <YAxis domain={[600, 800]} />
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <Tooltip />
-                            <Area type="monotone" dataKey="score" stroke="#6366f1" fillOpacity={1} fill="url(#colorScore)" />
-                          </AreaChart>
-                        </ResponsiveContainer>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-
-              {/* Loan Finder */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.2 }}
-              >
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">Loan Finder</CardTitle>
-                    <CardDescription>Find the right loan for your farming needs</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                      <div className="space-y-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="loanAmount">Loan Amount (₹)</Label>
-                          <div className="flex items-center gap-4">
-                            <Input
-                              id="loanAmount"
-                              type="number"
-                              value={loanAmount}
-                              onChange={(e) => setLoanAmount(parseInt(e.target.value))}
-                              className="w-full"
-                            />
-                            <span className="text-sm text-gray-500 whitespace-nowrap">
-                              ₹{loanAmount.toLocaleString()}
-                            </span>
-                          </div>
-                          <Slider
-                            value={[loanAmount]}
-                            min={10000}
-                            max={500000}
-                            step={10000}
-                            onValueChange={(value) => setLoanAmount(value[0])}
-                            className="mt-2"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="loanTenure">Loan Tenure (months)</Label>
-                          <div className="flex items-center gap-4">
-                            <Input
-                              id="loanTenure"
-                              type="number"
-                              value={loanTenure}
-                              onChange={(e) => setLoanTenure(parseInt(e.target.value))}
-                              className="w-full"
-                            />
-                            <span className="text-sm text-gray-500 whitespace-nowrap">
-                              {loanTenure} months
-                            </span>
-                          </div>
-                          <Slider
-                            value={[loanTenure]}
-                            min={3}
-                            max={60}
-                            step={1}
-                            onValueChange={(value) => setLoanTenure(value[0])}
-                            className="mt-2"
-                          />
-                        </div>
-                      </div>
-                      <div className="space-y-4">
-                        <div className="space-y-2">
-                          <Label>Loan Purpose</Label>
-                          <Select defaultValue="inputs">
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select purpose" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="inputs">Crop Inputs</SelectItem>
-                              <SelectItem value="equipment">Farm Equipment</SelectItem>
-                              <SelectItem value="irrigation">Irrigation System</SelectItem>
-                              <SelectItem value="storage">Storage Facility</SelectItem>
-                              <SelectItem value="land">Land Development</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div className="space-y-2">
-                          <Label>Crop Type</Label>
-                          <Select value={cropType} onValueChange={setCropType}>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select crop" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="wheat">Wheat</SelectItem>
-                              <SelectItem value="rice">Rice</SelectItem>
-                              <SelectItem value="cotton">Cotton</SelectItem>
-                              <SelectItem value="sugarcane">Sugarcane</SelectItem>
-                              <SelectItem value="vegetables">Vegetables</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="landArea">Land Area (Acres)</Label>
-                          <div className="flex items-center gap-4">
-                            <Input
-                              id="landArea"
-                              type="number"
-                              value={landArea}
-                              onChange={(e) => setLandArea(parseFloat(e.target.value))}
-                              className="w-full"
-                            />
-                            <span className="text-sm text-gray-500 whitespace-nowrap">
-                              {landArea} acres
-                            </span>
-                          </div>
-                          <Slider
-                            value={[landArea]}
-                            min={0.5}
-                            max={20}
-                            step={0.5}
-                            onValueChange={(value) => setLandArea(value[0])}
-                            className="mt-2"
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="mt-4">
-                      <h3 className="text-base font-medium text-gray-800 mb-4">Recommended Loans</h3>
-                      <div className="space-y-4">
-                        {displayLoans.map((loan) => (
-                          <div
-                            key={loan.id}
-                            className="bg-white border border-gray-200 rounded-xl p-4 hover:border-indigo-200 hover:shadow-md transition-all duration-200"
-                          >
-                            <div className="flex flex-col md:flex-row md:items-center gap-4">
-                              <div className="flex-shrink-0 w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center p-2">
-                                {loan.logo ? (
-                                  <Image
-                                    src={loan.logo}
-                                    alt={loan.provider}
-                                    width={48}
-                                    height={48}
-                                    className="object-contain"
-                                  />
-                                ) : (
-                                  <Landmark className="w-8 h-8 text-gray-400" />
-                                )}
-                              </div>
-
-                              <div className="flex-grow">
-                                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-                                  <div>
-                                    <div className="flex items-center gap-2">
-                                      <h4 className="text-lg font-semibold text-gray-800">{loan.name}</h4>
-                                      <Badge className="bg-indigo-50 text-indigo-700 border-indigo-200">
-                                        {loan.match}% Match
-                                      </Badge>
-                                    </div>
-                                    <p className="text-sm text-gray-500">{loan.provider}</p>
-                                  </div>
-                                  <div className="flex flex-wrap gap-3">
-                                    <div className="text-sm">
-                                      <span className="text-gray-500">Amount:</span>
-                                      <span className="ml-1 font-medium text-gray-800">{loan.amount}</span>
-                                    </div>
-                                    <div className="text-sm">
-                                      <span className="text-gray-500">Interest:</span>
-                                      <span className="ml-1 font-medium text-gray-800">{loan.interest}</span>
-                                    </div>
-                                    <div className="text-sm">
-                                      <span className="text-gray-500">Tenure:</span>
-                                      <span className="ml-1 font-medium text-gray-800">{loan.tenure}</span>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <div className="mt-3">
-                                  <Accordion type="single" collapsible className="w-full">
-                                    <AccordionItem value={`loan-${loan.id}`} className="border-none">
-                                      <AccordionTrigger className="py-1 text-sm text-indigo-600 hover:text-indigo-800 hover:no-underline">
-                                        View Details
-                                      </AccordionTrigger>
-                                      <AccordionContent>
-                                        <div className="pt-2 pb-3 space-y-3">
-                                          <div>
-                                            <p className="text-sm font-medium text-gray-700">Eligibility:</p>
-                                            <p className="text-sm text-gray-600">{loan.eligibility}</p>
-                                          </div>
-                                          <div>
-                                            <p className="text-sm font-medium text-gray-700">Purpose:</p>
-                                            <p className="text-sm text-gray-600">{loan.purpose}</p>
-                                          </div>
-                                          <div>
-                                            <p className="text-sm font-medium text-gray-700">Features:</p>
-                                            <ul className="mt-1 space-y-1">
-                                              {loan.features.map((feature, index) => (
-                                                <li key={index} className="flex items-start gap-2 text-sm text-gray-600">
-                                                  <Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                                                  <span>{feature}</span>
-                                                </li>
-                                              ))}
-                                            </ul>
-                                          </div>
-
-                                          <div className="pt-2">
-                                            <p className="text-sm font-medium text-gray-700 mb-2">Estimated EMI:</p>
-                                            <div className="bg-gray-50 p-3 rounded-lg">
-                                              <div className="flex items-center justify-between">
-                                                <span className="text-sm text-gray-600">For ₹{loanAmount.toLocaleString()}</span>
-                                                <span className="text-lg font-semibold text-gray-800">
-                                                  ₹{Math.round(calculateEMI(loanAmount, parseFloat(loan.interest), loanTenure)).toLocaleString()}/month
-                                                </span>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </AccordionContent>
-                                    </AccordionItem>
-                                  </Accordion>
-                                </div>
-                              </div>
-
-                              <div className="flex-shrink-0 flex flex-col gap-2">
-                                <Button className="bg-indigo-600 hover:bg-indigo-700 text-white">
-                                  Apply Now
-                                </Button>
-                                <Button variant="outline" className="border-indigo-200 text-indigo-700 hover:bg-indigo-50">
-                                  Compare
-                                </Button>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-
-                        {filteredLoans.length > 3 && (
-                          <div className="flex justify-center mt-4">
-                            <Button
-                              variant="outline"
-                              onClick={() => setShowAllLoans(!showAllLoans)}
-                              className="text-indigo-600 border-indigo-200 hover:bg-indigo-50"
-                            >
-                              {showAllLoans ? (
-                                <>
-                                  <ChevronRight className="w-4 h-4 mr-2 rotate-90" />
-                                  Show Less
-                                </>
-                              ) : (
-                                <>
-                                  <ChevronRight className="w-4 h-4 mr-2 -rotate-90" />
-                                  Show All ({filteredLoans.length}) Loans
-                                </>
-                              )}
-                            </Button>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-
-              {/* Credit Score Improvement Tips */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.3 }}
-              >
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">Improve Your Credit Score</CardTitle>
-                    <CardDescription>Follow these tips to increase your alternative credit score</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {improvementTips.map((tip) => (
-                        <div
-                          key={tip.id}
-                          className="bg-white border border-gray-200 rounded-lg p-4 hover:border-indigo-200 hover:shadow-sm transition-all duration-200"
-                        >
-                          <div className="flex items-start gap-3">
-                            <div className="flex-shrink-0 w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center">
-                              {tip.icon}
-                            </div>
-                            <div>
-                              <h4 className="text-base font-medium text-gray-800">{tip.title}</h4>
-                              <p className="text-sm text-gray-600 mt-1">{tip.description}</p>
-                              <div className="flex items-center gap-3 mt-2">
-                                <Badge variant="outline" className={`
-                                  ${tip.impact === 'High' ? 'bg-green-50 text-green-700 border-green-200' :
-                                    tip.impact === 'Medium' ? 'bg-amber-50 text-amber-700 border-amber-200' :
-                                    'bg-blue-50 text-blue-700 border-blue-200'}
-                                `}>
-                                  {tip.impact} Impact
-                                </Badge>
-                                <Badge variant="outline" className={`
-                                  ${tip.difficulty === 'Easy' ? 'bg-green-50 text-green-700 border-green-200' :
-                                    tip.difficulty === 'Medium' ? 'bg-amber-50 text-amber-700 border-amber-200' :
-                                    'bg-red-50 text-red-700 border-red-200'}
-                                `}>
-                                  {tip.difficulty}
-                                </Badge>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-
-              {/* Recent Financial Activities */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.4 }}
-              >
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">Recent Financial Activities</CardTitle>
-                    <CardDescription>Your recent transactions and financial updates</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      {recentActivities.map((activity) => (
-                        <div
-                          key={activity.id}
-                          className="flex items-start gap-4 p-3 rounded-lg hover:bg-gray-50 transition-colors"
-                        >
-                          <div className={`w-8 h-8 rounded-full bg-${activity.color}-100 flex items-center justify-center flex-shrink-0`}>
-                            <div className={`text-${activity.color}-500`}>
-                              {activity.icon}
-                            </div>
-                          </div>
-                          <div className="flex-grow">
-                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
-                              <h4 className="text-sm font-medium text-gray-800">{activity.title}</h4>
-                              <span className="text-xs text-gray-500">{activity.time}</span>
-                            </div>
-                            <div className="flex items-center gap-2 mt-1">
-                              {activity.status === 'pending' && (
-                                <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-                                  Pending
-                                </Badge>
-                              )}
-                              {activity.status === 'completed' && (
-                                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                                  Completed
-                                </Badge>
-                              )}
-                              {activity.status === 'info' && (
-                                <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200">
-                                  Info
-                                </Badge>
-                              )}
-                              {activity.amount && (
-                                <span className="text-sm font-medium text-gray-800">{activity.amount}</span>
-                              )}
-                              {activity.change && (
-                                <span className="text-sm font-medium text-green-600">{activity.change}</span>
-                              )}
-                            </div>
-                          </div>
-                          <Button variant="ghost" size="icon" className="flex-shrink-0">
-                            <ChevronRight className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            </TabsContent>
-
-            {/* Insurance Tab Content */}
-            <TabsContent value="insurance" className="space-y-6">
-              {/* Insurance Overview */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-                className="grid grid-cols-1 md:grid-cols-3 gap-6"
-              >
-                {/* Weather Risk Assessment */}
-                <Card className="md:col-span-2">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-lg">Weather Risk Assessment</CardTitle>
-                    <CardDescription>Risk profile for your crops based on historical weather patterns</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="h-[250px]">
-                      {isClient && (
-                        <ResponsiveContainer width="100%" height="100%">
-                          <AreaChart
-                            data={weatherRiskData}
-                            margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-                          >
-                            <defs>
-                              <linearGradient id="colorRisk" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#ef4444" stopOpacity={0.8} />
-                                <stop offset="95%" stopColor="#ef4444" stopOpacity={0} />
-                              </linearGradient>
-                            </defs>
-                            <XAxis dataKey="month" />
-                            <YAxis />
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <Tooltip />
-                            <Area type="monotone" dataKey="risk" stroke="#ef4444" fillOpacity={1} fill="url(#colorRisk)" />
-                          </AreaChart>
-                        </ResponsiveContainer>
-                      )}
-                    </div>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-                      <div className="bg-red-50 rounded-lg p-3 border border-red-100">
-                        <div className="flex items-center gap-2">
-                          <AlertTriangle className="w-4 h-4 text-red-500" />
-                          <span className="text-sm font-medium text-gray-800">High Risk Months</span>
-                        </div>
-                        <p className="text-sm text-gray-600 mt-1">May, June, July</p>
-                      </div>
-                      <div className="bg-amber-50 rounded-lg p-3 border border-amber-100">
-                        <div className="flex items-center gap-2">
-                          <CloudRain className="w-4 h-4 text-amber-500" />
-                          <span className="text-sm font-medium text-gray-800">Rainfall Deficit</span>
-                        </div>
-                        <p className="text-sm text-gray-600 mt-1">30% probability</p>
-                      </div>
-                      <div className="bg-orange-50 rounded-lg p-3 border border-orange-100">
-                        <div className="flex items-center gap-2">
-                          <Thermometer className="w-4 h-4 text-orange-500" />
-                          <span className="text-sm font-medium text-gray-800">Heat Stress</span>
-                        </div>
-                        <p className="text-sm text-gray-600 mt-1">45% probability</p>
-                      </div>
-                      <div className="bg-blue-50 rounded-lg p-3 border border-blue-100">
-                        <div className="flex items-center gap-2">
-                          <CloudLightning className="w-4 h-4 text-blue-500" />
-                          <span className="text-sm font-medium text-gray-800">Extreme Events</span>
-                        </div>
-                        <p className="text-sm text-gray-600 mt-1">15% probability</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Insurance Coverage Status */}
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-lg">Coverage Status</CardTitle>
-                    <CardDescription>Your current insurance protection</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div className="bg-green-50 rounded-lg p-4 border border-green-100">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <Shield className="w-5 h-5 text-green-500" />
-                            <span className="font-medium text-gray-800">Wheat Crop</span>
-                          </div>
-                          <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Active</Badge>
-                        </div>
-                        <div className="mt-3 space-y-2">
-                          <div className="flex justify-between text-sm">
-                            <span className="text-gray-600">Coverage:</span>
-                            <span className="font-medium text-gray-800">₹30,000 per acre</span>
-                          </div>
-                          <div className="flex justify-between text-sm">
-                            <span className="text-gray-600">Area Insured:</span>
-                            <span className="font-medium text-gray-800">2 acres</span>
-                          </div>
-                          <div className="flex justify-between text-sm">
-                            <span className="text-gray-600">Valid Until:</span>
-                            <span className="font-medium text-gray-800">June 30, 2023</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <Shield className="w-5 h-5 text-gray-400" />
-                            <span className="font-medium text-gray-800">Other Crops</span>
-                          </div>
-                          <Badge variant="outline" className="bg-gray-100 text-gray-800 hover:bg-gray-100">Not Insured</Badge>
-                        </div>
-                        <p className="text-sm text-gray-600 mt-3">Protect your other crops against weather risks and market fluctuations.</p>
-                        <Button className="w-full mt-3 bg-indigo-600 hover:bg-indigo-700 text-white">
-                          Explore Options
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-
-              {/* Insurance Finder */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.1 }}
-              >
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">Insurance Finder</CardTitle>
-                    <CardDescription>Find the right insurance for your crops</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                      <div className="space-y-4">
-                        <div className="space-y-2">
-                          <Label>Crop Type</Label>
-                          <Select value={cropType} onValueChange={setCropType}>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select crop" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="wheat">Wheat</SelectItem>
-                              <SelectItem value="rice">Rice</SelectItem>
-                              <SelectItem value="cotton">Cotton</SelectItem>
-                              <SelectItem value="sugarcane">Sugarcane</SelectItem>
-                              <SelectItem value="vegetables">Vegetables</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="landArea">Land Area (Acres)</Label>
-                          <div className="flex items-center gap-4">
-                            <Input
-                              id="landArea"
-                              type="number"
-                              value={landArea}
-                              onChange={(e) => setLandArea(parseFloat(e.target.value))}
-                              className="w-full"
-                            />
-                            <span className="text-sm text-gray-500 whitespace-nowrap">
-                              {landArea} acres
-                            </span>
-                          </div>
-                          <Slider
-                            value={[landArea]}
-                            min={0.5}
-                            max={20}
-                            step={0.5}
-                            onValueChange={(value) => setLandArea(value[0])}
-                            className="mt-2"
-                          />
-                        </div>
-                      </div>
-                      <div className="space-y-4">
-                        <div className="space-y-2">
-                          <Label>Risk Coverage</Label>
-                          <Select defaultValue="comprehensive">
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select coverage" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="basic">Basic (Weather only)</SelectItem>
-                              <SelectItem value="standard">Standard (Weather + Pests)</SelectItem>
-                              <SelectItem value="comprehensive">Comprehensive (All Risks)</SelectItem>
-                              <SelectItem value="premium">Premium (All Risks + Price Protection)</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div className="space-y-2">
-                          <Label>Sowing Season</Label>
-                          <Select defaultValue="kharif">
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select season" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="kharif">Kharif (Monsoon)</SelectItem>
-                              <SelectItem value="rabi">Rabi (Winter)</SelectItem>
-                              <SelectItem value="zaid">Zaid (Summer)</SelectItem>
-                              <SelectItem value="yearround">Year-round</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="mt-4">
-                      <h3 className="text-base font-medium text-gray-800 mb-4">Recommended Insurance Plans</h3>
-                      <div className="space-y-4">
-                        {displayInsurance.map((insurance) => (
-                          <div
-                            key={insurance.id}
-                            className="bg-white border border-gray-200 rounded-xl p-4 hover:border-indigo-200 hover:shadow-md transition-all duration-200"
-                          >
-                            <div className="flex flex-col md:flex-row md:items-center gap-4">
-                              <div className="flex-shrink-0 w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center p-2">
-                                {insurance.logo ? (
-                                  <Image
-                                    src={insurance.logo}
-                                    alt={insurance.provider}
-                                    width={48}
-                                    height={48}
-                                    className="object-contain"
-                                  />
-                                ) : (
-                                  <Shield className="w-8 h-8 text-gray-400" />
-                                )}
-                              </div>
-
-                              <div className="flex-grow">
-                                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-                                  <div>
-                                    <div className="flex items-center gap-2">
-                                      <h4 className="text-lg font-semibold text-gray-800">{insurance.name}</h4>
-                                      <Badge className="bg-indigo-50 text-indigo-700 border-indigo-200">
-                                        {insurance.match}% Match
-                                      </Badge>
-                                    </div>
-                                    <p className="text-sm text-gray-500">{insurance.provider}</p>
-                                  </div>
-                                  <div className="flex flex-wrap gap-3">
-                                    <div className="text-sm">
-                                      <span className="text-gray-500">Premium:</span>
-                                      <span className="ml-1 font-medium text-gray-800">{insurance.premium}</span>
-                                    </div>
-                                    <div className="text-sm">
-                                      <span className="text-gray-500">Coverage:</span>
-                                      <span className="ml-1 font-medium text-gray-800">{insurance.coverage}</span>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <div className="mt-3">
-                                  <Accordion type="single" collapsible className="w-full">
-                                    <AccordionItem value={`insurance-${insurance.id}`} className="border-none">
-                                      <AccordionTrigger className="py-1 text-sm text-indigo-600 hover:text-indigo-800 hover:no-underline">
-                                        View Details
-                                      </AccordionTrigger>
-                                      <AccordionContent>
-                                        <div className="pt-2 pb-3 space-y-3">
-                                          <div>
-                                            <p className="text-sm font-medium text-gray-700">Triggers:</p>
-                                            <p className="text-sm text-gray-600">{insurance.triggers}</p>
-                                          </div>
-                                          <div>
-                                            <p className="text-sm font-medium text-gray-700">Claim Process:</p>
-                                            <p className="text-sm text-gray-600">{insurance.claimProcess}</p>
-                                          </div>
-                                          <div>
-                                            <p className="text-sm font-medium text-gray-700">Features:</p>
-                                            <ul className="mt-1 space-y-1">
-                                              {insurance.features.map((feature, index) => (
-                                                <li key={index} className="flex items-start gap-2 text-sm text-gray-600">
-                                                  <Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                                                  <span>{feature}</span>
-                                                </li>
-                                              ))}
-                                            </ul>
-                                          </div>
-
-                                          <div className="pt-2">
-                                            <p className="text-sm font-medium text-gray-700 mb-2">Total Premium:</p>
-                                            <div className="bg-gray-50 p-3 rounded-lg">
-                                              <div className="flex items-center justify-between">
-                                                <span className="text-sm text-gray-600">For {landArea} acres</span>
-                                                <span className="text-lg font-semibold text-gray-800">
-                                                  ₹{Math.round(parseFloat(insurance.premium.replace(/[^\d.]/g, '')) * landArea).toLocaleString()}
-                                                </span>
-                                              </div>
-                                              <div className="mt-2 text-sm text-green-600 flex items-center gap-1">
-                                                <Info className="w-4 h-4" />
-                                                <span>Eligible for 50% premium subsidy under PMFBY</span>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </AccordionContent>
-                                    </AccordionItem>
-                                  </Accordion>
-                                </div>
-                              </div>
-
-                              <div className="flex-shrink-0 flex flex-col gap-2">
-                                <Button className="bg-indigo-600 hover:bg-indigo-700 text-white">
-                                  Enroll Now
-                                </Button>
-                                <Button variant="outline" className="border-indigo-200 text-indigo-700 hover:bg-indigo-50">
-                                  Compare
-                                </Button>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-
-                        {sortedInsurance.length > 3 && (
-                          <div className="flex justify-center mt-4">
-                            <Button
-                              variant="outline"
-                              onClick={() => setShowAllInsurance(!showAllInsurance)}
-                              className="text-indigo-600 border-indigo-200 hover:bg-indigo-50"
-                            >
-                              {showAllInsurance ? (
-                                <>
-                                  <ChevronRight className="w-4 h-4 mr-2 rotate-90" />
-                                  Show Less
-                                </>
-                              ) : (
-                                <>
-                                  <ChevronRight className="w-4 h-4 mr-2 -rotate-90" />
-                                  Show All ({sortedInsurance.length}) Plans
-                                </>
-                              )}
-                            </Button>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-
-              {/* Claim Process Guide */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.2 }}
-              >
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">Claim Process Guide</CardTitle>
-                    <CardDescription>How to file and track insurance claims</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="relative">
-                      <div className="absolute left-4 top-0 h-full w-0.5 bg-gray-200"></div>
-                      <div className="space-y-8">
-                        <div className="relative pl-10">
-                          <div className="absolute left-0 top-1 flex h-8 w-8 items-center justify-center rounded-full bg-indigo-100 text-indigo-600">
-                            <FileText className="h-4 w-4" />
-                          </div>
-                          <h3 className="text-base font-medium text-gray-800">1. Report Damage</h3>
-                          <p className="mt-1 text-sm text-gray-600">
-                            Report crop damage within 72 hours of the incident through the app or by calling our helpline.
-                          </p>
-                          <div className="mt-3">
-                            <Button variant="outline" className="text-indigo-600 border-indigo-200 hover:bg-indigo-50">
-                              Report Damage
-                            </Button>
-                          </div>
-                        </div>
-
-                        <div className="relative pl-10">
-                          <div className="absolute left-0 top-1 flex h-8 w-8 items-center justify-center rounded-full bg-indigo-100 text-indigo-600">
-                            <Camera className="h-4 w-4" />
-                          </div>
-                          <h3 className="text-base font-medium text-gray-800">2. Document Evidence</h3>
-                          <p className="mt-1 text-sm text-gray-600">
-                            Take clear photos of the damaged crops and affected area. Upload them through the app.
-                          </p>
-                          <div className="mt-3 flex flex-wrap gap-2">
-                            <div className="relative h-16 w-16 rounded-md bg-gray-100 flex items-center justify-center">
-                              <Plus className="h-6 w-6 text-gray-400" />
-                            </div>
-                            <div className="relative h-16 w-16 rounded-md overflow-hidden">
-                              <Image
-                                src="/images/crop-damage-1.jpg"
-                                alt="Crop damage"
-                                width={64}
-                                height={64}
-                                className="object-cover"
-                              />
-                            </div>
-                            <div className="relative h-16 w-16 rounded-md overflow-hidden">
-                              <Image
-                                src="/images/crop-damage-2.jpg"
-                                alt="Crop damage"
-                                width={64}
-                                height={64}
-                                className="object-cover"
-                              />
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="relative pl-10">
-                          <div className="absolute left-0 top-1 flex h-8 w-8 items-center justify-center rounded-full bg-indigo-100 text-indigo-600">
-                            <FileCheck className="h-4 w-4" />
-                          </div>
-                          <h3 className="text-base font-medium text-gray-800">3. Assessment</h3>
-                          <p className="mt-1 text-sm text-gray-600">
-                            An insurance surveyor will visit your farm to assess the damage within 7 working days.
-                          </p>
-                        </div>
-
-                        <div className="relative pl-10">
-                          <div className="absolute left-0 top-1 flex h-8 w-8 items-center justify-center rounded-full bg-indigo-100 text-indigo-600">
-                            <DollarSign className="h-4 w-4" />
-                          </div>
-                          <h3 className="text-base font-medium text-gray-800">4. Claim Settlement</h3>
-                          <p className="mt-1 text-sm text-gray-600">
-                            Once approved, the claim amount will be directly transferred to your linked bank account.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="mt-6 bg-gray-50 rounded-lg p-4">
-                      <div className="flex items-start gap-3">
-                        <Info className="h-5 w-5 text-indigo-600 mt-0.5" />
-                        <div>
-                          <h4 className="text-sm font-medium text-gray-800">Need help with a claim?</h4>
-                          <p className="mt-1 text-sm text-gray-600">
-                            Our support team is available 24/7 to assist you with the claim process.
-                          </p>
-                          <div className="mt-3">
-                            <Button variant="outline" className="text-indigo-600 border-indigo-200 hover:bg-indigo-50">
-                              Contact Support
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-
-              {/* Weather Alerts */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.3 }}
-              >
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">Weather Alerts & Advisories</CardTitle>
-                    <CardDescription>Stay informed about weather conditions affecting your crops</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
-                        <div className="flex items-start gap-3">
-                          <AlertTriangle className="h-5 w-5 text-amber-500 mt-0.5 flex-shrink-0" />
-                          <div>
-                            <h4 className="text-sm font-medium text-gray-800">Heavy Rainfall Alert</h4>
-                            <p className="mt-1 text-sm text-gray-600">
-                              Heavy rainfall expected in your region over the next 48 hours. Consider postponing any planned spraying activities.
-                            </p>
-                            <div className="mt-2 flex items-center gap-2">
-                              <Badge variant="outline" className="bg-amber-100 text-amber-800 border-amber-200">
-                                Medium Risk
-                              </Badge>
-                              <span className="text-xs text-gray-500">Valid until: May 15, 2023</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="bg-white border border-gray-200 rounded-lg p-4">
-                        <div className="flex items-start gap-3">
-                          <Thermometer className="h-5 w-5 text-orange-500 mt-0.5 flex-shrink-0" />
-                          <div>
-                            <h4 className="text-sm font-medium text-gray-800">Temperature Advisory</h4>
-                            <p className="mt-1 text-sm text-gray-600">
-                              Temperatures expected to rise above 38°C next week. Ensure adequate irrigation for your crops.
-                            </p>
-                            <div className="mt-2 flex items-center gap-2">
-                              <Badge variant="outline" className="bg-orange-100 text-orange-800 border-orange-200">
-                                High Risk
-                              </Badge>
-                              <span className="text-xs text-gray-500">Valid until: May 20, 2023</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="bg-white border border-gray-200 rounded-lg p-4">
-                        <div className="flex items-start gap-3">
-                          <Wind className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
-                          <div>
-                            <h4 className="text-sm font-medium text-gray-800">Wind Advisory</h4>
-                            <p className="mt-1 text-sm text-gray-600">
-                              Strong winds forecasted for tomorrow. Secure any loose structures and equipment on your farm.
-                            </p>
-                            <div className="mt-2 flex items-center gap-2">
-                              <Badge variant="outline" className="bg-blue-100 text-blue-800 border-blue-200">
-                                Low Risk
-                              </Badge>
-                              <span className="text-xs text-gray-500">Valid until: May 12, 2023</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="mt-6">
-                      <h3 className="text-base font-medium text-gray-800 mb-3">Weather Forecast</h3>
-                      <div className="grid grid-cols-5 gap-2">
-                        {['Mon', 'Tue', 'Wed', 'Thu', 'Fri'].map((day, index) => (
-                          <div key={index} className="bg-white border border-gray-200 rounded-lg p-3 text-center">
-                            <p className="text-sm font-medium text-gray-800">{day}</p>
-                            <div className="my-2">
-                              {index === 0 && <CloudRain className="h-6 w-6 mx-auto text-blue-500" />}
-                              {index === 1 && <CloudRain className="h-6 w-6 mx-auto text-blue-500" />}
-                              {index === 2 && <Cloud className="h-6 w-6 mx-auto text-gray-500" />}
-                              {index === 3 && <Sun className="h-6 w-6 mx-auto text-yellow-500" />}
-                              {index === 4 && <Sun className="h-6 w-6 mx-auto text-yellow-500" />}
-                            </div>
-                            <p className="text-sm font-medium text-gray-800">
-                              {index === 0 && '26°C'}
-                              {index === 1 && '25°C'}
-                              {index === 2 && '28°C'}
-                              {index === 3 && '32°C'}
-                              {index === 4 && '34°C'}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              {index === 0 && '80%'}
-                              {index === 1 && '60%'}
-                              {index === 2 && '30%'}
-                              {index === 3 && '10%'}
-                              {index === 4 && '5%'}
-                            </p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            </TabsContent>
-          </Tabs>
+      {/* Data Consent Modal - For Alternative Credit Scoring */}
+      <div className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 transition-opacity duration-300 ${false ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+        <div className="bg-white rounded-lg max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto">
+          <div className="flex justify-between items-start mb-4">
+            <h2 className="text-lg font-bold text-gray-800">डेटा सहमति</h2>
+            <button className="text-gray-500 hover:text-gray-700">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          
+          <div className="space-y-4">
+            <p className="text-sm text-gray-600">
+              आपके वैकल्पिक क्रेडिट स्कोर को बनाने के लिए, हमें आपके प्लेटफॉर्म डेटा का उपयोग करने की आवश्यकता है। यह आपको पारंपरिक क्रेडिट इतिहास के बिना भी वित्तीय सेवाओं तक पहुंच प्राप्त करने में मदद करेगा।
+            </p>
+            
+            <div className="bg-amber-50 border-l-4 border-amber-500 p-4">
+              <div className="flex">
+                <div className="flex-shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-amber-500">
+                    <path fillRule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm text-amber-700">
+                    आपका डेटा केवल आपकी सहमति से साझा किया जाएगा और केवल वित्तीय संस्थानों के साथ जिन्हें आप ऋण के लिए आवेदन करते हैं।
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <h3 className="font-medium text-gray-800 mb-2">हम निम्न डेटा एकत्र करेंगे:</h3>
+              <ul className="space-y-2">
+                <li className="flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-green-500">
+                    <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-sm text-gray-700">फसल और खेती का विवरण</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-green-500">
+                    <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-sm text-gray-700">बाजार लेनदेन और बिक्री रिकॉर्ड</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-green-500">
+                    <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-sm text-gray-700">सलाह अपनाने का इतिहास</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-green-500">
+                    <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-sm text-gray-700">ऐप उपयोग और सहभागिता</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-green-500">
+                    <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-sm text-gray-700">FPO सदस्यता और गतिविधियां</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
+          <div className="mt-6 flex flex-col gap-3">
+            <button className="bg-green-600 hover:bg-green-700 text-white py-2 rounded-md text-sm font-medium transition-colors">
+              मैं सहमत हूँ और जारी रखना चाहता हूँ
+            </button>
+            <button className="border border-gray-300 hover:border-gray-400 text-gray-700 py-2 rounded-md text-sm font-medium transition-colors">
+              अभी नहीं
+            </button>
+          </div>
         </div>
       </div>
     </div>

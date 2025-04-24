@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   Search,
@@ -13,12 +13,34 @@ import {
   HelpCircle,
   Sun,
   Moon,
+  Leaf,
+  Cloud,
+  Droplets,
+  Sprout,
+  Tractor,
 } from "lucide-react";
 
 export default function DashboardHeader() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [weatherData, setWeatherData] = useState({ temp: "28°C", condition: "Sunny" });
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.profile-menu') && !target.closest('.profile-button')) {
+        setIsProfileOpen(false);
+      }
+      if (!target.closest('.notifications-menu') && !target.closest('.notifications-button')) {
+        setIsNotificationsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const toggleProfile = () => {
     setIsProfileOpen(!isProfileOpen);
@@ -31,98 +53,157 @@ export default function DashboardHeader() {
   };
 
   return (
-    <header className="bg-white border-b border-gray-100 py-3 px-4 md:px-6 flex items-center justify-between fixed top-0 right-0 left-0 md:left-64 z-50 h-16 shadow-sm">
-      {/* Left side - Mobile menu toggle and breadcrumb */}
+    <header className="bg-gradient-to-r from-white to-green-50 border-b border-green-100 py-3 px-4 md:px-6 flex items-center justify-between fixed top-0 right-0 left-0 md:left-72 z-50 h-16 shadow-sm transition-all duration-300">
+      {/* Left side - Mobile menu toggle, breadcrumb and weather widget */}
       <div className="flex items-center gap-4">
+        {/* Enhanced mobile menu toggle button */}
         <button
-          className="md:hidden p-2 rounded-lg text-gray-500 hover:bg-gray-100 transition-colors"
+          className="md:hidden p-2 rounded-lg bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg hover:shadow-green-200/50 transition-all duration-300 transform hover:scale-105"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          aria-label="Toggle menu"
         >
           {isMobileMenuOpen ? (
-            <X className="w-5 h-5" />
+            <div className="w-5 h-5 flex items-center justify-center">
+              <span className="text-lg">✖️</span>
+            </div>
           ) : (
-            <Menu className="w-5 h-5" />
+            <div className="w-5 h-5 flex items-center justify-center">
+              <span className="text-lg">🍔</span>
+            </div>
           )}
         </button>
 
         <div className="hidden md:flex items-center gap-2">
-          <span className="text-sm text-gray-500">Dashboard</span>
-          <span className="text-gray-400">/</span>
-          <span className="text-sm font-medium text-gray-700">Overview</span>
+          <div className="flex items-center gap-1 text-green-600">
+            <div className="w-6 h-6 rounded-lg flex items-center justify-center bg-green-100 transition-all duration-300">
+              <span className="text-base">🌱</span>
+            </div>
+            <span className="text-sm font-['Poppins',_sans-serif] font-medium">Dashboard</span>
+          </div>
+          <span className="text-green-300">/</span>
+          <span className="text-sm font-['Poppins',_sans-serif] font-medium text-green-700">Overview</span>
+        </div>
+        
+        {/* Weather widget - now visible on both mobile and desktop */}
+        <div className="flex items-center gap-2 ml-2 bg-white/70 backdrop-blur-sm px-3 py-1.5 rounded-full border border-green-100 shadow-sm">
+          <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-500">
+            <span className="text-sm">☁️</span>
+          </div>
+          <div className="text-xs">
+            <span className="font-medium text-gray-700">{weatherData.temp}</span>
+            <span className="text-gray-500 ml-1">{weatherData.condition}</span>
+          </div>
+          <div className="w-1 h-1 bg-gray-300 rounded-full mx-1 hidden md:block"></div>
+          <div className="hidden md:flex items-center gap-1">
+            <span className="text-sm text-blue-500">💧</span>
+            <span className="text-xs text-gray-600">68%</span>
+          </div>
         </div>
       </div>
 
       {/* Right side - Search, notifications, settings, profile */}
       <div className="flex items-center gap-2 md:gap-4">
-        <div className="relative hidden md:block">
+        <div className="relative hidden md:block group">
           <input
             type="text"
-            placeholder="Search..."
-            className="w-64 py-2 px-4 pl-10 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
+            placeholder="Search crops, markets..."
+            className="w-64 py-2 px-4 pl-10 rounded-lg border border-green-100 focus:outline-none focus:ring-2 focus:ring-green-500/30 focus:border-transparent text-sm bg-white/80 backdrop-blur-sm transition-all duration-300 group-hover:shadow-md"
           />
-          <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
+          <div className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 transition-all duration-300 group-hover:text-green-500 flex items-center justify-center">
+            <span className="text-base text-gray-400 group-hover:text-green-500">🔍</span>
+          </div>
         </div>
 
         {/* Notifications */}
         <div className="relative">
           <button
-            className="relative p-2 text-gray-500 hover:bg-gray-100 rounded-full transition-colors"
+            className="notifications-button relative p-2 text-gray-600 hover:bg-green-100 rounded-full transition-all duration-300 hover:text-green-600 transform"
             onClick={toggleNotifications}
+            aria-label="Notifications"
           >
-            <Bell className="w-5 h-5" />
-            <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-amber-50 hover:bg-amber-100 transition-all duration-300">
+              <span className="text-lg">🔔</span>
+            </div>
+            <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
           </button>
 
           {/* Notifications dropdown */}
           {isNotificationsOpen && (
-            <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-100 z-50">
-              <div className="p-3 border-b border-gray-100 flex justify-between items-center">
-                <h3 className="font-medium text-gray-800">Notifications</h3>
-                <button className="text-xs text-green-600 hover:text-green-700">
+            <div className="notifications-menu absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-green-100 z-50 overflow-hidden transform origin-top-right transition-all duration-200 animate-dropdown">
+              <div className="p-3 border-b border-green-100 flex justify-between items-center bg-gradient-to-r from-green-50 to-white">
+                <h3 className="font-medium text-green-800 font-['Poppins',_sans-serif] flex items-center gap-2">
+                  <span className="text-base">🔔</span>
+                  Notifications
+                </h3>
+                <button className="text-xs text-green-600 hover:text-green-700 transition-colors">
                   Mark all as read
                 </button>
               </div>
 
               <div className="max-h-80 overflow-y-auto">
-                <div className="p-3 border-b border-gray-100 hover:bg-gray-50 bg-green-50">
+                <div className="p-3 border-b border-green-100 hover:bg-green-50 bg-green-50/50 transition-colors">
                   <div className="flex gap-3">
-                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center text-green-600 flex-shrink-0">
-                      <Bell className="w-4 h-4" />
+                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center text-green-600 flex-shrink-0 shadow-sm">
+                      <span className="text-base">☁️</span>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-800">
+                      <p className="text-sm font-medium text-gray-800 font-['Poppins',_sans-serif]">
                         Weather Alert
                       </p>
                       <p className="text-xs text-gray-600 mt-1">
                         Heavy rainfall expected in your region
                       </p>
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
                         10 minutes ago
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="p-3 border-b border-gray-100 hover:bg-gray-50">
+                <div className="p-3 border-b border-green-100 hover:bg-green-50 transition-colors">
                   <div className="flex gap-3">
-                    <div className="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center text-amber-600 flex-shrink-0">
-                      <Bell className="w-4 h-4" />
+                    <div className="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center text-amber-600 flex-shrink-0 shadow-sm">
+                      <span className="text-base">🚜</span>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-800">
+                      <p className="text-sm font-medium text-gray-800 font-['Poppins',_sans-serif]">
                         Market Update
                       </p>
                       <p className="text-xs text-gray-600 mt-1">
                         Wheat prices increased by 5% today
                       </p>
-                      <p className="text-xs text-gray-500 mt-1">2 hours ago</p>
+                      <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 bg-amber-500 rounded-full"></span>
+                        2 hours ago
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="p-3 border-b border-green-100 hover:bg-green-50 transition-colors">
+                  <div className="flex gap-3">
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 flex-shrink-0 shadow-sm">
+                      <span className="text-base">💧</span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-800 font-['Poppins',_sans-serif]">
+                        Irrigation Reminder
+                      </p>
+                      <p className="text-xs text-gray-600 mt-1">
+                        Time to water your rice fields
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
+                        5 hours ago
+                      </p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="p-2 border-t border-gray-100">
-                <button className="w-full py-2 text-sm text-green-600 hover:text-green-700 font-medium">
+              <div className="p-2 border-t border-green-100 bg-gradient-to-r from-white to-green-50">
+                <button className="w-full py-2 text-sm text-green-600 hover:text-green-700 font-medium transition-colors font-['Poppins',_sans-serif]">
                   View all notifications
                 </button>
               </div>
@@ -130,40 +211,43 @@ export default function DashboardHeader() {
           )}
         </div>
 
-        {/* Settings */}
-        <button className="p-2 text-gray-500 hover:bg-gray-100 rounded-full transition-colors">
-          <Settings className="w-5 h-5" />
-        </button>
-
-        {/* Theme toggle */}
-        <button className="p-2 text-gray-500 hover:bg-gray-100 rounded-full transition-colors">
-          <Sun className="w-5 h-5" />
-        </button>
 
         {/* Profile dropdown */}
         <div className="relative">
           <button
-            className="flex items-center gap-2 ml-2 focus:outline-none"
+            className="profile-button flex items-center gap-2 ml-2 focus:outline-none group"
             onClick={toggleProfile}
+            aria-label="User profile"
           >
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white font-medium text-sm">
-              RK
+            <div className="relative w-9 h-9 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white font-medium text-sm shadow-sm transition-all duration-300 group-hover:shadow-md group-hover:scale-105 overflow-hidden">
+              {/* Plant stem */}
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0.5 h-2 bg-green-800 transition-all duration-500 group-hover:h-3"></div>
+              
+              {/* Plant leaves */}
+              <div className="absolute bottom-2 left-1/2 -translate-x-2 w-1.5 h-1.5 bg-green-300 rounded-full transform -rotate-45 transition-all duration-500 group-hover:scale-110"></div>
+              <div className="absolute bottom-2.5 left-1/2 -translate-x-0 w-1.5 h-1.5 bg-green-300 rounded-full transform rotate-45 transition-all duration-500 group-hover:scale-110"></div>
+              
+              <span className="relative z-10">RK</span>
             </div>
             <div className="hidden md:block">
-              <p className="text-sm font-medium text-gray-800 text-left">
+              <p className="text-sm font-medium text-gray-800 text-left font-['Poppins',_sans-serif] transition-all duration-300 group-hover:text-green-700">
                 Ram Kumar
               </p>
-              <p className="text-xs text-gray-500 text-left">Farmer</p>
+              <p className="text-xs text-gray-500 text-left flex items-center gap-1">
+                <span className="text-xs text-green-500">🌿</span>
+                <span className="font-['Poppins',_sans-serif]">Farmer</span>
+              </p>
             </div>
-            <ChevronDown className="w-4 h-4 text-gray-400 hidden md:block" />
+            <ChevronDown className={`w-4 h-4 text-gray-400 hidden md:block transition-all duration-300 group-hover:text-green-500 ${isProfileOpen ? 'rotate-180' : ''}`} />
           </button>
 
           {/* Profile menu */}
           {isProfileOpen && (
-            <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-100 z-50">
-              <div className="p-3 border-b border-gray-100">
-                <p className="text-sm font-medium text-gray-800">Ram Kumar</p>
-                <p className="text-xs text-gray-500 mt-0.5">
+            <div className="profile-menu absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-green-100 z-50 overflow-hidden transform origin-top-right transition-all duration-200 animate-dropdown">
+              <div className="p-3 border-b border-green-100 bg-gradient-to-r from-green-50 to-white">
+                <p className="text-sm font-medium text-gray-800 font-['Poppins',_sans-serif]">Ram Kumar</p>
+                <p className="text-xs text-gray-500 mt-0.5 flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
                   ram.kumar@example.com
                 </p>
               </div>
@@ -171,41 +255,27 @@ export default function DashboardHeader() {
               <div className="py-1">
                 <Link
                   href="/profile"
-                  className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                  className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-green-50 transition-colors"
                 >
-                  <User className="w-4 h-4 mr-3 text-gray-500" />
-                  Your Profile
+                  <span className="text-base text-green-500 mr-3">👤</span>
+                  <span className="font-['Poppins',_sans-serif]">Your Profile</span>
                 </Link>
                 <Link
                   href="/settings"
-                  className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                  className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-green-50 transition-colors"
                 >
-                  <Settings className="w-4 h-4 mr-3 text-gray-500" />
-                  Settings
-                </Link>
-                <Link
-                  href="/help"
-                  className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                >
-                  <HelpCircle className="w-4 h-4 mr-3 text-gray-500" />
-                  Help Center
-                </Link>
-                <Link
-                  href="/theme"
-                  className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                >
-                  <Moon className="w-4 h-4 mr-3 text-gray-500" />
-                  Dark Mode
+                  <span className="text-base text-green-500 mr-3">⚙️</span>
+                  <span className="font-['Poppins',_sans-serif]">Settings</span>
                 </Link>
               </div>
 
-              <div className="py-1 border-t border-gray-100">
+              <div className="py-1 border-t border-green-100">
                 <Link
                   href="/logout"
-                  className="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-50"
+                  className="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors group"
                 >
-                  <LogOut className="w-4 h-4 mr-3 text-red-500" />
-                  Sign out
+                  <span className="text-base text-red-500 mr-3 transition-all duration-300 group-hover:translate-x-1">👋</span>
+                  <span className="font-['Poppins',_sans-serif] transition-all duration-300 group-hover:translate-x-1">Sign out</span>
                 </Link>
               </div>
             </div>
@@ -216,124 +286,238 @@ export default function DashboardHeader() {
       {/* Mobile menu overlay */}
       {isMobileMenuOpen && (
         <div
-          className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+          className="md:hidden fixed inset-0 bg-black/20 backdrop-blur-sm z-30 transition-opacity duration-300 animate-fade-in"
           onClick={() => setIsMobileMenuOpen(false)}
         ></div>
       )}
 
-      {/* Mobile menu */}
+      {/* Mobile menu - Integrated with sidebar style */}
       {isMobileMenuOpen && (
-        <div className="md:hidden fixed top-16 left-0 w-64 h-full bg-white shadow-lg z-40 transform transition-transform duration-300 ease-in-out">
-          <div className="p-4 border-b border-gray-100">
+        <div className="md:hidden fixed top-16 left-0 w-64 h-[calc(100vh-4rem)] bg-white border-r border-green-100 shadow-lg z-30 transform transition-all duration-300 ease-in-out overflow-y-auto animate-slide-in-left">
+          {/* User profile section */}
+          <div className="p-4 border-b border-green-100">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white font-medium">
-                RK
+              <div className="relative w-12 h-12 rounded-lg bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center shadow-md shadow-green-200 overflow-hidden group">
+                {/* Sun */}
+                <div className="absolute top-1 right-1 w-2 h-2 rounded-full bg-yellow-300 animate-pulse"></div>
+                
+                {/* Field/ground */}
+                <div className="absolute bottom-0 left-0 w-full h-3 bg-green-700/50"></div>
+                
+                {/* Plant stem */}
+                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 w-1 h-4 bg-green-800"></div>
+                
+                {/* Plant leaves */}
+                <div className="absolute bottom-5 left-1/2 -translate-x-3 w-2 h-2 bg-green-400 rounded-full transform -rotate-45"></div>
+                <div className="absolute bottom-6 left-1/2 -translate-x-0 w-2 h-2 bg-green-400 rounded-full transform rotate-45"></div>
+                
+                <span className="relative z-10 text-white font-bold text-lg">RK</span>
               </div>
               <div>
-                <p className="font-medium text-gray-800">Ram Kumar</p>
-                <p className="text-xs text-gray-500">Farmer</p>
+                <p className="font-medium text-gray-800 font-['Poppins',_sans-serif]">Ram Kumar</p>
+                <p className="text-xs text-gray-500 flex items-center gap-1">
+                  <span className="text-xs text-green-500">🌿</span>
+                  <span className="font-['Poppins',_sans-serif]">Farmer</span>
+                </p>
               </div>
             </div>
           </div>
 
+          {/* Search bar */}
+          <div className="px-3 py-4">
+            <div className="relative">
+              <input 
+                type="text" 
+                placeholder="Search..." 
+                className="w-full pl-9 pr-4 py-2 rounded-lg bg-white/70 backdrop-blur-sm border border-green-100 focus:outline-none focus:ring-2 focus:ring-green-500/30 text-sm text-gray-700 placeholder-gray-400"
+              />
+              <div className="absolute left-3 top-2.5 text-gray-400">
+                <span className="text-base">🔍</span>
+              </div>
+            </div>
+          </div>
+          
+          {/* Weather widget for mobile */}
+          <div className="px-3 mb-4">
+            <div className="p-3 bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-lg border border-blue-100 relative overflow-hidden">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500">
+                  <span className="text-xl">☁️</span>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800">{weatherData.temp}</p>
+                  <p className="text-xs text-gray-600">{weatherData.condition}</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center justify-between text-xs text-gray-600 mt-2">
+                <div className="flex items-center gap-1">
+                  <span className="text-blue-500">💧</span>
+                  <span>68% Humidity</span>
+                </div>
+                <span className="text-green-600 font-medium">View Details</span>
+              </div>
+            </div>
+          </div>
+          
+          {/* Decorative farm element */}
+          <div className="px-3 mb-2">
+            <div className="h-2 bg-gradient-to-r from-green-200 via-yellow-200 to-green-200 rounded-full opacity-60 relative overflow-hidden">
+              <div className="absolute top-0 left-0 h-full w-10 bg-white/30 animate-pulse"></div>
+            </div>
+          </div>
+
+          {/* Navigation */}
           <nav className="p-4">
+            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 mb-2 flex items-center font-['Poppins',_sans-serif]">
+              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+              Main Menu
+            </h2>
+            
             <ul className="space-y-2">
               <li>
                 <Link
                   href="/"
-                  className="flex items-center gap-3 px-3 py-2 text-green-600 bg-green-50 rounded-lg font-medium"
+                  className="flex items-center gap-3 px-3 py-2.5 text-green-600 bg-green-50 rounded-lg font-medium relative overflow-hidden group"
                 >
-                  <span className="w-5 h-5 flex items-center justify-center">
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                      />
-                    </svg>
+                  <span className="absolute inset-0 bg-gradient-to-r from-green-500/10 to-transparent opacity-80 rounded-lg"></span>
+                  <span className="relative z-10 flex items-center justify-center w-8 h-8 rounded-lg bg-green-100 transition-transform duration-300 group-hover:scale-110">
+                    <span className="text-lg">🏡</span>
                   </span>
-                  Dashboard
+                  <span className="relative z-10 font-['Poppins',_sans-serif] transition-all duration-300 group-hover:translate-x-1">Dashboard</span>
+                  <span className="absolute left-0 top-0 bottom-0 w-1 bg-green-500 rounded-r-full"></span>
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/analytics"
-                  className="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
+                  href="/gyan-dhara"
+                  className="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-green-50 rounded-lg transition-all duration-300 group relative overflow-hidden"
                 >
-                  <span className="w-5 h-5 flex items-center justify-center text-gray-500">
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                      />
-                    </svg>
+                  <span className="relative z-10 flex items-center justify-center w-8 h-8 rounded-lg bg-gray-50 transition-transform duration-300 group-hover:scale-110 group-hover:bg-blue-100">
+                    <span className="text-lg">🌧️</span>
                   </span>
-                  Analytics
+                  <span className="relative z-10 font-['Poppins',_sans-serif] transition-all duration-300 group-hover:translate-x-1">Gyan Dhara</span>
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/reports"
-                  className="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
+                  href="/fasal-doctor"
+                  className="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-green-50 rounded-lg transition-all duration-300 group relative overflow-hidden"
                 >
-                  <span className="w-5 h-5 flex items-center justify-center text-gray-500">
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                      />
-                    </svg>
+                  <span className="relative z-10 flex items-center justify-center w-8 h-8 rounded-lg bg-gray-50 transition-transform duration-300 group-hover:scale-110 group-hover:bg-green-100">
+                    <span className="text-lg">🌱</span>
                   </span>
-                  Reports
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/community"
-                  className="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
-                >
-                  <span className="w-5 h-5 flex items-center justify-center text-gray-500">
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                      />
-                    </svg>
-                  </span>
-                  Community
+                  <span className="relative z-10 font-['Poppins',_sans-serif] transition-all duration-300 group-hover:translate-x-1">Fasal Doctor</span>
                 </Link>
               </li>
             </ul>
+            
+            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 mb-2 mt-6 flex items-center font-['Poppins',_sans-serif]">
+              <span className="w-2 h-2 bg-yellow-500 rounded-full mr-2"></span>
+              Services
+            </h2>
+            
+            <ul className="space-y-2">
+              <li>
+                <Link
+                  href="/bazaar-bridge"
+                  className="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-green-50 rounded-lg transition-all duration-300 group relative overflow-hidden"
+                >
+                  <span className="relative z-10 flex items-center justify-center w-8 h-8 rounded-lg bg-gray-50 transition-transform duration-300 group-hover:scale-110 group-hover:bg-yellow-100">
+                    <span className="text-lg">🛒</span>
+                  </span>
+                  <span className="relative z-10 font-['Poppins',_sans-serif] transition-all duration-300 group-hover:translate-x-1">Bazaar Bridge</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/arthik-sahara"
+                  className="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-green-50 rounded-lg transition-all duration-300 group relative overflow-hidden"
+                >
+                  <span className="relative z-10 flex items-center justify-center w-8 h-8 rounded-lg bg-gray-50 transition-transform duration-300 group-hover:scale-110 group-hover:bg-green-100">
+                    <span className="text-lg">💰</span>
+                  </span>
+                  <span className="relative z-10 font-['Poppins',_sans-serif] transition-all duration-300 group-hover:translate-x-1">Arthik Sahara</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/samuday-shakti"
+                  className="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-green-50 rounded-lg transition-all duration-300 group relative overflow-hidden"
+                >
+                  <span className="relative z-10 flex items-center justify-center w-8 h-8 rounded-lg bg-gray-50 transition-transform duration-300 group-hover:scale-110 group-hover:bg-purple-100">
+                    <span className="text-lg">👨‍👩‍👧‍👦</span>
+                  </span>
+                  <span className="relative z-10 font-['Poppins',_sans-serif] transition-all duration-300 group-hover:translate-x-1">Samuday Shakti</span>
+                </Link>
+              </li>
+            </ul>
+            
+            <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 mb-2 mt-6 flex items-center font-['Poppins',_sans-serif]">
+              <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+              Support
+            </h2>
+            
+            <ul className="space-y-2">
+              <li>
+                <Link
+                  href="/ai-assistant"
+                  className="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-green-50 rounded-lg transition-all duration-300 group relative overflow-hidden"
+                >
+                  <span className="relative z-10 flex items-center justify-center w-8 h-8 rounded-lg bg-gray-50 transition-transform duration-300 group-hover:scale-110 group-hover:bg-blue-100">
+                    <span className="text-lg">🤖</span>
+                  </span>
+                  <span className="relative z-10 font-['Poppins',_sans-serif] transition-all duration-300 group-hover:translate-x-1">AI Assistant</span>
+                </Link>
+              </li>
+              <li>
+              </li>
+              <li>
+              </li>
+            </ul>
           </nav>
+
+          {/* Logout button */}
+          <div className="p-4 border-t border-green-100 mt-auto">
+            <Link
+              href="/"
+              className="flex items-center gap-3 px-3 py-2.5 text-red-600 hover:bg-red-50 rounded-lg transition-all duration-300 group"
+            >
+              <span className="relative z-10 flex items-center justify-center w-8 h-8 rounded-lg bg-red-50 transition-transform duration-300 group-hover:scale-110">
+                <span className="text-lg">👋</span>
+              </span>
+              <span className="font-['Poppins',_sans-serif] transition-all duration-300 group-hover:translate-x-1">Sign out</span>
+            </Link>
+          </div>
         </div>
       )}
+
+      {/* Add animation classes */}
+      <style jsx global>{`
+        @keyframes dropdown {
+          0% { opacity: 0; transform: translateY(-10px) scale(0.95); }
+          100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .animate-dropdown {
+          animation: dropdown 0.2s ease-out forwards;
+        }
+        
+        @keyframes fade-in {
+          0% { opacity: 0; }
+          100% { opacity: 1; }
+        }
+        .animate-fade-in {
+          animation: fade-in 0.2s ease-out forwards;
+        }
+        
+        @keyframes slide-in-left {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(0); }
+        }
+        .animate-slide-in-left {
+          animation: slide-in-left 0.3s ease-out forwards;
+        }
+      `}</style>
     </header>
   );
 }
