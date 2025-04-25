@@ -31,7 +31,12 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-### 4. Run the Development Server
+### 4. Download the ML Models
+```sh
+python setup_models.py
+```
+
+### 5. Run the Development Server
 #### macOS/Linux
 ```sh
 uvicorn app.main:app --reload
