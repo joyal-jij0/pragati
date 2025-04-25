@@ -10,4 +10,4 @@ app/utils/__pycache__
 app/db/__pycache__ 
 app/db/models/__pycache__
 app/core/__pycache__
-/ml_models/*
+ml_models/*
