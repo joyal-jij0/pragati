@@ -40,7 +40,7 @@ model user {
   createdAt    DateTime @db.Timestamp(6)
   accessToken  String?  @db.VarChar
   refreshToken String?  @db.VarChar
-  memberships  Member[] @relation("UserMemberships")
+  memberships  Member[] @relation("UserToMembership")
 }
 
 model FPO {
@@ -49,15 +49,15 @@ model FPO {
   location    String    @db.VarChar(200)
   established DateTime  @db.Timestamp(6)
   description String?   @db.VarChar
-  members     Member[]  @relation("FPO_Members")
+  members     Member[]  @relation("FPOToMembership")
   createdAt   DateTime  @default(now()) @db.Timestamp(6)
 }
 
 model Member {
   id       Int      @id @default(autoincrement())
-  user     user     @relation(fields: [userId], references: [id])
+  user     user     @relation("UserToMembership", fields: [userId], references: [id])
   userId   Int
-  fpo      FPO      @relation(fields: [fpoId], references: [id])
+  fpo      FPO      @relation("FPOToMembership", fields: [fpoId], references: [id])
   fpoId    Int
   role     String   @default("Member") @db.VarChar(50) // Example: Admin, Manager, Member
   joinedAt DateTime @default(now()) @db.Timestamp(6)
