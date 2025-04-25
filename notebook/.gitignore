@@ -3,3 +3,4 @@ catboost_info
 data/*
 __pycache__ 
 tensorboard_logs
+models/*
