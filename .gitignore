@@ -2,3 +2,4 @@
 /backend/venv
 /models/*
 /web/src/app/prisma
+/web/src/app/generated
