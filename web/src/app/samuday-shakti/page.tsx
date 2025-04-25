@@ -63,13 +63,13 @@ const SamudayShaktiPage = () => {
                   समुदाय शक्ति आपके FPO को डिजिटल रूप से प्रबंधित करने, सामूहिक खरीद और बिक्री को सुविधाजनक बनाने, संसाधनों को साझा करने और अपने समुदाय के साथ जुड़ने के लिए एक व्यापक प्लेटफॉर्म प्रदान करता है।
                 </p>
                 <div className="flex flex-wrap gap-3">
-                  <div className="bg-white bg-opacity-20 px-3 py-1.5 rounded-full text-sm font-medium">
+                  <div className="bg-white bg-opacity-20 text-muted-foreground px-3 py-1.5 rounded-full text-sm font-semibold">
                     120+ सक्रिय FPO
                   </div>
-                  <div className="bg-white bg-opacity-20 px-3 py-1.5 rounded-full text-sm font-medium">
+                  <div className="bg-white bg-opacity-20 text-muted-foreground px-3 py-1.5 rounded-full text-sm font-semibold">
                     ₹2.5 करोड़+ सामूहिक खरीद
                   </div>
-                  <div className="bg-white bg-opacity-20 px-3 py-1.5 rounded-full text-sm font-medium">
+                  <div className="bg-white bg-opacity-20 text-muted-foreground px-3 py-1.5 rounded-full text-sm font-semibold">
                     15% औसत मूल्य लाभ
                   </div>
                 </div>
