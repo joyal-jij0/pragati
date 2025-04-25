@@ -12,7 +12,6 @@ export async function GET() {
       id: true,
       name: true,
       location: true,
-      established: true,
       description: true,
       // members: true,
       _count: {

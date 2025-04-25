@@ -22,7 +22,6 @@ export async function POST(request: Request) {
       data: {
         name,
         location,
-        established: new Date(),
         description: description || 'fpo', // Optional field
       },
     })

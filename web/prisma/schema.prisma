@@ -44,10 +44,9 @@ model user {
 }
 
 model FPO {
-  id          Int       @id @default(autoincrement())
+  id          String    @id @default(cuid())
   name        String    @unique @db.VarChar(100)
   location    String    @db.VarChar(200)
-  established DateTime  @db.Timestamp(6)
   description String?   @db.VarChar
   members     Member[]  @relation("FPOToMembership")
   createdAt   DateTime  @default(now()) @db.Timestamp(6)
@@ -58,7 +57,7 @@ model Member {
   user     user     @relation("UserToMembership", fields: [userId], references: [id])
   userId   Int
   fpo      FPO      @relation("FPOToMembership", fields: [fpoId], references: [id])
-  fpoId    Int
+  fpoId    String
   role     String   @default("Member") @db.VarChar(50) // Example: Admin, Manager, Member
   joinedAt DateTime @default(now()) @db.Timestamp(6)
 }
