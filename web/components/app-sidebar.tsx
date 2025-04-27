@@ -1,21 +1,22 @@
 'use client'
 
+import {
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from '@/components/ui/sidebar'
+import { cn } from '@/lib/utils'
+
 import * as React from 'react'
 import {
   BookOpen,
   Bot,
-  Frame,
-  GalleryVerticalEnd,
-  Map,
-  PieChart,
   SearchIcon,
-  Settings2,
   SquareTerminal,
   TreePalmIcon,
 } from 'lucide-react'
-
-import { NavMain } from '@/components/nav-main'
-import { NavServices } from '@/components/nav-projects'
 import { NavUser } from '@/components/nav-user'
 import { TeamSwitcher } from '@/components/team-switcher'
 import {
@@ -25,6 +26,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from '@/components/ui/sidebar'
+import { usePathname } from 'next/navigation'
 
 // This is sample data.
 const data = {
@@ -43,87 +45,43 @@ const data = {
   navMain: [
     {
       title: '🏡 Dashboard',
-      url: '#',
+      url: '/dashboard',
       icon: SquareTerminal,
       isActive: true,
-      items: [
-        {
-          title: 'History',
-          url: '#',
-        },
-        {
-          title: 'Starred',
-          url: '#',
-        },
-        {
-          title: 'Settings',
-          url: '#',
-        },
-      ],
     },
     {
       title: '🌧️ Gyan Dhara',
-      url: '#',
+      url: '/gyan-dhara',
       icon: Bot,
-      items: [
-        {
-          title: 'Genesis',
-          url: '#',
-        },
-        {
-          title: 'Explorer',
-          url: '#',
-        },
-        {
-          title: 'Quantum',
-          url: '#',
-        },
-      ],
     },
     {
       title: '🌱 Fasal Doctor',
-      url: '#',
+      url: '/fasal-doctor',
       icon: BookOpen,
-      items: [
-        {
-          title: 'Introduction',
-          url: '#',
-        },
-        {
-          title: 'Get Started',
-          url: '#',
-        },
-        {
-          title: 'Tutorials',
-          url: '#',
-        },
-        {
-          title: 'Changelog',
-          url: '#',
-        },
-      ],
     },
   ],
-  projects: [
+  navServices: [
     {
-      name: '🛒 Bazaar Bridge',
-      url: '#',
-      icon: Frame,
+      title: '🛒 Bazaar Bridge',
+      url: '/bazaar-bridge',
+      icon: SquareTerminal,
+      isActive: true,
     },
     {
-      name: '💰 Arthik Sahara',
-      url: '#',
-      icon: PieChart,
+      title: '💰 Arthik Sahara',
+      url: '/arthik-sahar',
+      icon: Bot,
     },
     {
-      name: '👨‍👩‍👧‍👦 Samuday Shakti',
-      url: '#',
-      icon: Map,
+      title: '👨‍👩‍👧‍👦 Samuday Shakti',
+      url: '/samuday-shakti',
+      icon: BookOpen,
     },
   ],
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const pathname = usePathname()
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -148,8 +106,75 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </div>
         </div>
 
-        <NavMain items={data.navMain} />
-        <NavServices projects={data.projects} />
+        <SidebarGroup>
+          <SidebarGroupLabel>
+            <span className="w-2 h-2 bg-green-500 rounded-full mr-2" /> Main
+            Menu
+          </SidebarGroupLabel>
+          <SidebarMenu>
+            {data.navMain.map((item) => (
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton asChild>
+                  <a
+                    href={item.url}
+                    className={cn(
+                      `flex items-center gap-3 px-4 py-5 rounded-xl transition-all duration-300 group/menu-item relative overflow-hidden`,
+                      pathname?.startsWith(item.url)
+                        ? 'bg-gradient-to-r from-green-500/10 to-green-600/5 text-green-700 font-medium'
+                        : 'text-gray-700 group-hover/menu-item:bg-green-50'
+                    )}
+                    title={item.title}
+                  >
+                    {pathname?.startsWith(item.url) && (
+                      <span className="absolute inset-0 bg-gradient-to-r from-green-500/10 to-transparent opacity-80 rounded-xl"></span>
+                    )}
+                    <span className="relative z-10 font-['Poppins',_sans-serif] text-base transition-all duration-300 group-hover/menu-item:translate-x-1">
+                      {item.title}
+                    </span>
+                    {pathname?.startsWith(item.url) && (
+                      <span className="absolute left-0 top-0 bottom-0 w-1.5 bg-green-500 rounded-r-full"></span>
+                    )}
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel>
+            <span className="w-2 h-2 bg-yellow-500 rounded-full mr-2" />{' '}
+            Services
+          </SidebarGroupLabel>
+          <SidebarMenu>
+            {data.navServices.map((item) => (
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton asChild>
+                  <a
+                    href={item.url}
+                    className={cn(
+                      `flex items-center gap-3 px-4 py-5 rounded-xl transition-all duration-300 group/menu-item relative overflow-hidden`,
+                      pathname?.startsWith(item.url)
+                        ? 'bg-gradient-to-r from-green-500/10 to-green-600/5 text-green-700 font-medium'
+                        : 'text-gray-700 group-hover/menu-item:bg-green-50'
+                    )}
+                    title={item.title}
+                  >
+                    {pathname?.startsWith(item.url) && (
+                      <span className="absolute inset-0 bg-gradient-to-r from-green-500/10 to-transparent opacity-80 rounded-xl"></span>
+                    )}
+                    <span className="relative z-10 font-['Poppins',_sans-serif] text-base transition-all duration-300 group-hover/menu-item:translate-x-1">
+                      {item.title}
+                    </span>
+                    {pathname?.startsWith(item.url) && (
+                      <span className="absolute left-0 top-0 bottom-0 w-1.5 bg-green-500 rounded-r-full"></span>
+                    )}
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
