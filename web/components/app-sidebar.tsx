@@ -82,7 +82,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
       <SidebarContent>
-        <div className="px-4 pt-4 space-y-2">
+        <div className="px-4 pt-4 space-y-2 group-data-[collapsible=icon]:h-0 overflow-hidden">
           <div className="relative group/input">
             <input
               type="text"
