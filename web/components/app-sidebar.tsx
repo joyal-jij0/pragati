@@ -8,6 +8,7 @@ import {
   GalleryVerticalEnd,
   Map,
   PieChart,
+  SearchIcon,
   Settings2,
   SquareTerminal,
 } from 'lucide-react'
@@ -33,9 +34,9 @@ const data = {
   },
   teams: [
     {
-      name: 'Acme Inc',
+      name: 'Krishi Sahayak',
       logo: GalleryVerticalEnd,
-      plan: 'Enterprise',
+      plan: 'Empowering Indian Farmers',
     },
   ],
   navMain: [
@@ -128,6 +129,24 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
       <SidebarContent>
+        <div className="px-4 pt-4 space-y-2">
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search..."
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/70 backdrop-blur-sm border border-green-100 focus:outline-none focus:ring-2 focus:ring-green-500/30 text-sm text-gray-700 placeholder-gray-400 transition-all duration-300 group-hover:shadow-md"
+            />
+            <SearchIcon className="w-5 h-5 absolute left-3 top-3 text-gray-400 transition-all duration-300 hover:text-green-500" />
+          </div>
+
+          {/* Decorative farm element */}
+          <div className="px-0.5">
+            <div className="h-2.5 bg-gradient-to-r from-green-200 via-yellow-200 to-green-200 rounded-full opacity-70 relative overflow-hidden">
+              <div className="absolute top-0 left-0 h-full w-12 bg-white/40 animate-pulse-slow"></div>
+            </div>
+          </div>
+        </div>
+
         <NavMain items={data.navMain} />
         <NavServices projects={data.projects} />
       </SidebarContent>
