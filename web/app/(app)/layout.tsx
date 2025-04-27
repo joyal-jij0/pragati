@@ -46,7 +46,7 @@ export default function DashboardLayout({
             </Breadcrumb>
           </div>
           {/* Weather widget - now visible on both mobile and desktop */}
-          <div className="flex items-center gap-2 ml-2 bg-white/70 backdrop-blur-sm px-3 py-1.5 rounded-full border border-green-100 shadow-sm">
+          <div className="flex items-center gap-2 ml-2 bg-white/70 backdrop-blur-sm pl-1.5 pr-3 py-1 rounded-full border border-green-100 shadow-sm">
             <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-500">
               <span className="text-sm">☁️</span>
             </div>
