@@ -36,17 +36,17 @@ export function NavMain({
               <a
                 href={item.url}
                 className={cn(
-                  `flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-300 group relative overflow-hidden`,
+                  `flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-300 group/menu-item relative overflow-hidden`,
                   item.isActive
                     ? 'bg-gradient-to-r from-green-500/10 to-green-600/5 text-green-700 font-medium'
-                    : 'text-gray-700 group-hover:bg-green-50'
+                    : 'text-gray-700 group-hover/menu-item:bg-green-50'
                 )}
                 title={item.title}
               >
                 {item.isActive && (
                   <span className="absolute inset-0 bg-gradient-to-r from-green-500/10 to-transparent opacity-80 rounded-xl"></span>
                 )}
-                <span className="relative z-10 font-['Poppins',_sans-serif] text-base transition-all duration-300 group-hover:translate-x-1">
+                <span className="relative z-10 font-['Poppins',_sans-serif] text-base transition-all duration-300 group-hover/menu-item:translate-x-1">
                   {item.title}
                 </span>
                 {item.isActive && (
