@@ -44,38 +44,38 @@ const data = {
   ],
   navMain: [
     {
-      title: '🏡 Dashboard',
+      title: 'Dashboard',
       url: '/dashboard',
-      icon: SquareTerminal,
+      icon: '🏡',
       isActive: true,
     },
     {
-      title: '🌧️ Gyan Dhara',
+      title: 'Gyan Dhara',
       url: '/gyan-dhara',
-      icon: Bot,
+      icon: '🌧️',
     },
     {
-      title: '🌱 Fasal Doctor',
+      title: 'Fasal Doctor',
       url: '/fasal-doctor',
-      icon: BookOpen,
+      icon: '🌱',
     },
   ],
   navServices: [
     {
-      title: '🛒 Bazaar Bridge',
+      title: 'Bazaar Bridge',
       url: '/bazaar-bridge',
-      icon: SquareTerminal,
+      icon: '🛒',
       isActive: true,
     },
     {
-      title: '💰 Arthik Sahara',
+      title: 'Arthik Sahara',
       url: '/arthik-sahar',
-      icon: Bot,
+      icon: '💰',
     },
     {
-      title: '👨‍👩‍👧‍👦 Samuday Shakti',
+      title: 'Samuday Shakti',
       url: '/samuday-shakti',
-      icon: BookOpen,
+      icon: '👨‍👩‍👧‍👦',
     },
   ],
 }
@@ -129,6 +129,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                       <span className="absolute inset-0 bg-gradient-to-r from-green-500/10 to-transparent opacity-80 rounded-xl"></span>
                     )}
                     <span className="relative z-10 font-['Poppins',_sans-serif] text-base transition-all duration-300 group-hover/menu-item:translate-x-1">
+                      {item.icon}
+                    </span>
+                    <span className="relative z-10 font-['Poppins',_sans-serif] text-base transition-all duration-300 group-hover/menu-item:translate-x-1">
                       {item.title}
                     </span>
                     {pathname?.startsWith(item.url) && (
@@ -163,6 +166,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     {pathname?.startsWith(item.url) && (
                       <span className="absolute inset-0 bg-gradient-to-r from-green-500/10 to-transparent opacity-80 rounded-xl"></span>
                     )}
+                    <span className="relative z-10 font-['Poppins',_sans-serif] text-base transition-all duration-300 group-hover/menu-item:translate-x-1">
+                      {item.icon}
+                    </span>
                     <span className="relative z-10 font-['Poppins',_sans-serif] text-base transition-all duration-300 group-hover/menu-item:translate-x-1">
                       {item.title}
                     </span>
