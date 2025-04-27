@@ -14,6 +14,7 @@ import ResourceSharing from "@/components/samudayShakti/ResourceSharing";
 import CommunityHub from "@/components/samudayShakti/CommunityHub";
 import FPODirectory from "@/components/samudayShakti/FPODirectory";
 import AICollaborationAssistant from "@/components/samudayShakti/AICollaborationAssistant";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const SamudayShaktiPage = () => {
   // Animation variants
@@ -95,29 +96,43 @@ const SamudayShaktiPage = () => {
           {/* Main Tabs */}
           <motion.div variants={itemVariants}>
             <Tabs defaultValue="dashboard" className="w-full">
-              <TabsList className="grid grid-cols-7 mb-6 bg-white/50 p-1 rounded-lg">
-                <TabsTrigger value="dashboard" className="data-[state=active]:bg-green-100 data-[state=active]:text-green-800">
-                  डैशबोर्ड
-                </TabsTrigger>
-                <TabsTrigger value="purchases" className="data-[state=active]:bg-green-100 data-[state=active]:text-green-800">
-                  सामूहिक खरीद
-                </TabsTrigger>
-                <TabsTrigger value="sales" className="data-[state=active]:bg-green-100 data-[state=active]:text-green-800">
-                  सामूहिक बिक्री
-                </TabsTrigger>
-                <TabsTrigger value="resources" className="data-[state=active]:bg-green-100 data-[state=active]:text-green-800">
-                  संसाधन साझाकरण
-                </TabsTrigger>
-                <TabsTrigger value="community" className="data-[state=active]:bg-green-100 data-[state=active]:text-green-800">
-                  समुदाय हब
-                </TabsTrigger>
-                <TabsTrigger value="directory" className="data-[state=active]:bg-green-100 data-[state=active]:text-green-800">
-                  FPO निर्देशिका
-                </TabsTrigger>
-                <TabsTrigger value="ai-assistant" className="data-[state=active]:bg-green-100 data-[state=active]:text-green-800">
-                  AI सहायक
-                </TabsTrigger>
-              </TabsList>
+              <div className="flex items-center justify-between mb-6">
+                <TabsList className="grid grid-cols-7 bg-white/50 p-1 rounded-lg">
+                  <TabsTrigger value="dashboard" className="data-[state=active]:bg-green-100 data-[state=active]:text-green-800">
+                    डैशबोर्ड
+                  </TabsTrigger>
+                  <TabsTrigger value="purchases" className="data-[state=active]:bg-green-100 data-[state=active]:text-green-800">
+                    सामूहिक खरीद
+                  </TabsTrigger>
+                  <TabsTrigger value="sales" className="data-[state=active]:bg-green-100 data-[state=active]:text-green-800">
+                    सामूहिक बिक्री
+                  </TabsTrigger>
+                  <TabsTrigger value="resources" className="data-[state=active]:bg-green-100 data-[state=active]:text-green-800">
+                    संसाधन साझाकरण
+                  </TabsTrigger>
+                  <TabsTrigger value="community" className="data-[state=active]:bg-green-100 data-[state=active]:text-green-800">
+                    समुदाय हब
+                  </TabsTrigger>
+                  <TabsTrigger value="directory" className="data-[state=active]:bg-green-100 data-[state=active]:text-green-800">
+                    FPO निर्देशिका
+                  </TabsTrigger>
+                  <TabsTrigger value="ai-assistant" className="data-[state=active]:bg-green-100 data-[state=active]:text-green-800">
+                    AI सहायक
+                  </TabsTrigger>
+                </TabsList>
+                <div className="px-8">
+                  <Select>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="किसान उन्नति FPO" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="light">Light</SelectItem>
+                      <SelectItem value="dark">Dark</SelectItem>
+                      <SelectItem value="system">System</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
 
               <TabsContent value="dashboard" className="mt-0">
                 <FPODashboard />
