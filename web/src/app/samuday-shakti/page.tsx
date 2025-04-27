@@ -4,7 +4,21 @@ import React, { useState, useEffect } from 'react'
 import DashboardHeader from '@/components/DashboardHeader'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { motion } from 'framer-motion'
-import { Users, ChevronRight, Loader2 } from 'lucide-react'
+import {
+  Users,
+  ChevronRight,
+  Loader2,
+  MapPin,
+  Calendar,
+  UserCircle,
+  Info,
+  Shield,
+  Activity,
+  Package,
+  Handshake,
+  BarChart2,
+  Users2,
+} from 'lucide-react'
 
 // Import Samuday Shakti components
 import FPODashboard from '@/components/samudayShakti/FPODashboard'
@@ -84,6 +98,17 @@ const SamudayShaktiPage = () => {
 
   // Find the selected FPO object
   const currentFpo = fpos.find((fpo) => fpo.id === selectedFpo)
+
+  // Format date function
+  const formatDate = (dateString) => {
+    const date = new Date(dateString)
+    // Format as DD/MM/YYYY
+    return date.toLocaleDateString('hi-IN', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    })
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-amber-50">
@@ -207,7 +232,7 @@ const SamudayShaktiPage = () => {
                     </div>
                   ) : (
                     <Select value={selectedFpo} onValueChange={handleFpoChange}>
-                      <SelectTrigger className="w-[180px]">
+                      <SelectTrigger className="w-[200px] border-green-200 bg-green-50">
                         <SelectValue placeholder="FPO चुनें">
                           {currentFpo ? currentFpo.name : 'FPO चुनें'}
                         </SelectValue>
@@ -230,7 +255,7 @@ const SamudayShaktiPage = () => {
               </div>
 
               <TabsContent value="dashboard" className="mt-0">
-                <FPODashboard fpoId={selectedFpo} />
+                <FPODashboard currentFpo={currentFpo} />
               </TabsContent>
 
               <TabsContent value="purchases" className="mt-0">
