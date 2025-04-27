@@ -1,20 +1,26 @@
-"use client";
+'use client'
 
-import React, { useState } from "react";
-import DashboardHeader from "@/components/DashboardHeader";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { motion } from "framer-motion";
-import { Users, ChevronRight } from "lucide-react";
+import React, { useState } from 'react'
+import DashboardHeader from '@/components/DashboardHeader'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { motion } from 'framer-motion'
+import { Users, ChevronRight } from 'lucide-react'
 
 // Import Samuday Shakti components
-import FPODashboard from "@/components/samudayShakti/FPODashboard";
-import GroupPurchases from "@/components/samudayShakti/GroupPurchases";
-import CollectiveSales from "@/components/samudayShakti/CollectiveSales";
-import ResourceSharing from "@/components/samudayShakti/ResourceSharing";
-import CommunityHub from "@/components/samudayShakti/CommunityHub";
-import FPODirectory from "@/components/samudayShakti/FPODirectory";
-import AICollaborationAssistant from "@/components/samudayShakti/AICollaborationAssistant";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import FPODashboard from '@/components/samudayShakti/FPODashboard'
+import GroupPurchases from '@/components/samudayShakti/GroupPurchases'
+import CollectiveSales from '@/components/samudayShakti/CollectiveSales'
+import ResourceSharing from '@/components/samudayShakti/ResourceSharing'
+import CommunityHub from '@/components/samudayShakti/CommunityHub'
+import FPODirectory from '@/components/samudayShakti/FPODirectory'
+import AICollaborationAssistant from '@/components/samudayShakti/AICollaborationAssistant'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
 const SamudayShaktiPage = () => {
   // Animation variants
@@ -23,19 +29,19 @@ const SamudayShaktiPage = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
-      }
-    }
-  };
+        staggerChildren: 0.1,
+      },
+    },
+  }
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { type: "spring", stiffness: 100 }
-    }
-  };
+      transition: { type: 'spring', stiffness: 100 },
+    },
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-amber-50">
@@ -53,15 +59,20 @@ const SamudayShaktiPage = () => {
           className="space-y-6"
         >
           {/* Introduction Card */}
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="bg-gradient-to-r from-green-600 to-green-700 rounded-xl shadow-lg overflow-hidden text-white"
           >
             <div className="p-6 md:p-8 flex flex-col md:flex-row items-center gap-6">
               <div className="w-full md:w-2/3">
-                <h2 className="text-2xl font-bold mb-3">किसान उत्पादक संगठन (FPO) प्लेटफॉर्म</h2>
+                <h2 className="text-2xl font-bold mb-3">
+                  किसान उत्पादक संगठन (FPO) प्लेटफॉर्म
+                </h2>
                 <p className="mb-4">
-                  समुदाय शक्ति आपके FPO को डिजिटल रूप से प्रबंधित करने, सामूहिक खरीद और बिक्री को सुविधाजनक बनाने, संसाधनों को साझा करने और अपने समुदाय के साथ जुड़ने के लिए एक व्यापक प्लेटफॉर्म प्रदान करता है।
+                  समुदाय शक्ति आपके FPO को डिजिटल रूप से प्रबंधित करने, सामूहिक
+                  खरीद और बिक्री को सुविधाजनक बनाने, संसाधनों को साझा करने और
+                  अपने समुदाय के साथ जुड़ने के लिए एक व्यापक प्लेटफॉर्म प्रदान
+                  करता है।
                 </p>
                 <div className="flex flex-wrap gap-3">
                   <div className="bg-white bg-opacity-20 text-muted-foreground px-3 py-1.5 rounded-full text-sm font-semibold">
@@ -76,9 +87,9 @@ const SamudayShaktiPage = () => {
                 </div>
               </div>
               <div className="w-full md:w-1/3 flex justify-center">
-                <img 
-                  src="https://images.unsplash.com/photo-1593113630400-ea4288922497?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" 
-                  alt="Farmers working together" 
+                <img
+                  src="https://images.unsplash.com/photo-1593113630400-ea4288922497?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+                  alt="Farmers working together"
                   className="rounded-lg shadow-md max-w-full h-auto"
                 />
               </div>
@@ -98,25 +109,46 @@ const SamudayShaktiPage = () => {
             <Tabs defaultValue="dashboard" className="w-full">
               <div className="flex items-center justify-between mb-6">
                 <TabsList className="grid grid-cols-7 bg-white/50 p-1 rounded-lg">
-                  <TabsTrigger value="dashboard" className="data-[state=active]:bg-green-100 data-[state=active]:text-green-800">
+                  <TabsTrigger
+                    value="dashboard"
+                    className="data-[state=active]:bg-green-100 data-[state=active]:text-green-800"
+                  >
                     डैशबोर्ड
                   </TabsTrigger>
-                  <TabsTrigger value="purchases" className="data-[state=active]:bg-green-100 data-[state=active]:text-green-800">
+                  <TabsTrigger
+                    value="purchases"
+                    className="data-[state=active]:bg-green-100 data-[state=active]:text-green-800"
+                  >
                     सामूहिक खरीद
                   </TabsTrigger>
-                  <TabsTrigger value="sales" className="data-[state=active]:bg-green-100 data-[state=active]:text-green-800">
+                  <TabsTrigger
+                    value="sales"
+                    className="data-[state=active]:bg-green-100 data-[state=active]:text-green-800"
+                  >
                     सामूहिक बिक्री
                   </TabsTrigger>
-                  <TabsTrigger value="resources" className="data-[state=active]:bg-green-100 data-[state=active]:text-green-800">
+                  <TabsTrigger
+                    value="resources"
+                    className="data-[state=active]:bg-green-100 data-[state=active]:text-green-800"
+                  >
                     संसाधन साझाकरण
                   </TabsTrigger>
-                  <TabsTrigger value="community" className="data-[state=active]:bg-green-100 data-[state=active]:text-green-800">
+                  <TabsTrigger
+                    value="community"
+                    className="data-[state=active]:bg-green-100 data-[state=active]:text-green-800"
+                  >
                     समुदाय हब
                   </TabsTrigger>
-                  <TabsTrigger value="directory" className="data-[state=active]:bg-green-100 data-[state=active]:text-green-800">
+                  <TabsTrigger
+                    value="directory"
+                    className="data-[state=active]:bg-green-100 data-[state=active]:text-green-800"
+                  >
                     FPO निर्देशिका
                   </TabsTrigger>
-                  <TabsTrigger value="ai-assistant" className="data-[state=active]:bg-green-100 data-[state=active]:text-green-800">
+                  <TabsTrigger
+                    value="ai-assistant"
+                    className="data-[state=active]:bg-green-100 data-[state=active]:text-green-800"
+                  >
                     AI सहायक
                   </TabsTrigger>
                 </TabsList>
@@ -165,7 +197,10 @@ const SamudayShaktiPage = () => {
           </motion.div>
 
           {/* Success Stories */}
-          <motion.div variants={itemVariants} className="bg-white rounded-xl shadow-md overflow-hidden">
+          <motion.div
+            variants={itemVariants}
+            className="bg-white rounded-xl shadow-md overflow-hidden"
+          >
             <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
               <h3 className="font-medium text-gray-800">सफलता की कहानियां</h3>
               <button className="text-sm text-green-600 hover:text-green-700 font-medium flex items-center gap-1">
@@ -173,7 +208,7 @@ const SamudayShaktiPage = () => {
                 <ChevronRight className="h-4 w-4" />
               </button>
             </div>
-            
+
             <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="bg-gradient-to-r from-amber-50 to-amber-100 rounded-lg p-4 border border-amber-200">
                 <div className="flex flex-col h-full">
@@ -186,7 +221,9 @@ const SamudayShaktiPage = () => {
                     किसान उन्नति FPO ने 15% अधिक मूल्य प्राप्त किया
                   </h4>
                   <p className="text-sm text-gray-600 mb-4 flex-grow">
-                    हरियाणा के सोनीपत में किसान उन्नति FPO ने 120 टन गेहूं की सामूहिक बिक्री के माध्यम से मंडी मूल्य से 15% अधिक मूल्य प्राप्त किया।
+                    हरियाणा के सोनीपत में किसान उन्नति FPO ने 120 टन गेहूं की
+                    सामूहिक बिक्री के माध्यम से मंडी मूल्य से 15% अधिक मूल्य
+                    प्राप्त किया।
                   </p>
                   <div className="flex items-center justify-between mt-auto">
                     <span className="text-xs text-gray-500">सितंबर 2023</span>
@@ -196,7 +233,7 @@ const SamudayShaktiPage = () => {
                   </div>
                 </div>
               </div>
-              
+
               <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-4 border border-blue-200">
                 <div className="flex flex-col h-full">
                   <div className="mb-3">
@@ -208,7 +245,9 @@ const SamudayShaktiPage = () => {
                     प्रगति किसान FPO ने 12% लागत बचाई
                   </h4>
                   <p className="text-sm text-gray-600 mb-4 flex-grow">
-                    महाराष्ट्र के नासिक में प्रगति किसान FPO ने उर्वरकों की सामूहिक खरीद के माध्यम से 12% लागत बचाई और गुणवत्ता सुनिश्चित की।
+                    महाराष्ट्र के नासिक में प्रगति किसान FPO ने उर्वरकों की
+                    सामूहिक खरीद के माध्यम से 12% लागत बचाई और गुणवत्ता
+                    सुनिश्चित की।
                   </p>
                   <div className="flex items-center justify-between mt-auto">
                     <span className="text-xs text-gray-500">अगस्त 2023</span>
@@ -218,7 +257,7 @@ const SamudayShaktiPage = () => {
                   </div>
                 </div>
               </div>
-              
+
               <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-4 border border-green-200">
                 <div className="flex flex-col h-full">
                   <div className="mb-3">
@@ -230,7 +269,9 @@ const SamudayShaktiPage = () => {
                     जय किसान FPO ने उत्पादकता बढ़ाई
                   </h4>
                   <p className="text-sm text-gray-600 mb-4 flex-grow">
-                    मध्य प्रदेश के इंदौर में जय किसान FPO ने कृषि उपकरणों के साझाकरण के माध्यम से सदस्यों की उत्पादकता में 25% की वृद्धि की।
+                    मध्य प्रदेश के इंदौर में जय किसान FPO ने कृषि उपकरणों के
+                    साझाकरण के माध्यम से सदस्यों की उत्पादकता में 25% की वृद्धि
+                    की।
                   </p>
                   <div className="flex items-center justify-between mt-auto">
                     <span className="text-xs text-gray-500">जुलाई 2023</span>
@@ -245,7 +286,7 @@ const SamudayShaktiPage = () => {
         </motion.div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SamudayShaktiPage;
+export default SamudayShaktiPage
