@@ -1,10 +1,10 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import DashboardHeader from '@/components/DashboardHeader'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { motion } from 'framer-motion'
-import { Users, ChevronRight } from 'lucide-react'
+import { Users, ChevronRight, Loader2 } from 'lucide-react'
 
 // Import Samuday Shakti components
 import FPODashboard from '@/components/samudayShakti/FPODashboard'
@@ -23,6 +23,45 @@ import {
 } from '@/components/ui/select'
 
 const SamudayShaktiPage = () => {
+  const [fpos, setFpos] = useState([])
+  const [selectedFpo, setSelectedFpo] = useState('')
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  // Fetch FPOs from API
+  useEffect(() => {
+    const fetchFPOs = async () => {
+      try {
+        setIsLoading(true)
+        const response = await fetch('/api/samuday-shakti/fpo')
+
+        if (!response.ok) {
+          throw new Error(`Error fetching FPOs: ${response.status}`)
+        }
+
+        const data = await response.json()
+        setFpos(data)
+
+        // Set the first FPO as default if available
+        if (data.length > 0) {
+          setSelectedFpo(data[0].id)
+        }
+      } catch (err) {
+        console.error('Failed to fetch FPOs:', err)
+        setError(err.message)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchFPOs()
+  }, [])
+
+  // Handle FPO selection change
+  const handleFpoChange = (value) => {
+    setSelectedFpo(value)
+  }
+
   // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -42,6 +81,9 @@ const SamudayShaktiPage = () => {
       transition: { type: 'spring', stiffness: 100 },
     },
   }
+
+  // Find the selected FPO object
+  const currentFpo = fpos.find((fpo) => fpo.id === selectedFpo)
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-amber-50">
@@ -153,45 +195,66 @@ const SamudayShaktiPage = () => {
                   </TabsTrigger>
                 </TabsList>
                 <div className="px-8">
-                  <Select>
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="किसान उन्नति FPO" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="light">Light</SelectItem>
-                      <SelectItem value="dark">Dark</SelectItem>
-                      <SelectItem value="system">System</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  {isLoading ? (
+                    <div className="w-[180px] h-10 flex items-center justify-center bg-white rounded-md">
+                      <Loader2 className="h-4 w-4 animate-spin text-green-600" />
+                    </div>
+                  ) : error ? (
+                    <div className="w-[180px] h-10 flex items-center justify-center bg-white rounded-md">
+                      <span className="text-red-500 text-xs">
+                        लोड करने में त्रुटि
+                      </span>
+                    </div>
+                  ) : (
+                    <Select value={selectedFpo} onValueChange={handleFpoChange}>
+                      <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="FPO चुनें">
+                          {currentFpo ? currentFpo.name : 'FPO चुनें'}
+                        </SelectValue>
+                      </SelectTrigger>
+                      <SelectContent>
+                        {fpos.map((fpo) => (
+                          <SelectItem key={fpo.id} value={fpo.id}>
+                            <div className="flex flex-col">
+                              <span>{fpo.name}</span>
+                              <span className="text-xs text-gray-500">
+                                {fpo.location}
+                              </span>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
                 </div>
               </div>
 
               <TabsContent value="dashboard" className="mt-0">
-                <FPODashboard />
+                <FPODashboard fpoId={selectedFpo} />
               </TabsContent>
 
               <TabsContent value="purchases" className="mt-0">
-                <GroupPurchases />
+                <GroupPurchases fpoId={selectedFpo} />
               </TabsContent>
 
               <TabsContent value="sales" className="mt-0">
-                <CollectiveSales />
+                <CollectiveSales fpoId={selectedFpo} />
               </TabsContent>
 
               <TabsContent value="resources" className="mt-0">
-                <ResourceSharing />
+                <ResourceSharing fpoId={selectedFpo} />
               </TabsContent>
 
               <TabsContent value="community" className="mt-0">
-                <CommunityHub />
+                <CommunityHub fpoId={selectedFpo} />
               </TabsContent>
 
               <TabsContent value="directory" className="mt-0">
-                <FPODirectory />
+                <FPODirectory fpoId={selectedFpo} />
               </TabsContent>
 
               <TabsContent value="ai-assistant" className="mt-0">
-                <AICollaborationAssistant />
+                <AICollaborationAssistant fpoId={selectedFpo} />
               </TabsContent>
             </Tabs>
           </motion.div>
