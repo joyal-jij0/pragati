@@ -18,6 +18,8 @@ import {
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar'
 import { Button } from './ui/button'
+import Link from 'next/link'
+import { cn } from '@/lib/utils'
 
 export function NavMain({
   items,
@@ -40,19 +42,55 @@ export function NavMain({
       </SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
-          // <Button tooltip={item.title} variant={'outline'}>
-          //   {item.icon && <item.icon />}
-          //   <span>{item.title}</span>
-          //   <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-          // </Button>
-          <SidebarMenuItem key={item.title} tooltip={item.title}>
+          <SidebarMenuItem key={item.title}>
             <SidebarMenuButton asChild>
-              <a href={item.url}>
-                {/* {item.icon && <item.icon />} */}
-                <span>{item.title}</span>
+              <a
+                href={item.url}
+                className={cn(
+                  `flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-300 relative overflow-hidden`,
+                  item.isActive
+                    ? 'bg-gradient-to-r from-green-500/10 to-green-600/5 text-green-700 font-medium'
+                    : 'text-gray-700 hover:bg-green-50'
+                )}
+                title={item.title}
+              >
+                {item.isActive && (
+                  <span className="absolute inset-0 bg-gradient-to-r from-green-500/10 to-transparent opacity-80 rounded-xl"></span>
+                )}
+                <span className="relative z-10 font-['Poppins',_sans-serif] text-base transition-all duration-300 hover:translate-x-1">
+                  {item.title}
+                </span>
+                {item.isActive && (
+                  <span className="absolute left-0 top-0 bottom-0 w-1.5 bg-green-500 rounded-r-full"></span>
+                )}
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
+
+          // <Link
+          //   key={item.title}
+          //   href={item.url}
+          //   className={cn(
+          //     `flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-300 group relative overflow-hidden`,
+          //     item.isActive
+          //       ? 'bg-gradient-to-r from-green-500/10 to-green-600/5 text-green-700 font-medium'
+          //       : 'text-gray-700 hover:bg-green-50'
+          //   )}
+          //   title={item.title}
+          // >
+          //   {item.isActive && (
+          //     <span className="absolute inset-0 bg-gradient-to-r from-green-500/10 to-transparent opacity-80 rounded-xl"></span>
+          //   )}
+          //   {/* <span className="relative z-10 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+          //     {item.icon(item.isActive)}
+          //   </span> */}
+          //   <span className="relative z-10 font-['Poppins',_sans-serif] text-base transition-all duration-300 group-hover:translate-x-1">
+          //     {item.title}
+          //   </span>
+          //   {item.isActive && (
+          //     <span className="absolute left-0 top-0 bottom-0 w-1.5 bg-green-500 rounded-r-full"></span>
+          //   )}
+          // </Link>
         ))}
       </SidebarMenu>
     </SidebarGroup>
