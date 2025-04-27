@@ -11,6 +11,7 @@ import {
   SearchIcon,
   Settings2,
   SquareTerminal,
+  TreePalmIcon,
 } from 'lucide-react'
 
 import { NavMain } from '@/components/nav-main'
@@ -35,7 +36,7 @@ const data = {
   teams: [
     {
       name: 'Krishi Sahayak',
-      logo: GalleryVerticalEnd,
+      logo: TreePalmIcon,
       plan: 'Empowering Indian Farmers',
     },
   ],

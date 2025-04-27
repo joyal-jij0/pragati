@@ -36,7 +36,7 @@ export function NavMain({
               <a
                 href={item.url}
                 className={cn(
-                  `flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-300 group/menu-item relative overflow-hidden`,
+                  `flex items-center gap-3 px-4 py-5 rounded-xl transition-all duration-300 group/menu-item relative overflow-hidden`,
                   item.isActive
                     ? 'bg-gradient-to-r from-green-500/10 to-green-600/5 text-green-700 font-medium'
                     : 'text-gray-700 group-hover/menu-item:bg-green-50'
