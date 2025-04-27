@@ -10,13 +10,7 @@ import {
 import { cn } from '@/lib/utils'
 
 import * as React from 'react'
-import {
-  BookOpen,
-  Bot,
-  SearchIcon,
-  SquareTerminal,
-  TreePalmIcon,
-} from 'lucide-react'
+import { SearchIcon, TreePalmIcon } from 'lucide-react'
 import { NavUser } from '@/components/nav-user'
 import { TeamSwitcher } from '@/components/team-switcher'
 import {
