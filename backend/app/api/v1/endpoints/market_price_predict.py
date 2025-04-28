@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status 
+from fastapi import APIRouter, HTTPException, status 
 from fastapi.responses import JSONResponse 
 from app.schemas.market_price import MarketPriceInput
 from app.services.market_price_service import predict_market_price

@@ -8,7 +8,7 @@ from contextlib import asynccontextmanager
 
 from app.utils.api_models import ApiError
 from app.db.session import create_db_and_tables
-from app.api.v1.endpoints import healthcheck, users, weather, market_price_predict
+from app.api.v1.endpoints import healthcheck, users, weather, market_price_predict, disease_detect
 
 # Configure logging
 logging.basicConfig(
@@ -54,5 +54,6 @@ app.add_middleware(
 
 app.include_router(healthcheck, prefix="/api/v1", tags=["Health"])
 app.include_router(users, prefix="/api/v1/users", tags=["Users"])
-app.include_router(weather, prefix="/api/v1/weather", tags=["weather"])
+app.include_router(weather, prefix="/api/v1/weather", tags=["Weather"])
 app.include_router(market_price_predict, prefix="/api/v1/market-price", tags=["Market-Price"])
+app.include_router(disease_detect, prefix="/api/v1/disease-detect", tags=["Disease-Detect"])
