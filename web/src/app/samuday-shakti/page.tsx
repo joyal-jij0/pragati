@@ -71,9 +71,9 @@ export default function SamudayShaktiPage() {
         const data: FPOType[] = await response.json()
         setJoinedFPOs(data)
 
-        // Set the first FPO as default if available
+        // Set the first FPO's ID as default if available
         if (data.length > 0) {
-          setSelectedFPO(data[0].name)
+          setSelectedFPO(data[0].id) // Change this line to use ID
           setLocation(data[0].location)
         }
       } catch (err) {
@@ -109,10 +109,10 @@ export default function SamudayShaktiPage() {
   }
 
   // Handle FPO change
-  const handleFPOChange = (fpoId) => {
+  const handleFPOChange = (fpoId: string) => {
     const fpo = joinedFPOs.find((f) => f.id === fpoId)
     if (fpo) {
-      setSelectedFPO(fpo.name)
+      setSelectedFPO(fpo.id) // Change this line to store ID instead of name
       setLocation(fpo.location)
     }
   }
@@ -300,7 +300,7 @@ export default function SamudayShaktiPage() {
                       <div
                         key={fpo.id}
                         className={`p-3 rounded-lg border ${
-                          selectedFPO === fpo.name
+                          selectedFPO === fpo.id // Change this line to compare IDs
                             ? 'border-green-200 bg-green-50'
                             : 'border-gray-100 hover:bg-gray-50'
                         } cursor-pointer`}
@@ -320,7 +320,7 @@ export default function SamudayShaktiPage() {
                               </p>
                             </div>
                           </div>
-                          {selectedFPO === fpo.name && (
+                          {selectedFPO === fpo.id && ( // Change this line to compare IDs
                             <div className="h-3 w-3 rounded-full bg-green-500"></div>
                           )}
                         </div>

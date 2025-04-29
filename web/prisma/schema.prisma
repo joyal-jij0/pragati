@@ -41,6 +41,7 @@ model user {
   accessToken  String?  @db.VarChar
   refreshToken String?  @db.VarChar
   memberships  Member[] @relation("UserToMembership")
+  messages     Message[] @relation("UserToMessages")
 }
 
 model FPO {
@@ -50,6 +51,7 @@ model FPO {
   description String?   @db.VarChar
   members     Member[]  @relation("FPOToMembership")
   createdAt   DateTime  @default(now()) @db.Timestamp(6)
+  messages    Message[] @relation("FPOToMessages")
 }
 
 model Member {
@@ -60,4 +62,15 @@ model Member {
   fpoId    String
   role     String   @default("Member") @db.VarChar(50) // Example: Admin, Manager, Member
   joinedAt DateTime @default(now()) @db.Timestamp(6)
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  fpo       FPO      @relation("FPOToMessages", fields: [fpoId], references: [id])
+  fpoId     String
+  sender    user     @relation("UserToMessages", fields: [senderId], references: [id])
+  senderId  Int
+  content   String   @db.Text
+  readBy    Int[]    // Array of user IDs who have read this message
+  createdAt DateTime @default(now()) @db.Timestamp(6)
 }

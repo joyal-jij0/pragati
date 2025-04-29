@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { 
   MessageSquare, 
   Send, 
@@ -16,12 +17,42 @@ import {
 } from "lucide-react";
 
 interface GroupChatAnnouncementsProps {
-  selectedFPO: string;
+  selectedFPO: string;  // This is now the FPO id from the database
+}
+
+interface Message {
+  id: string;
+  content: string;
+  sender: {
+    id: number;
+    email: string;
+  };
+  readBy: number[];
+  createdAt: string;
+  fpoId: string;
+}
+
+interface ChatState {
+  messages: Message[];
+  loading: boolean;
+  error: string | null;
+  page: number;
+  hasMore: boolean;
 }
 
 const GroupChatAnnouncements = ({ selectedFPO }: GroupChatAnnouncementsProps) => {
   const [activeTab, setActiveTab] = useState("chat");
   const [message, setMessage] = useState("");
+  const [chatState, setChatState] = useState<ChatState>({
+    messages: [],
+    loading: false,
+    error: null,
+    page: 1,
+    hasMore: true
+  });
+
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const currentUser = useRef<number | null>(null); // Will store current user's ID
   
   // Sample announcements data
   const announcements = [
@@ -117,10 +148,76 @@ const GroupChatAnnouncements = ({ selectedFPO }: GroupChatAnnouncementsProps) =>
   };
   
   const handleSendMessage = () => {
-    if (message.trim() === "") return;
-    // Logic to send message would go here
-    setMessage("");
+    if (message.trim() === '') return;
+    sendMessage(message);
   };
+
+  const fetchMessages = async (fpoId: string, page: number) => {
+    try {
+      setChatState(prev => ({ ...prev, loading: true }));
+      const response = await fetch(`/api/samuday-shakti/fpo/${fpoId}/messages?page=${page}&limit=50`);
+      
+      if (!response.ok) throw new Error('Failed to fetch messages');
+      
+      const data = await response.json();
+      
+      setChatState(prev => ({
+        ...prev,
+        messages: page === 1 ? data.messages : [...prev.messages, ...data.messages],
+        loading: false,
+        hasMore: page < data.pages,
+        page: data.currentPage
+      }));
+    } catch (error) {
+      setChatState(prev => ({
+        ...prev,
+        error: 'Failed to load messages',
+        loading: false
+      }));
+    }
+  };
+
+  const sendMessage = async (content: string) => {
+    if (!selectedFPO || !content.trim()) return;
+
+    try {
+      const response = await fetch(`/api/samuday-shakti/fpo/${selectedFPO}/messages`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send message');
+      }
+
+      const data = await response.json();
+      setChatState(prev => ({
+        ...prev,
+        messages: [...prev.messages, data.message]
+      }));
+      setMessage('');
+      
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedFPO && activeTab === 'chat') {
+      fetchMessages(selectedFPO, 1);
+    }
+  }, [selectedFPO, activeTab]);
+
+  // Add auto-scroll effect
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [chatState.messages]);
+
+  // Add this to your component to debug the selectedFPO value
+  useEffect(() => {
+    console.log('Selected FPO:', selectedFPO);
+  }, [selectedFPO]);
   
   return (
     <motion.div
@@ -182,29 +279,54 @@ const GroupChatAnnouncements = ({ selectedFPO }: GroupChatAnnouncementsProps) =>
         {/* Chat Tab Content */}
         {activeTab === "chat" && (
           <div className="space-y-4">
+            {/* Chat Messages Section */}
             <div className="h-96 overflow-y-auto bg-gray-50 rounded-lg p-4 space-y-4">
-              {chatMessages.map((msg) => (
-                <motion.div
-                  key={msg.id}
-                  variants={itemVariants}
-                  className={`flex ${msg.isCurrentUser ? "justify-end" : "justify-start"}`}
-                >
-                  <div className={`max-w-[80%] ${msg.isCurrentUser ? "bg-green-100 text-gray-800" : "bg-white border border-gray-200 text-gray-800"} rounded-lg p-3 shadow-sm`}>
-                    {!msg.isCurrentUser && (
-                      <div className="flex items-center gap-2 mb-1">
-                        <div className="h-6 w-6 rounded-full bg-green-100 flex items-center justify-center text-green-800 text-xs font-medium">
-                          {msg.avatar}
+              {chatState.loading && chatState.messages.length === 0 ? (
+                <div className="flex justify-center items-center h-full">
+                  <span className="text-gray-500">Loading messages...</span>
+                </div>
+              ) : chatState.error ? (
+                <div className="flex justify-center items-center h-full">
+                  <span className="text-red-500">{chatState.error}</span>
+                </div>
+              ) : chatState.messages.length === 0 ? (
+                <div className="flex justify-center items-center h-full">
+                  <span className="text-gray-500">No messages yet</span>
+                </div>
+              ) : (
+                <>
+                  {chatState.messages.map((msg) => (
+                    <motion.div
+                      key={msg.id}
+                      variants={itemVariants}
+                      className={`flex ${msg.sender.id === currentUser.current ? "justify-end" : "justify-start"}`}
+                    >
+                      <div className={`max-w-[80%] ${
+                        msg.sender.id === currentUser.current 
+                          ? "bg-green-100 text-gray-800" 
+                          : "bg-white border border-gray-200 text-gray-800"
+                        } rounded-lg p-3 shadow-sm`}
+                      >
+                        {msg.sender.id !== currentUser.current && (
+                          <div className="flex items-center gap-2 mb-1">
+                            <div className="h-6 w-6 rounded-full bg-green-100 flex items-center justify-center text-green-800 text-xs font-medium">
+                              {msg.sender.email.substring(0, 2).toUpperCase()}
+                            </div>
+                            <span className="text-sm font-medium">{msg.sender.email}</span>
+                          </div>
+                        )}
+                        <p className="text-sm">{msg.content}</p>
+                        <div className={`text-xs text-gray-500 mt-1 ${
+                          msg.sender.id === currentUser.current ? "text-right" : ""
+                        }`}>
+                          {new Date(msg.createdAt).toLocaleTimeString()}
                         </div>
-                        <span className="text-sm font-medium">{msg.sender}</span>
                       </div>
-                    )}
-                    <p className="text-sm">{msg.content}</p>
-                    <div className={`text-xs text-gray-500 mt-1 ${msg.isCurrentUser ? "text-right" : ""}`}>
-                      {msg.time}
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
+                    </motion.div>
+                  ))}
+                  <div ref={messagesEndRef} />
+                </>
+              )}
             </div>
             
             <div className="flex items-center gap-2">
