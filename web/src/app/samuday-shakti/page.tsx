@@ -15,6 +15,8 @@ import {
   Globe,
   UserPlus,
 } from 'lucide-react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 // Import components
 import FPODashboard from '@/components/samudayShakti/FPODashboard'
@@ -39,6 +41,8 @@ export type FPOType = {
 }
 
 export default function SamudayShaktiPage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [location, setLocation] = useState('Sonipat, Haryana')
   const [activeTab, setActiveTab] = useState('fpoDashboard')
@@ -47,15 +51,21 @@ export default function SamudayShaktiPage() {
   const [selectedFPO, setSelectedFPO] = useState('')
   const [joinedFPOs, setJoinedFPOs] = useState<FPOType[]>([])
 
-  // Fetch FPOs from API
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/auth/signin?callbackUrl=/samuday-shakti')
+    }
+  }, [status, router])
+
+  // Update the fetch FPOs function to use the new route
   useEffect(() => {
     const fetchFPOs = async () => {
       try {
         setIsLoading(true)
-        const response = await fetch('/api/samuday-shakti/fpo')
+        const response = await fetch('/api/samuday-shakti/fpo/joined')
 
         if (!response.ok) {
-          throw new Error(`Error fetching FPOs: ${response.status}`)
+          throw new Error(`Error fetching joined FPOs: ${response.status}`)
         }
 
         const data: FPOType[] = await response.json()
@@ -67,14 +77,16 @@ export default function SamudayShaktiPage() {
           setLocation(data[0].location)
         }
       } catch (err) {
-        console.error('Failed to fetch FPOs:', err)
+        console.error('Failed to fetch joined FPOs:', err)
       } finally {
         setIsLoading(false)
       }
     }
 
-    fetchFPOs()
-  }, [])
+    if (status === 'authenticated') {
+      fetchFPOs()
+    }
+  }, [status])
 
   // Animation variants
   const containerVariants = {
@@ -125,6 +137,14 @@ export default function SamudayShaktiPage() {
       setSelectedFPO(updatedFPOs[0].name)
       setLocation(updatedFPOs[0].location)
     }
+  }
+
+  if (status === 'loading') {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-700"></div>
+      </div>
+    )
   }
 
   return (

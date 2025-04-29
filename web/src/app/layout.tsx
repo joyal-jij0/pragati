@@ -4,6 +4,7 @@ import "./globals.css";
 import Sidebar from "@/components/Sidebar";
 import DashboardHeader from "@/components/DashboardHeader";
 import { Providers } from "../../Provider";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,6 +38,7 @@ export default function RootLayout({
             <main className="flex-1 overflow-y-auto py-6">{children}</main>
           </div>
         </Providers>
+        <Toaster position="top-right" />
       </body>
     </html>
   );
