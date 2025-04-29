@@ -26,26 +26,55 @@ import GroupChatAnnouncements from '@/components/samudayShakti/GroupChatAnnounce
 import EquipmentRental from '@/components/samudayShakti/EquipmentRental'
 import PageHeader from '@/components/samudayShakti/PageHeader'
 
+// Update FPO type definition to match API schema
+export type FPOType = {
+  id: string
+  name: string
+  location: string
+  description: string
+  _count: {
+    members: number
+  }
+  createdAt: Date
+}
+
 export default function SamudayShaktiPage() {
+  const [isLoading, setIsLoading] = useState(false)
   const [location, setLocation] = useState('Sonipat, Haryana')
   const [activeTab, setActiveTab] = useState('fpoDashboard')
   const [activeSection, setActiveSection] = useState('myFPO')
   const [showAIAssistant, setShowAIAssistant] = useState(false)
-  const [selectedFPO, setSelectedFPO] = useState('Sonipat Kisan FPO')
-  const [joinedFPOs, setJoinedFPOs] = useState([
-    {
-      id: 1,
-      name: 'Sonipat Kisan FPO',
-      members: 248,
-      location: 'Sonipat, Haryana',
-    },
-    {
-      id: 2,
-      name: 'Karnal Agri Collective',
-      members: 186,
-      location: 'Karnal, Haryana',
-    },
-  ])
+  const [selectedFPO, setSelectedFPO] = useState('')
+  const [joinedFPOs, setJoinedFPOs] = useState<FPOType[]>([])
+
+  // Fetch FPOs from API
+  useEffect(() => {
+    const fetchFPOs = async () => {
+      try {
+        setIsLoading(true)
+        const response = await fetch('/api/samuday-shakti/fpo')
+
+        if (!response.ok) {
+          throw new Error(`Error fetching FPOs: ${response.status}`)
+        }
+
+        const data: FPOType[] = await response.json()
+        setJoinedFPOs(data)
+
+        // Set the first FPO as default if available
+        if (data.length > 0) {
+          setSelectedFPO(data[0].name)
+          setLocation(data[0].location)
+        }
+      } catch (err) {
+        console.error('Failed to fetch FPOs:', err)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchFPOs()
+  }, [])
 
   // Animation variants
   const containerVariants = {
@@ -169,145 +198,151 @@ export default function SamudayShaktiPage() {
 
       {/* Main Content */}
       <div className="container mx-auto px-4 py-6">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="grid grid-cols-1 lg:grid-cols-3 gap-6"
-        >
-          {/* Left Sidebar - FPO Navigation */}
+        {isLoading ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-700"></div>
+          </div>
+        ) : (
           <motion.div
-            variants={itemVariants}
-            className="lg:col-span-1 space-y-4"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="grid grid-cols-1 lg:grid-cols-3 gap-6"
           >
-            <div className="bg-white rounded-xl shadow-md p-4">
-              <h3 className="text-lg font-semibold text-gray-800 mb-3">
-                FPO Hub
-              </h3>
-              <div className="space-y-2">
-                <button
-                  onClick={() => setActiveSection('myFPO')}
-                  className={`w-full flex items-center justify-between p-3 rounded-lg text-left ${
-                    activeSection === 'myFPO'
-                      ? 'bg-green-50 text-green-700'
-                      : 'hover:bg-gray-50 text-gray-700'
-                  }`}
-                >
-                  <div className="flex items-center gap-2">
-                    <Users size={18} />
-                    <span>My FPO Groups</span>
-                  </div>
-                  <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                    {joinedFPOs.length}
-                  </span>
-                </button>
-
-                <button
-                  onClick={() => setActiveSection('discover')}
-                  className={`w-full flex items-center justify-between p-3 rounded-lg text-left ${
-                    activeSection === 'discover'
-                      ? 'bg-green-50 text-green-700'
-                      : 'hover:bg-gray-50 text-gray-700'
-                  }`}
-                >
-                  <div className="flex items-center gap-2">
-                    <Globe size={18} />
-                    <span>Discover FPOs</span>
-                  </div>
-                  <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                    New
-                  </span>
-                </button>
-
-                <button
-                  onClick={() => setActiveSection('create')}
-                  className={`w-full flex items-center justify-between p-3 rounded-lg text-left ${
-                    activeSection === 'create'
-                      ? 'bg-green-50 text-green-700'
-                      : 'hover:bg-gray-50 text-gray-700'
-                  }`}
-                >
-                  <div className="flex items-center gap-2">
-                    <Plus size={18} />
-                    <span>Create New FPO</span>
-                  </div>
-                </button>
-              </div>
-            </div>
-
-            {/* Joined FPOs List */}
-            {activeSection === 'myFPO' && (
+            {/* Left Sidebar - FPO Navigation */}
+            <motion.div
+              variants={itemVariants}
+              className="lg:col-span-1 space-y-4"
+            >
               <div className="bg-white rounded-xl shadow-md p-4">
-                <h3 className="text-md font-medium text-gray-800 mb-3">
-                  My FPO Groups
+                <h3 className="text-lg font-semibold text-gray-800 mb-3">
+                  FPO Hub
                 </h3>
                 <div className="space-y-2">
-                  {joinedFPOs.map((fpo) => (
-                    <div
-                      key={fpo.id}
-                      className={`p-3 rounded-lg border ${
-                        selectedFPO === fpo.name
-                          ? 'border-green-200 bg-green-50'
-                          : 'border-gray-100 hover:bg-gray-50'
-                      } cursor-pointer`}
-                      onClick={() => handleFPOChange(fpo.id)}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center text-green-600">
-                            <Users size={16} />
-                          </div>
-                          <div>
-                            <p className="font-medium text-gray-800">
-                              {fpo.name}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              {fpo.members} members
-                            </p>
-                          </div>
-                        </div>
-                        {selectedFPO === fpo.name && (
-                          <div className="h-3 w-3 rounded-full bg-green-500"></div>
-                        )}
-                      </div>
+                  <button
+                    onClick={() => setActiveSection('myFPO')}
+                    className={`w-full flex items-center justify-between p-3 rounded-lg text-left ${
+                      activeSection === 'myFPO'
+                        ? 'bg-green-50 text-green-700'
+                        : 'hover:bg-gray-50 text-gray-700'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Users size={18} />
+                      <span>My FPO Groups</span>
                     </div>
-                  ))}
+                    <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                      {joinedFPOs.length}
+                    </span>
+                  </button>
+
+                  <button
+                    onClick={() => setActiveSection('discover')}
+                    className={`w-full flex items-center justify-between p-3 rounded-lg text-left ${
+                      activeSection === 'discover'
+                        ? 'bg-green-50 text-green-700'
+                        : 'hover:bg-gray-50 text-gray-700'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Globe size={18} />
+                      <span>Discover FPOs</span>
+                    </div>
+                    <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                      New
+                    </span>
+                  </button>
+
+                  <button
+                    onClick={() => setActiveSection('create')}
+                    className={`w-full flex items-center justify-between p-3 rounded-lg text-left ${
+                      activeSection === 'create'
+                        ? 'bg-green-50 text-green-700'
+                        : 'hover:bg-gray-50 text-gray-700'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Plus size={18} />
+                      <span>Create New FPO</span>
+                    </div>
+                  </button>
                 </div>
               </div>
-            )}
-          </motion.div>
 
-          {/* Main Content Area */}
-          <motion.div
-            variants={itemVariants}
-            className="lg:col-span-2 space-y-6"
-          >
-            {/* Conditional rendering based on active section and tab */}
-            {activeSection === 'myFPO' && (
-              <>
-                {activeTab === 'fpoDashboard' && (
-                  <FPODashboard selectedFPO={selectedFPO} />
-                )}
-                {activeTab === 'groupChat' && (
-                  <GroupChatAnnouncements selectedFPO={selectedFPO} />
-                )}
-                {activeTab === 'equipment' && (
-                  <EquipmentRental selectedFPO={selectedFPO} />
-                )}
-                {activeTab === 'members' && (
-                  <FPOMembers selectedFPO={selectedFPO} />
-                )}
-              </>
-            )}
+              {/* Joined FPOs List */}
+              {activeSection === 'myFPO' && joinedFPOs.length > 0 && (
+                <div className="bg-white rounded-xl shadow-md p-4">
+                  <h3 className="text-md font-medium text-gray-800 mb-3">
+                    My FPO Groups
+                  </h3>
+                  <div className="space-y-2">
+                    {joinedFPOs.map((fpo) => (
+                      <div
+                        key={fpo.id}
+                        className={`p-3 rounded-lg border ${
+                          selectedFPO === fpo.name
+                            ? 'border-green-200 bg-green-50'
+                            : 'border-gray-100 hover:bg-gray-50'
+                        } cursor-pointer`}
+                        onClick={() => handleFPOChange(fpo.id)}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+                              <Users size={16} />
+                            </div>
+                            <div>
+                              <p className="font-medium text-gray-800">
+                                {fpo.name}
+                              </p>
+                              <p className="text-xs text-gray-500">
+                                {fpo._count.members} members
+                              </p>
+                            </div>
+                          </div>
+                          {selectedFPO === fpo.name && (
+                            <div className="h-3 w-3 rounded-full bg-green-500"></div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </motion.div>
 
-            {activeSection === 'discover' && (
-              <FPODiscovery onJoinFPO={handleJoinFPO} />
-            )}
-            {activeSection === 'create' && (
-              <FPOCreation onFPOCreated={handleJoinFPO} />
-            )}
+            {/* Main Content Area */}
+            <motion.div
+              variants={itemVariants}
+              className="lg:col-span-2 space-y-6"
+            >
+              {/* Conditional rendering based on active section and tab */}
+              {activeSection === 'myFPO' && (
+                <>
+                  {activeTab === 'fpoDashboard' && (
+                    <FPODashboard selectedFPO={selectedFPO} />
+                  )}
+                  {activeTab === 'groupChat' && (
+                    <GroupChatAnnouncements selectedFPO={selectedFPO} />
+                  )}
+                  {activeTab === 'equipment' && (
+                    <EquipmentRental selectedFPO={selectedFPO} />
+                  )}
+                  {activeTab === 'members' && (
+                    <FPOMembers selectedFPO={selectedFPO} />
+                  )}
+                </>
+              )}
+
+              {activeSection === 'discover' && (
+                <FPODiscovery onJoinFPO={handleJoinFPO} />
+              )}
+              {activeSection === 'create' && (
+                <FPOCreation onFPOCreated={handleJoinFPO} />
+              )}
+            </motion.div>
           </motion.div>
-        </motion.div>
+        )}
       </div>
     </div>
   )
