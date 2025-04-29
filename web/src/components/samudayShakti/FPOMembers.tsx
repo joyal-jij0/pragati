@@ -9,6 +9,7 @@ import {
   Users,
   Star,
   UserPlus,
+  Loader2,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -20,14 +21,7 @@ import MemberAnalytics from './members/MemberAnalytics'
 import MembershipRequests from './members/MembershipRequests'
 import AddMemberForm from './members/AddMemberForm'
 import { Badge } from '@/components/ui/badge'
-
-// Sample data for member roles
-const memberRoles = [
-  { id: 'all', name: 'All Members', count: 248 },
-  { id: 'board', name: 'Executive Members', count: 7 },
-  { id: 'active', name: 'Active Members', count: 186 },
-  { id: 'inactive', name: 'Inactive Members', count: 62 },
-]
+import { FPOMemberType } from '@/app/api/samuday-shakti/fpo/[id]/members/route'
 
 // FPO members data interface
 export interface FPOMember {
@@ -45,41 +39,6 @@ export interface FPOMember {
   contributions: number
   rating: number
 }
-
-// Sample data for FPO members
-export const membersList = [
-  {
-    id: 1,
-    name: 'Ramvir Singh',
-    role: 'President',
-    avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
-    location: 'Sonipat, Haryana',
-    joinDate: 'June 2018',
-    phone: '+91 98765 43210',
-    email: 'ramvir@example.com',
-    landHolding: '5 Acres',
-    crops: ['Wheat', 'Rice', 'Mustard'],
-    active: true,
-    contributions: 24,
-    rating: 4.8,
-  },
-  {
-    id: 2,
-    name: 'Sunita Devi',
-    role: 'Vice President',
-    avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
-    location: 'Sonipat, Haryana',
-    joinDate: 'August 2018',
-    phone: '+91 97654 32109',
-    email: 'sunita@example.com',
-    landHolding: '3.5 Acres',
-    crops: ['Wheat', 'Vegetables'],
-    active: true,
-    contributions: 18,
-    rating: 4.6,
-  },
-  // ... existing code ...
-]
 
 // Sample data for membership requests
 export const membershipRequests = [
@@ -110,14 +69,10 @@ export const membershipRequests = [
 ]
 
 interface FPOMembersProps {
-  fpoName?: string
-  fpoId?: string
+  selectedFPO: string
 }
 
-const FPOMembers = ({
-  fpoName = 'Sonipat Kisan FPO',
-  fpoId = 'fpo1',
-}: FPOMembersProps) => {
+const FPOMembers = ({ selectedFPO }: FPOMembersProps) => {
   // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -144,8 +99,119 @@ const FPOMembers = ({
   const [showFilters, setShowFilters] = useState(false)
   const [activeTab, setActiveTab] = useState('members')
   const [showAddMemberForm, setShowAddMemberForm] = useState(false)
-  const [members, setMembers] = useState(membersList)
+  const [members, setMembers] = useState<FPOMember[]>([])
   const [requests, setRequests] = useState(membershipRequests)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [currentFpoId, setCurrentFpoId] = useState<string | null>(null)
+
+  // Member roles are now dynamic based on fetched data
+  const [memberRoles, setMemberRoles] = useState([
+    { id: 'all', name: 'All Members', count: 0 },
+    { id: 'board', name: 'Executive Members', count: 0 },
+    { id: 'active', name: 'Active Members', count: 0 },
+    { id: 'inactive', name: 'Inactive Members', count: 0 },
+  ])
+
+  // Fetch FPO ID based on selected FPO name
+  useEffect(() => {
+    const fetchFpoId = async () => {
+      if (!selectedFPO) return
+
+      try {
+        setIsLoading(true)
+        const response = await fetch('/api/samuday-shakti/fpo')
+
+        if (!response.ok) {
+          throw new Error(`Error fetching FPOs: ${response.status}`)
+        }
+
+        const data = await response.json()
+        const fpo = data.find((f) => f.name === selectedFPO)
+
+        if (fpo) {
+          setCurrentFpoId(fpo.id)
+        } else {
+          setError('Selected FPO not found')
+        }
+      } catch (err) {
+        console.error('Error fetching FPO ID:', err)
+        setError('Failed to fetch FPO data')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchFpoId()
+  }, [selectedFPO])
+
+  // Fetch members data when FPO ID is available
+  useEffect(() => {
+    const fetchMembers = async () => {
+      if (!currentFpoId) return
+
+      try {
+        setIsLoading(true)
+        const response = await fetch(
+          `/api/samuday-shakti/fpo/${currentFpoId}/members`
+        )
+
+        if (!response.ok) {
+          throw new Error(`Error fetching members: ${response.status}`)
+        }
+
+        const data: FPOMemberType[] = await response.json()
+
+        // Transform API data to component format
+        const transformedMembers: FPOMember[] = data.map((member) => ({
+          id: member.id,
+          name: member.details?.name || 'Unknown',
+          role: member.role,
+          avatar: member.details?.avatar || '',
+          location: member.details?.location || '',
+          joinDate: new Date(member.joinedAt).toLocaleDateString('en-US', {
+            month: 'long',
+            year: 'numeric',
+          }),
+          phone: member.details?.phone || '',
+          email: member.user?.email || '',
+          landHolding: member.details?.landHolding || 'Unknown',
+          crops: member.details?.crops || [],
+          active: member.details?.active || false,
+          contributions: member.details?.contributions || 0,
+          rating: member.details?.rating || 3.0,
+        }))
+
+        setMembers(transformedMembers)
+
+        // Update member role counts
+        const allCount = transformedMembers.length
+        const boardMembers = transformedMembers.filter((m) =>
+          ['President', 'Vice President', 'Secretary', 'Treasurer'].includes(
+            m.role
+          )
+        ).length
+        const activeMembers = transformedMembers.filter((m) => m.active).length
+        const inactiveMembers = transformedMembers.filter(
+          (m) => !m.active
+        ).length
+
+        setMemberRoles([
+          { id: 'all', name: 'All Members', count: allCount },
+          { id: 'board', name: 'Executive Members', count: boardMembers },
+          { id: 'active', name: 'Active Members', count: activeMembers },
+          { id: 'inactive', name: 'Inactive Members', count: inactiveMembers },
+        ])
+      } catch (err) {
+        console.error('Error fetching members:', err)
+        setError('Failed to fetch members data')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchMembers()
+  }, [currentFpoId])
 
   // Filter members based on search term and role
   const filteredMembers = members.filter((member) => {
@@ -165,6 +231,7 @@ const FPOMembers = ({
 
   // Handle adding a new member
   const handleAddMember = (newMember: Omit<FPOMember, 'id'>) => {
+    // In a real application, this would make an API call to add the member
     const id = members.length + 1
     setMembers([...members, { ...newMember, id }])
     setShowAddMemberForm(false)
@@ -172,6 +239,7 @@ const FPOMembers = ({
 
   // Handle removing a member
   const handleRemoveMember = (memberId: number) => {
+    // In a real application, this would make an API call to remove the member
     setMembers(members.filter((member) => member.id !== memberId))
   }
 
@@ -179,7 +247,7 @@ const FPOMembers = ({
   const handleAcceptRequest = (requestId: number) => {
     const request = requests.find((req) => req.id === requestId)
     if (request) {
-      // Add to members
+      // Add to members - in a real app, make an API call
       const newMember: FPOMember = {
         id: members.length + 1,
         name: request.name,
@@ -210,6 +278,15 @@ const FPOMembers = ({
     setRequests(requests.filter((req) => req.id !== requestId))
   }
 
+  if (error) {
+    return (
+      <div className="bg-red-50 p-4 rounded-lg border border-red-200 text-red-700">
+        <h3 className="font-medium">Error</h3>
+        <p>{error}</p>
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-6">
       <motion.div
@@ -225,7 +302,7 @@ const FPOMembers = ({
         >
           <div>
             <h2 className="text-2xl font-bold text-gray-800">
-              {fpoName} Members
+              {selectedFPO} Members
             </h2>
             <p className="text-gray-600 mt-1">
               Information and management of all FPO members
@@ -347,15 +424,56 @@ const FPOMembers = ({
                 )}
               </div>
 
-              {/* Members List Component */}
-              <MembersList
-                members={filteredMembers}
-                onRemoveMember={handleRemoveMember}
-              />
+              {/* Loading State */}
+              {isLoading ? (
+                <div className="flex justify-center items-center p-12 bg-white rounded-lg shadow-md">
+                  <Loader2 className="h-8 w-8 text-green-600 animate-spin" />
+                  <span className="ml-3 text-gray-600">
+                    Loading member data...
+                  </span>
+                </div>
+              ) : (
+                <>
+                  {members.length === 0 ? (
+                    <div className="bg-white rounded-lg shadow-md p-8 text-center">
+                      <Users className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+                      <h3 className="text-lg font-medium text-gray-800">
+                        No Members Found
+                      </h3>
+                      <p className="text-gray-600 mt-1">
+                        This FPO doesn't have any members yet or your search
+                        filters don't match any members.
+                      </p>
+                      <Button
+                        className="mt-4 bg-green-600 hover:bg-green-700 text-white"
+                        onClick={() => setShowAddMemberForm(true)}
+                      >
+                        <UserPlus className="h-4 w-4 mr-2" />
+                        Add New Member
+                      </Button>
+                    </div>
+                  ) : (
+                    /* Members List Component */
+                    <MembersList
+                      members={filteredMembers}
+                      onRemoveMember={handleRemoveMember}
+                    />
+                  )}
+                </>
+              )}
             </TabsContent>
 
             <TabsContent value="analytics" className="space-y-4">
-              <MemberAnalytics members={members} />
+              {isLoading ? (
+                <div className="flex justify-center items-center p-12 bg-white rounded-lg shadow-md">
+                  <Loader2 className="h-8 w-8 text-green-600 animate-spin" />
+                  <span className="ml-3 text-gray-600">
+                    Loading analytics data...
+                  </span>
+                </div>
+              ) : (
+                <MemberAnalytics members={members} />
+              )}
             </TabsContent>
 
             <TabsContent value="requests" className="space-y-4">
