@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 
-// Custom Components
+
 import WeatherWidget from '@/components/dashboard/WeatherWidget'
 import CropHealthCard from '@/components/dashboard/CropHealthCard'
 import MarketPriceCard from '@/components/dashboard/MarketPriceCard'

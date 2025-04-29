@@ -267,7 +267,7 @@ export default function DashboardHeader() {
               </div>
               <div className="hidden md:block">
                 <p className="text-sm font-medium text-gray-800 text-left font-['Poppins',_sans-serif] transition-all duration-300 group-hover:text-green-700">
-                  {session.data?.user?.name || "Ram Kumar"}
+                  {session.data?.user?.name }
                 </p>
                 <p className="text-xs text-gray-500 text-left flex items-center gap-1">
                   <span className="text-xs text-green-500">🌿</span>
@@ -286,11 +286,11 @@ export default function DashboardHeader() {
               <div className="profile-menu absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-green-100 z-50 overflow-hidden transform origin-top-right transition-all duration-200 animate-dropdown">
                 <div className="p-3 border-b border-green-100 bg-gradient-to-r from-green-50 to-white">
                   <p className="text-sm font-medium text-gray-800 font-['Poppins',_sans-serif]">
-                    Ram Kumar
+                    {session.data?.user?.name }
                   </p>
                   <p className="text-xs text-gray-500 mt-0.5 flex items-center gap-1">
                     <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
-                    ram.kumar@example.com
+                    {session.data?.user?.email}
                   </p>
                 </div>
 
