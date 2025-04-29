@@ -1,203 +1,214 @@
-"use client";
+'use client'
 
-import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import React, { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
 import {
   Search,
   Filter,
   ChevronDown,
   Users,
   Star,
-  UserPlus
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+  UserPlus,
+} from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 // Import sub-components
-import MembersList from "./members/MembersList";
-import MemberAnalytics from "./members/MemberAnalytics";
-import MembershipRequests from "./members/MembershipRequests";
-import AddMemberForm from "./members/AddMemberForm";
-import { Badge } from "@/components/ui/badge";
+import MembersList from './members/MembersList'
+import MemberAnalytics from './members/MemberAnalytics'
+import MembershipRequests from './members/MembershipRequests'
+import AddMemberForm from './members/AddMemberForm'
+import { Badge } from '@/components/ui/badge'
 
 // Sample data for member roles
 const memberRoles = [
-  { id: "all", name: "All Members", count: 248 },
-  { id: "board", name: "Executive Members", count: 7 },
-  { id: "active", name: "Active Members", count: 186 },
-  { id: "inactive", name: "Inactive Members", count: 62 }
-];
+  { id: 'all', name: 'All Members', count: 248 },
+  { id: 'board', name: 'Executive Members', count: 7 },
+  { id: 'active', name: 'Active Members', count: 186 },
+  { id: 'inactive', name: 'Inactive Members', count: 62 },
+]
 
 // FPO members data interface
 export interface FPOMember {
-  id: number;
-  name: string;
-  role: string;
-  avatar: string;
-  location: string;
-  joinDate: string;
-  phone: string;
-  email: string;
-  landHolding: string;
-  crops: string[];
-  active: boolean;
-  contributions: number;
-  rating: number;
+  id: number
+  name: string
+  role: string
+  avatar: string
+  location: string
+  joinDate: string
+  phone: string
+  email: string
+  landHolding: string
+  crops: string[]
+  active: boolean
+  contributions: number
+  rating: number
 }
 
 // Sample data for FPO members
 export const membersList = [
   {
     id: 1,
-    name: "Ramvir Singh",
-    role: "President",
-    avatar: "https://randomuser.me/api/portraits/men/32.jpg",
-    location: "Sonipat, Haryana",
-    joinDate: "June 2018",
-    phone: "+91 98765 43210",
-    email: "ramvir@example.com",
-    landHolding: "5 Acres",
-    crops: ["Wheat", "Rice", "Mustard"],
+    name: 'Ramvir Singh',
+    role: 'President',
+    avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+    location: 'Sonipat, Haryana',
+    joinDate: 'June 2018',
+    phone: '+91 98765 43210',
+    email: 'ramvir@example.com',
+    landHolding: '5 Acres',
+    crops: ['Wheat', 'Rice', 'Mustard'],
     active: true,
     contributions: 24,
-    rating: 4.8
+    rating: 4.8,
   },
   {
     id: 2,
-    name: "Sunita Devi",
-    role: "Vice President",
-    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
-    location: "Sonipat, Haryana",
-    joinDate: "August 2018",
-    phone: "+91 97654 32109",
-    email: "sunita@example.com",
-    landHolding: "3.5 Acres",
-    crops: ["Wheat", "Vegetables"],
+    name: 'Sunita Devi',
+    role: 'Vice President',
+    avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
+    location: 'Sonipat, Haryana',
+    joinDate: 'August 2018',
+    phone: '+91 97654 32109',
+    email: 'sunita@example.com',
+    landHolding: '3.5 Acres',
+    crops: ['Wheat', 'Vegetables'],
     active: true,
     contributions: 18,
-    rating: 4.6
+    rating: 4.6,
   },
   // ... existing code ...
-];
+]
 
 // Sample data for membership requests
 export const membershipRequests = [
   {
     id: 101,
-    name: "Rajesh Verma",
-    avatar: "https://randomuser.me/api/portraits/men/72.jpg",
-    location: "Panipat, Haryana",
-    phone: "+91 87654 32109",
-    email: "rajesh@example.com",
-    landHolding: "4.2 Acres",
-    crops: ["Wheat", "Barley"],
-    requestDate: "June 15, 2023",
-    status: "pending"
+    name: 'Rajesh Verma',
+    avatar: 'https://randomuser.me/api/portraits/men/72.jpg',
+    location: 'Panipat, Haryana',
+    phone: '+91 87654 32109',
+    email: 'rajesh@example.com',
+    landHolding: '4.2 Acres',
+    crops: ['Wheat', 'Barley'],
+    requestDate: 'June 15, 2023',
+    status: 'pending',
   },
   {
     id: 102,
-    name: "Kavita Sharma",
-    avatar: "https://randomuser.me/api/portraits/women/62.jpg",
-    location: "Sonipat, Haryana",
-    phone: "+91 76543 21098",
-    email: "kavita@example.com",
-    landHolding: "2.8 Acres",
-    crops: ["Vegetables", "Flowers"],
-    requestDate: "June 18, 2023",
-    status: "pending"
-  }
-];
+    name: 'Kavita Sharma',
+    avatar: 'https://randomuser.me/api/portraits/women/62.jpg',
+    location: 'Sonipat, Haryana',
+    phone: '+91 76543 21098',
+    email: 'kavita@example.com',
+    landHolding: '2.8 Acres',
+    crops: ['Vegetables', 'Flowers'],
+    requestDate: 'June 18, 2023',
+    status: 'pending',
+  },
+]
 
 interface FPOMembersProps {
-  fpoName?: string;
-  fpoId?: string;
+  fpoName?: string
+  fpoId?: string
 }
 
-const FPOMembers = ({ fpoName = "Sonipat Kisan FPO", fpoId = "fpo1" }: FPOMembersProps) => {
+const FPOMembers = ({
+  fpoName = 'Sonipat Kisan FPO',
+  fpoId = 'fpo1',
+}: FPOMembersProps) => {
   // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
-      }
-    }
-  };
+        staggerChildren: 0.1,
+      },
+    },
+  }
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { type: "spring", stiffness: 100 }
-    }
-  };
+      transition: { type: 'spring', stiffness: 100 },
+    },
+  }
 
   // State for filters and tabs
-  const [searchTerm, setSearchTerm] = useState("");
-  const [roleFilter, setRoleFilter] = useState("all");
-  const [showFilters, setShowFilters] = useState(false);
-  const [activeTab, setActiveTab] = useState("members");
-  const [showAddMemberForm, setShowAddMemberForm] = useState(false);
-  const [members, setMembers] = useState(membersList);
-  const [requests, setRequests] = useState(membershipRequests);
+  const [searchTerm, setSearchTerm] = useState('')
+  const [roleFilter, setRoleFilter] = useState('all')
+  const [showFilters, setShowFilters] = useState(false)
+  const [activeTab, setActiveTab] = useState('members')
+  const [showAddMemberForm, setShowAddMemberForm] = useState(false)
+  const [members, setMembers] = useState(membersList)
+  const [requests, setRequests] = useState(membershipRequests)
 
   // Filter members based on search term and role
-  const filteredMembers = members.filter(member => {
-    const matchesSearch = member.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          member.role.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesRole = roleFilter === "all" || 
-                        (roleFilter === "board" && ["President", "Vice President", "Secretary", "Treasurer"].includes(member.role)) ||
-                        (roleFilter === "active" && member.active) ||
-                        (roleFilter === "inactive" && !member.active);
-    return matchesSearch && matchesRole;
-  });
+  const filteredMembers = members.filter((member) => {
+    const matchesSearch =
+      member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      member.role.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesRole =
+      roleFilter === 'all' ||
+      (roleFilter === 'board' &&
+        ['President', 'Vice President', 'Secretary', 'Treasurer'].includes(
+          member.role
+        )) ||
+      (roleFilter === 'active' && member.active) ||
+      (roleFilter === 'inactive' && !member.active)
+    return matchesSearch && matchesRole
+  })
 
   // Handle adding a new member
-  const handleAddMember = (newMember: Omit<FPOMember, "id">) => {
-    const id = members.length + 1;
-    setMembers([...members, { ...newMember, id }]);
-    setShowAddMemberForm(false);
-  };
+  const handleAddMember = (newMember: Omit<FPOMember, 'id'>) => {
+    const id = members.length + 1
+    setMembers([...members, { ...newMember, id }])
+    setShowAddMemberForm(false)
+  }
 
   // Handle removing a member
   const handleRemoveMember = (memberId: number) => {
-    setMembers(members.filter(member => member.id !== memberId));
-  };
+    setMembers(members.filter((member) => member.id !== memberId))
+  }
 
   // Handle accepting a membership request
   const handleAcceptRequest = (requestId: number) => {
-    const request = requests.find(req => req.id === requestId);
+    const request = requests.find((req) => req.id === requestId)
     if (request) {
       // Add to members
       const newMember: FPOMember = {
         id: members.length + 1,
         name: request.name,
-        role: "Member",
+        role: 'Member',
         avatar: request.avatar,
         location: request.location,
-        joinDate: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
+        joinDate: new Date().toLocaleDateString('en-US', {
+          month: 'long',
+          year: 'numeric',
+        }),
         phone: request.phone,
         email: request.email,
         landHolding: request.landHolding,
         crops: request.crops,
         active: true,
         contributions: 0,
-        rating: 3.0
-      };
-      setMembers([...members, newMember]);
-      
+        rating: 3.0,
+      }
+      setMembers([...members, newMember])
+
       // Remove from requests
-      setRequests(requests.filter(req => req.id !== requestId));
+      setRequests(requests.filter((req) => req.id !== requestId))
     }
-  };
+  }
 
   // Handle rejecting a membership request
   const handleRejectRequest = (requestId: number) => {
-    setRequests(requests.filter(req => req.id !== requestId));
-  };
+    setRequests(requests.filter((req) => req.id !== requestId))
+  }
 
   return (
     <div className="space-y-6">
@@ -208,20 +219,33 @@ const FPOMembers = ({ fpoName = "Sonipat Kisan FPO", fpoId = "fpo1" }: FPOMember
         className="space-y-6"
       >
         {/* Header Section */}
-        <motion.div variants={itemVariants} className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <motion.div
+          variants={itemVariants}
+          className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
+        >
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">{fpoName} Members</h2>
+            <h2 className="text-2xl font-bold text-gray-800">
+              {fpoName} Members
+            </h2>
             <p className="text-gray-600 mt-1">
               Information and management of all FPO members
             </p>
           </div>
           <div className="flex gap-3">
-            <Button variant="outline" className="bg-white" onClick={() => setShowFilters(!showFilters)}>
+            <Button
+              variant="outline"
+              className="bg-white"
+              onClick={() => setShowFilters(!showFilters)}
+            >
               <Filter className="h-4 w-4 mr-2" />
               Filter
-              <ChevronDown className={`h-4 w-4 ml-1 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
+              <ChevronDown
+                className={`h-4 w-4 ml-1 transition-transform ${
+                  showFilters ? 'rotate-180' : ''
+                }`}
+              />
             </Button>
-            <Button 
+            <Button
               className="bg-green-600 hover:bg-green-700 text-white"
               onClick={() => setShowAddMemberForm(true)}
             >
@@ -233,15 +257,19 @@ const FPOMembers = ({ fpoName = "Sonipat Kisan FPO", fpoId = "fpo1" }: FPOMember
 
         {/* Add Member Form Modal */}
         {showAddMemberForm && (
-          <AddMemberForm 
-            onAdd={handleAddMember} 
-            onCancel={() => setShowAddMemberForm(false)} 
+          <AddMemberForm
+            onAdd={handleAddMember}
+            onCancel={() => setShowAddMemberForm(false)}
           />
         )}
 
         {/* Tabs */}
         <motion.div variants={itemVariants}>
-          <Tabs defaultValue="members" className="w-full" onValueChange={setActiveTab}>
+          <Tabs
+            defaultValue="members"
+            className="w-full"
+            onValueChange={setActiveTab}
+          >
             <TabsList className="grid grid-cols-3 mb-6">
               <TabsTrigger value="members" className="text-sm">
                 <Users className="h-4 w-4 mr-2" />
@@ -255,7 +283,9 @@ const FPOMembers = ({ fpoName = "Sonipat Kisan FPO", fpoId = "fpo1" }: FPOMember
                 <UserPlus className="h-4 w-4 mr-2" />
                 Membership Requests
                 {requests.length > 0 && (
-                  <Badge className="ml-2 bg-red-500 text-white">{requests.length}</Badge>
+                  <Badge className="ml-2 bg-red-500 text-white">
+                    {requests.length}
+                  </Badge>
                 )}
               </TabsTrigger>
             </TabsList>
@@ -278,7 +308,9 @@ const FPOMembers = ({ fpoName = "Sonipat Kisan FPO", fpoId = "fpo1" }: FPOMember
 
                 {showFilters && (
                   <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-100">
-                    <h3 className="text-sm font-medium text-gray-700 mb-3">Filter by member role</h3>
+                    <h3 className="text-sm font-medium text-gray-700 mb-3">
+                      Filter by member role
+                    </h3>
                     <div className="flex flex-wrap gap-2">
                       {memberRoles.map((role) => (
                         <button
@@ -291,15 +323,23 @@ const FPOMembers = ({ fpoName = "Sonipat Kisan FPO", fpoId = "fpo1" }: FPOMember
                           onClick={() => setRoleFilter(role.id)}
                         >
                           <span>{role.name}</span>
-                          <Badge variant="secondary" className="ml-1 bg-white text-gray-600">
+                          <Badge
+                            variant="secondary"
+                            className="ml-1 bg-white text-gray-600"
+                          >
                             {role.count}
                           </Badge>
                         </button>
                       ))}
                     </div>
-                    
+
                     <div className="mt-4 flex justify-end">
-                      <Button variant="outline" size="sm" className="text-xs" onClick={() => setRoleFilter("all")}>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="text-xs"
+                        onClick={() => setRoleFilter('all')}
+                      >
                         Reset Filters
                       </Button>
                     </div>
@@ -308,9 +348,9 @@ const FPOMembers = ({ fpoName = "Sonipat Kisan FPO", fpoId = "fpo1" }: FPOMember
               </div>
 
               {/* Members List Component */}
-              <MembersList 
-                members={filteredMembers} 
-                onRemoveMember={handleRemoveMember} 
+              <MembersList
+                members={filteredMembers}
+                onRemoveMember={handleRemoveMember}
               />
             </TabsContent>
 
@@ -319,8 +359,8 @@ const FPOMembers = ({ fpoName = "Sonipat Kisan FPO", fpoId = "fpo1" }: FPOMember
             </TabsContent>
 
             <TabsContent value="requests" className="space-y-4">
-              <MembershipRequests 
-                requests={requests} 
+              <MembershipRequests
+                requests={requests}
                 onAccept={handleAcceptRequest}
                 onReject={handleRejectRequest}
               />
@@ -329,7 +369,7 @@ const FPOMembers = ({ fpoName = "Sonipat Kisan FPO", fpoId = "fpo1" }: FPOMember
         </motion.div>
       </motion.div>
     </div>
-  );
-};
+  )
+}
 
-export default FPOMembers;
+export default FPOMembers
