@@ -17,9 +17,58 @@ interface FPOSelectorProps {
 
 const FPOSelector = ({ selectedFPO, joinedFPOs, onChangeFPO, onLeaveFPO }: FPOSelectorProps) => {
   const [showDropdown, setShowDropdown] = useState(false);
+  const [isLeaving, setIsLeaving] = useState(false);
   
   const currentFPO = joinedFPOs.find(fpo => fpo.name === selectedFPO);
-  
+
+  const handleLeaveFPO = async (fpo: FPO) => {
+    if (!confirm(`Are you sure you want to leave ${fpo.name}?`)) {
+      return;
+    }
+
+    try {
+      setIsLeaving(true);
+      const response = await fetch('/api/samuday-shakti/fpo/leave', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ fpoId: fpo.id }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || 'Failed to leave FPO');
+      }
+
+      onLeaveFPO(fpo.id);
+      setShowDropdown(false);
+      toast.success(`Successfully left ${fpo.name}`);
+    } catch (error) {
+      console.error('Error leaving FPO:', error);
+      toast.error(error.message || 'Failed to leave FPO');
+    } finally {
+      setIsLeaving(false);
+    }
+  };
+
+  const leaveButton = currentFPO && (
+    <div className="border-t border-gray-100 mt-2 pt-2">
+      <button
+        className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md flex items-center gap-2"
+        onClick={() => handleLeaveFPO(currentFPO)}
+        disabled={isLeaving}
+      >
+        {isLeaving ? (
+          <div className="h-4 w-4 border-2 border-red-600 border-t-transparent rounded-full animate-spin" />
+        ) : (
+          <LogOut className="h-4 w-4" />
+        )}
+        <span>{isLeaving ? 'Leaving...' : 'Leave this FPO'}</span>
+      </button>
+    </div>
+  );
+
   return (
     <div className="bg-white shadow-sm">
       <div className="container mx-auto px-4 py-3">
@@ -63,22 +112,7 @@ const FPOSelector = ({ selectedFPO, joinedFPOs, onChangeFPO, onLeaveFPO }: FPOSe
                     </button>
                   ))}
                   
-                  {currentFPO && (
-                    <div className="border-t border-gray-100 mt-2 pt-2">
-                      <button
-                        className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md flex items-center gap-2"
-                        onClick={() => {
-                          if (confirm(`Are you sure you want to leave ${selectedFPO}?`)) {
-                            onLeaveFPO(currentFPO.id);
-                            setShowDropdown(false);
-                          }
-                        }}
-                      >
-                        <LogOut className="h-4 w-4" />
-                        <span>Leave this FPO</span>
-                      </button>
-                    </div>
-                  )}
+                  {leaveButton}
                 </div>
               </div>
             )}
