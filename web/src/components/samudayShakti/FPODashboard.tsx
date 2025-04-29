@@ -184,8 +184,8 @@ const FPODashboard = ({ currentFpo }: any) => {
               </div>
               <p className="text-sm text-gray-500 flex items-center gap-1">
                 <Users className="h-4 w-4" />
-                {currentFpo._count.members} सदस्य • स्थापित{' '}
-                {formatDate(currentFpo.createdAt)}
+                {currentFpo?._count?.members} सदस्य • स्थापित{' '}
+                {formatDate(currentFpo?.createdAt)}
               </p>
             </div>
           </div>
