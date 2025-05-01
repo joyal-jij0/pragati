@@ -1,55 +1,56 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
 
-
-import WeatherWidget from '@/components/dashboard/WeatherWidget'
-import CropHealthCard from '@/components/dashboard/CropHealthCard'
-import MarketPriceCard from '@/components/dashboard/MarketPriceCard'
-import AdvisoryCard from '@/components/dashboard/AdvisoryCard'
-import ActivityFeed from '@/components/dashboard/ActivityFeed'
-import RecommendationCard from '@/components/dashboard/RecommendationCard'
-import FinancialSummary from '@/components/dashboard/FinancialSummary'
-import FarmStatistics from '@/components/dashboard/FarmStatistics'
-import QuickActions from '@/components/dashboard/QuickActions'
-import FarmerCommunity from '@/components/dashboard/FarmerCommunity'
-import WelcomeBanner from '@/components/dashboard/WelcomeBanner'
+import WeatherWidget from "@/components/dashboard/WeatherWidget";
+import CropHealthCard from "@/components/dashboard/CropHealthCard";
+import MarketPriceCard from "@/components/dashboard/MarketPriceCard";
+import AdvisoryCard from "@/components/dashboard/AdvisoryCard";
+import ActivityFeed from "@/components/dashboard/ActivityFeed";
+import RecommendationCard from "@/components/dashboard/RecommendationCard";
+import FinancialSummary from "@/components/dashboard/FinancialSummary";
+import FarmStatistics from "@/components/dashboard/FarmStatistics";
+import QuickActions from "@/components/dashboard/QuickActions";
+import FarmerCommunity from "@/components/dashboard/FarmerCommunity";
+import WelcomeBanner from "@/components/dashboard/WelcomeBanner";
 
 // Mock data
-import { 
-  weatherData, 
-  cropHealthData, 
-  marketPriceData, 
+import {
+  weatherData,
+  cropHealthData,
+  marketPriceData,
   advisoryData,
   activityData,
   recommendationData,
   financialData,
   farmStatData,
-  communityData
-} from '@/data/dashboardData'
+  communityData,
+} from "@/data/dashboardData";
+import { useSession } from "next-auth/react";
 
 export default function Dashboard() {
-  const [greeting, setGreeting] = useState('Good morning')
-  const [isLoading, setIsLoading] = useState(true)
-
+  const [greeting, setGreeting] = useState("Good morning");
+  const [isLoading, setIsLoading] = useState(true);
+  const session = useSession();
+  const farmarName = session?.data?.user?.name || "Farmer";
   useEffect(() => {
     // Set greeting based on time of day
-    const hour = new Date().getHours()
+    const hour = new Date().getHours();
     if (hour >= 12 && hour < 17) {
-      setGreeting('Good afternoon')
+      setGreeting("Good afternoon");
     } else if (hour >= 17) {
-      setGreeting('Good evening')
+      setGreeting("Good evening");
     }
-    
+
     // Simulate data loading
     const timer = setTimeout(() => {
-      setIsLoading(false)
-    }, 1000)
-    
-    return () => clearTimeout(timer)
-  }, [])
+      setIsLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   // Animation variants
   const containerVariants = {
@@ -57,23 +58,23 @@ export default function Dashboard() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
-      }
-    }
-  }
-  
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
   const itemVariants = {
     hidden: { y: 20, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
       transition: {
-        type: 'spring',
+        type: "spring",
         stiffness: 100,
-        damping: 15
-      }
-    }
-  }
+        damping: 15,
+      },
+    },
+  };
 
   if (isLoading) {
     return (
@@ -85,22 +86,24 @@ export default function Dashboard() {
               <span className="text-2xl">🌱</span>
             </div>
           </div>
-          <p className="mt-4 text-green-800 font-medium">Loading your farm data...</p>
+          <p className="mt-4 text-green-800 font-medium">
+            Loading your farm data...
+          </p>
         </div>
       </div>
-    )
+    );
   }
 
   return (
-    <motion.div 
-      className="p-4 md:p-6 space-y-6 bg-gradient-to-b from-green-50 to-white min-h-screen"
+    <motion.div
+      className="p-4 md:p-6 space-y-6 bg-gradient-to-b from-green-50 to-white min-h-screen lg:my-12"
       initial="hidden"
       animate="visible"
       variants={containerVariants}
     >
       {/* Welcome Banner */}
       <motion.div variants={itemVariants}>
-        <WelcomeBanner greeting={greeting} farmerName="Ashish K Choudhary" />
+        <WelcomeBanner greeting={greeting} farmerName={farmarName} />
       </motion.div>
 
       {/* Quick Actions */}
@@ -136,28 +139,40 @@ export default function Dashboard() {
         </motion.div>
 
         {/* Financial Summary */}
-        <motion.div variants={itemVariants} className="md:col-span-2 lg:col-span-2">
+        <motion.div
+          variants={itemVariants}
+          className="md:col-span-2 lg:col-span-2"
+        >
           <FinancialSummary financialData={financialData} />
         </motion.div>
 
         {/* Recommendations */}
-        <motion.div variants={itemVariants} className="md:col-span-2 lg:col-span-2">
+        <motion.div
+          variants={itemVariants}
+          className="md:col-span-2 lg:col-span-2"
+        >
           <RecommendationCard recommendations={recommendationData} />
         </motion.div>
 
         {/* Activity Feed */}
-        <motion.div variants={itemVariants} className="md:col-span-2 lg:col-span-2">
+        <motion.div
+          variants={itemVariants}
+          className="md:col-span-2 lg:col-span-2"
+        >
           <ActivityFeed activities={activityData} />
         </motion.div>
 
         {/* Farmer Community */}
-        <motion.div variants={itemVariants} className="md:col-span-3 lg:col-span-2">
+        <motion.div
+          variants={itemVariants}
+          className="md:col-span-3 lg:col-span-2"
+        >
           <FarmerCommunity communityData={communityData} />
         </motion.div>
       </div>
 
       {/* Enhanced Footer */}
-      <motion.footer 
+      <motion.footer
         variants={itemVariants}
         className="mt-12 rounded-lg bg-gradient-to-r from-green-50 to-emerald-50 border border-green-100 shadow-sm overflow-hidden"
       >
@@ -165,7 +180,7 @@ export default function Dashboard() {
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                <motion.span 
+                <motion.span
                   className="text-xl"
                   animate={{ rotate: [0, 10, 0, -10, 0] }}
                   transition={{ duration: 3, repeat: Infinity }}
@@ -173,28 +188,31 @@ export default function Dashboard() {
                   🌾
                 </motion.span>
               </div>
-              <h3 className="text-lg font-semibold text-green-800">Krishi Sahayak AI</h3>
+              <h3 className="text-lg font-semibold text-green-800">
+                Krishi Sahayak AI
+              </h3>
             </div>
             <p className="text-sm text-gray-600">
-              Empowering Indian farmers with AI-driven insights, market intelligence, and sustainable farming practices.
+              Empowering Indian farmers with AI-driven insights, market
+              intelligence, and sustainable farming practices.
             </p>
             <div className="flex space-x-3 pt-2">
-              <motion.a 
-                href="#" 
+              <motion.a
+                href="#"
                 className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-700"
                 whileHover={{ y: -3, backgroundColor: "#dcfce7" }}
               >
                 <span>📱</span>
               </motion.a>
-              <motion.a 
-                href="#" 
+              <motion.a
+                href="#"
                 className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-700"
                 whileHover={{ y: -3, backgroundColor: "#dcfce7" }}
               >
                 <span>📧</span>
               </motion.a>
-              <motion.a 
-                href="#" 
+              <motion.a
+                href="#"
                 className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-700"
                 whileHover={{ y: -3, backgroundColor: "#dcfce7" }}
               >
@@ -202,43 +220,63 @@ export default function Dashboard() {
               </motion.a>
             </div>
           </div>
-          
+
           <div>
             <h4 className="font-medium text-green-800 mb-4">Quick Links</h4>
             <ul className="space-y-2">
-              {['Dashboard', 'Market Prices', 'Weather Forecast', 'Crop Calendar', 'Government Schemes'].map((item) => (
+              {[
+                "Dashboard",
+                "Market Prices",
+                "Weather Forecast",
+                "Crop Calendar",
+                "Government Schemes",
+              ].map((item) => (
                 <motion.li key={item} whileHover={{ x: 3 }}>
-                  <Link href="#" className="text-sm text-gray-600 hover:text-green-700 flex items-center gap-1">
+                  <Link
+                    href="#"
+                    className="text-sm text-gray-600 hover:text-green-700 flex items-center gap-1"
+                  >
                     <span>→</span> {item}
                   </Link>
                 </motion.li>
               ))}
             </ul>
           </div>
-          
+
           <div>
             <h4 className="font-medium text-green-800 mb-4">Resources</h4>
             <ul className="space-y-2">
-              {['Farming Techniques', 'Pest Management', 'Soil Health', 'Water Conservation', 'Success Stories'].map((item) => (
+              {[
+                "Farming Techniques",
+                "Pest Management",
+                "Soil Health",
+                "Water Conservation",
+                "Success Stories",
+              ].map((item) => (
                 <motion.li key={item} whileHover={{ x: 3 }}>
-                  <Link href="#" className="text-sm text-gray-600 hover:text-green-700 flex items-center gap-1">
+                  <Link
+                    href="#"
+                    className="text-sm text-gray-600 hover:text-green-700 flex items-center gap-1"
+                  >
                     <span>→</span> {item}
                   </Link>
                 </motion.li>
               ))}
             </ul>
           </div>
-          
+
           <div>
             <h4 className="font-medium text-green-800 mb-4">Stay Updated</h4>
-            <p className="text-sm text-gray-600 mb-3">Subscribe to our newsletter for farming tips and market updates.</p>
+            <p className="text-sm text-gray-600 mb-3">
+              Subscribe to our newsletter for farming tips and market updates.
+            </p>
             <div className="flex">
-              <input 
-                type="email" 
-                placeholder="Your email" 
+              <input
+                type="email"
+                placeholder="Your email"
                 className="text-sm px-3 py-2 border border-green-200 rounded-l-md focus:outline-none focus:ring-1 focus:ring-green-500 w-full"
               />
-              <motion.button 
+              <motion.button
                 className="bg-green-600 text-white px-3 py-2 rounded-r-md text-sm font-medium"
                 whileHover={{ backgroundColor: "#16a34a" }}
                 whileTap={{ scale: 0.98 }}
@@ -248,19 +286,41 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-        
+
         <div className="border-t border-green-100 p-6 bg-white/50">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-sm text-gray-600">© 2025 Krishi Sahayak AI - Empowering Indian Farmers</p>
+            <p className="text-sm text-gray-600">
+              © 2025 Krishi Sahayak AI - Empowering Indian Farmers
+            </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
-              <Link href="/help" className="text-sm text-green-600 hover:text-green-700 transition-colors">Help</Link>
-              <Link href="/privacy" className="text-sm text-green-600 hover:text-green-700 transition-colors">Privacy Policy</Link>
-              <Link href="/terms" className="text-sm text-green-600 hover:text-green-700 transition-colors">Terms of Service</Link>
-              <Link href="/contact" className="text-sm text-green-600 hover:text-green-700 transition-colors">Contact Us</Link>
+              <Link
+                href="/help"
+                className="text-sm text-green-600 hover:text-green-700 transition-colors"
+              >
+                Help
+              </Link>
+              <Link
+                href="/privacy"
+                className="text-sm text-green-600 hover:text-green-700 transition-colors"
+              >
+                Privacy Policy
+              </Link>
+              <Link
+                href="/terms"
+                className="text-sm text-green-600 hover:text-green-700 transition-colors"
+              >
+                Terms of Service
+              </Link>
+              <Link
+                href="/contact"
+                className="text-sm text-green-600 hover:text-green-700 transition-colors"
+              >
+                Contact Us
+              </Link>
             </div>
           </div>
         </div>
       </motion.footer>
     </motion.div>
-  )
+  );
 }

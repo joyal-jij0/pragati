@@ -18,8 +18,10 @@ import CommunityInsights from "@/components/fasalDoctor/CommunityInsights";
 
 // Import data
 import { fasalDoctorData } from "@/data/fasalDoctorData";
+import { useSession } from "next-auth/react";
 
 const FasalDoctorPage = () => {
+  
   // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
