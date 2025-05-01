@@ -70,6 +70,7 @@ export default function GyanDharaPage() {
             'Region-Specific Advice',
             'Trusted by Farmers',
           ]}
+          floatingIcon="🌧️"
         />
       </div>
 

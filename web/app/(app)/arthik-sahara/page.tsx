@@ -60,6 +60,7 @@ export default function ArthikSaharaPage() {
           secondaryTitle="Sahara"
           info="Your trusted companion for financial guidance, helping you find the best loan options while ensuring transparency, affordability, and protection from scams."
           badges={['Verified Lenders', 'No Hidden Fees', 'Tailored Advice']}
+          floatingIcon="💰"
         />
       </div>
 

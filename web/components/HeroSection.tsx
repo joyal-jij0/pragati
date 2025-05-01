@@ -8,6 +8,7 @@ interface HeroSectionProps {
   secondaryTitle?: string
   info: string
   badges?: string[]
+  floatingIcon?: string
 }
 
 const HeroSection: FC<HeroSectionProps> = ({
@@ -15,6 +16,7 @@ const HeroSection: FC<HeroSectionProps> = ({
   secondaryTitle,
   info,
   badges,
+  floatingIcon = '🌱',
 }) => {
   return (
     <motion.div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-green-600 to-green-500 text-white">
@@ -83,7 +85,7 @@ const HeroSection: FC<HeroSectionProps> = ({
                 transition={{ duration: 5, repeat: Infinity }}
                 className="text-7xl"
               >
-                🌱
+                {floatingIcon}
               </motion.div>
             </div>
           </div>

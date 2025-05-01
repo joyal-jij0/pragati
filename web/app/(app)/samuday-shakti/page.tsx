@@ -103,6 +103,7 @@ export default function SamudayShaktiPage() {
         secondaryTitle="FPO"
         info="Efficient FPO management for organizing resources, improving market access, and building networks for mutual growth and success"
         badges={['Resource Management', 'Market Access', 'Community Growth']}
+        floatingIcon='👨‍👩‍👧‍👦'
       />
 
       <div className="grid grid-cols-12 gap-4 pb-8">

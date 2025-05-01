@@ -1,20 +1,20 @@
 'use client'
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { motion } from "framer-motion";
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
+import { motion } from 'framer-motion'
 
-import WeatherWidget from "@/components/dashboard/WeatherWidget";
-import CropHealthCard from "@/components/dashboard/CropHealthCard";
-import MarketPriceCard from "@/components/dashboard/MarketPriceCard";
-import AdvisoryCard from "@/components/dashboard/AdvisoryCard";
-import ActivityFeed from "@/components/dashboard/ActivityFeed";
-import RecommendationCard from "@/components/dashboard/RecommendationCard";
-import FinancialSummary from "@/components/dashboard/FinancialSummary";
-import FarmStatistics from "@/components/dashboard/FarmStatistics";
-import QuickActions from "@/components/dashboard/QuickActions";
-import FarmerCommunity from "@/components/dashboard/FarmerCommunity";
-import WelcomeBanner from "@/components/dashboard/WelcomeBanner";
+import WeatherWidget from '@/components/dashboard/WeatherWidget'
+import CropHealthCard from '@/components/dashboard/CropHealthCard'
+import MarketPriceCard from '@/components/dashboard/MarketPriceCard'
+import AdvisoryCard from '@/components/dashboard/AdvisoryCard'
+import ActivityFeed from '@/components/dashboard/ActivityFeed'
+import RecommendationCard from '@/components/dashboard/RecommendationCard'
+import FinancialSummary from '@/components/dashboard/FinancialSummary'
+import FarmStatistics from '@/components/dashboard/FarmStatistics'
+import QuickActions from '@/components/dashboard/QuickActions'
+import FarmerCommunity from '@/components/dashboard/FarmerCommunity'
+import WelcomeBanner from '@/components/dashboard/WelcomeBanner'
 
 // Mock data
 import {
@@ -27,38 +27,39 @@ import {
   financialData,
   farmStatData,
   communityData,
-} from "@/data/dashboardData";
-import { createClient } from "@/utils/supabase/client";
+} from '@/data/dashboardData'
+import { createClient } from '@/utils/supabase/client'
 
 export default function Dashboard() {
-  const [greeting, setGreeting] = useState("Good morning");
-  const [isLoading, setIsLoading] = useState(true);
+  const [greeting, setGreeting] = useState('Good morning')
+  const [isLoading, setIsLoading] = useState(true)
   const supabase = createClient()
-  const [farmerName, setfarmerName] = useState("Farmer")
+  const [farmerName, setfarmerName] = useState('Farmer')
 
   useEffect(() => {
     supabase.auth.getSession().then((session) => {
-      session.data.session?.user.user_metadata.full_name  && setfarmerName(session.data.session?.user.user_metadata.full_name)
+      session.data.session?.user.user_metadata.full_name &&
+        setfarmerName(session.data.session?.user.user_metadata.full_name)
       // do something here with the session like  ex: setState(session)
-    });
+    })
   }, [])
 
   useEffect(() => {
     // Set greeting based on time of day
-    const hour = new Date().getHours();
+    const hour = new Date().getHours()
     if (hour >= 12 && hour < 17) {
-      setGreeting("Good afternoon");
+      setGreeting('Good afternoon')
     } else if (hour >= 17) {
-      setGreeting("Good evening");
+      setGreeting('Good evening')
     }
 
     // Simulate data loading
     const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
+      setIsLoading(false)
+    }, 1000)
 
-    return () => clearTimeout(timer);
-  }, []);
+    return () => clearTimeout(timer)
+  }, [])
 
   // Animation variants
   const containerVariants = {
@@ -69,7 +70,7 @@ export default function Dashboard() {
         staggerChildren: 0.1,
       },
     },
-  };
+  }
 
   const itemVariants = {
     hidden: { y: 20, opacity: 0 },
@@ -77,12 +78,12 @@ export default function Dashboard() {
       y: 0,
       opacity: 1,
       transition: {
-        type: "spring",
+        type: 'spring',
         stiffness: 100,
         damping: 15,
       },
     },
-  };
+  }
 
   if (isLoading) {
     return (
@@ -99,7 +100,7 @@ export default function Dashboard() {
           </p>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -208,21 +209,21 @@ export default function Dashboard() {
               <motion.a
                 href="#"
                 className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-700"
-                whileHover={{ y: -3, backgroundColor: "#dcfce7" }}
+                whileHover={{ y: -3, backgroundColor: '#dcfce7' }}
               >
                 <span>📱</span>
               </motion.a>
               <motion.a
                 href="#"
                 className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-700"
-                whileHover={{ y: -3, backgroundColor: "#dcfce7" }}
+                whileHover={{ y: -3, backgroundColor: '#dcfce7' }}
               >
                 <span>📧</span>
               </motion.a>
               <motion.a
                 href="#"
                 className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-700"
-                whileHover={{ y: -3, backgroundColor: "#dcfce7" }}
+                whileHover={{ y: -3, backgroundColor: '#dcfce7' }}
               >
                 <span>📞</span>
               </motion.a>
@@ -233,11 +234,11 @@ export default function Dashboard() {
             <h4 className="font-medium text-green-800 mb-4">Quick Links</h4>
             <ul className="space-y-2">
               {[
-                "Dashboard",
-                "Market Prices",
-                "Weather Forecast",
-                "Crop Calendar",
-                "Government Schemes",
+                'Dashboard',
+                'Market Prices',
+                'Weather Forecast',
+                'Crop Calendar',
+                'Government Schemes',
               ].map((item) => (
                 <motion.li key={item} whileHover={{ x: 3 }}>
                   <Link
@@ -255,11 +256,11 @@ export default function Dashboard() {
             <h4 className="font-medium text-green-800 mb-4">Resources</h4>
             <ul className="space-y-2">
               {[
-                "Farming Techniques",
-                "Pest Management",
-                "Soil Health",
-                "Water Conservation",
-                "Success Stories",
+                'Farming Techniques',
+                'Pest Management',
+                'Soil Health',
+                'Water Conservation',
+                'Success Stories',
               ].map((item) => (
                 <motion.li key={item} whileHover={{ x: 3 }}>
                   <Link
@@ -286,7 +287,7 @@ export default function Dashboard() {
               />
               <motion.button
                 className="bg-green-600 text-white px-3 py-2 rounded-r-md text-sm font-medium"
-                whileHover={{ backgroundColor: "#16a34a" }}
+                whileHover={{ backgroundColor: '#16a34a' }}
                 whileTap={{ scale: 0.98 }}
               >
                 Subscribe
@@ -330,5 +331,5 @@ export default function Dashboard() {
         </div>
       </motion.footer>
     </motion.div>
-  );
+  )
 }
