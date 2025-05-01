@@ -17,7 +17,7 @@ const HeroSection: FC<HeroSectionProps> = ({
   badges,
 }) => {
   return (
-    <motion.div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-green-600 to-green-500 text-white mb-10">
+    <motion.div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-green-600 to-green-500 text-white">
       <div className="absolute inset-0 opacity-10">
         <div className="absolute -right-20 -top-20 h-80 w-80 rounded-full bg-white/20"></div>
         <div className="absolute -left-20 -bottom-20 h-80 w-80 rounded-full bg-white/20"></div>
