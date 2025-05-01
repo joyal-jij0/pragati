@@ -1,0 +1,26 @@
+export const groupBuyingDeals = [
+    {
+      id: 1,
+      product: "Urea Fertilizer",
+      originalPrice: 320,
+      groupPrice: 280,
+      unit: "per 50kg bag",
+      minQuantity: 100,
+      currentParticipants: 18,
+      targetParticipants: 25,
+      deadline: "Oct 25, 2023",
+      organizer: "Kisan FPO",
+    },
+    {
+      id: 2,
+      product: "Tractor Rental",
+      originalPrice: 800,
+      groupPrice: 600,
+      unit: "per day",
+      minQuantity: 30,
+      currentParticipants: 22,
+      targetParticipants: 30,
+      deadline: "Oct 30, 2023",
+      organizer: "Pragati Kisan Sangh",
+    },
+  ];

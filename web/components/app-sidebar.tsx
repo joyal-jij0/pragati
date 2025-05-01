@@ -55,15 +55,15 @@ const data = {
     },
   ],
   navServices: [
-    {
-      title: 'Bazaar Bridge',
-      url: '/bazaar-bridge',
-      icon: '🛒',
-      isActive: true,
-    },
+    // {
+    //   title: 'Bazaar Bridge',
+    //   url: '/bazaar-bridge',
+    //   icon: '🛒',
+    //   isActive: true,
+    // },
     {
       title: 'Arthik Sahara',
-      url: '/arthik-sahar',
+      url: '/arthik-sahara',
       icon: '💰',
     },
     {
