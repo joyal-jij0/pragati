@@ -1,346 +1,371 @@
 'use client'
 
-import HeroSection from '@/components/HeroSection'
-import FPODashboard from '@/components/samudayShakti/FPODashboard'
-import GroupChatAnnouncements from '@/components/samudayShakti/GroupChatAnnouncements'
+import React, { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
 import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/ui/animated-tabs'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import {
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupLabel,
-  SidebarGroupContent,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-} from '@/components/ui/sidebar'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import { cn } from '@/lib/utils'
-import {
-  AwardIcon,
-  BarChart2Icon,
-  ChevronDownIcon,
-  DollarSignIcon,
-  FilterIcon,
-  Globe2Icon,
-  ImageIcon,
-  MessageSquareIcon,
-  PaperclipIcon,
-  PlusIcon,
-  SearchIcon,
-  SendIcon,
-  StarIcon,
-  TractorIcon,
-  TrendingUpIcon,
-  UserIcon,
-  Users2Icon,
-  UsersIcon,
+  MapPin,
+  Search,
+  Bell,
+  Menu,
+  BarChart2,
+  Users,
+  MessageSquare,
+  Tractor,
+  Plus,
+  Globe,
+  UserPlus,
 } from 'lucide-react'
-import EquipmentRental from '../../../components/samudayShakti/EquipmentRental'
-import ProductRentCard from '@/components/ProductRentCard'
+import { useRouter } from 'next/navigation'
 
-const rentProducts = [
-  {
-    name: 'John Deere 5055E',
-    location: 'Jaipur, Rajasthan',
-    price: '₹1200/day',
-    image:
-      'https://assets.khetigaadi.com/new-tractor/John-Deere-53101735727642_OpIDdN3Zb.png',
-    sellerName: 'Mahesh Agri Tools',
-  },
-  {
-    name: 'Mahindra 275 DI XP Plus',
-    location: 'Ludhiana, Punjab',
-    price: '₹1000/day',
-    image:
-      'https://d2ki7eiqd260sq.cloudfront.net/MAHINDRA-GYROVATOR44271477-28d3-4da2-b7c8-764ee7d830d3.webp',
-    sellerName: 'Singh Machinery',
-  },
-  {
-    name: 'Kartar Combine Harvester',
-    location: 'Karnal, Haryana',
-    price: '₹2500/day',
-    image:
-      'https://media.istockphoto.com/id/1339336243/photo/john-deere-s670-soybean-sunset.jpg?s=612x612&w=0&k=20&c=pH59jG3UG73i2B_hxXH3UEGvOFHuGAxQh1feJ2IuJTM=',
-    sellerName: 'Haryana Agro Tools',
-  },
-  {
-    name: 'Power Tiller VST Shakti',
-    location: 'Bikaner, Rajasthan',
-    price: '₹800/day',
-    image:
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJkR99f0wCsl_ee1p0fPG1n48fzU2r51InLw&s',
-    sellerName: 'Thar Farm Rentals',
-  },
-  {
-    name: 'Rotavator Shaktiman',
-    location: 'Amritsar, Punjab',
-    price: '₹500/day',
-    image:
-      'https://assets.khetigaadi.com/new-tractor/John-Deere-53101735727642_OpIDdN3Zb.png',
-    sellerName: 'Punjab Farm Implements',
-  },
-]
+// Import components
+import FPODashboard from '@/components/samudayShakti/FPODashboard'
+import FPOSelector from '@/components/samudayShakti/FPOSelector'
+import FPOMembers from '@/components/samudayShakti/FPOMembers'
+import FPODiscovery from '@/components/samudayShakti/FPODiscovery'
+import FPOCreation from '@/components/samudayShakti/FPOCreation'
+import GroupChatAnnouncements from '@/components/samudayShakti/GroupChatAnnouncements'
+import EquipmentRental from '@/components/samudayShakti/EquipmentRental'
+import PageHeader from '@/components/samudayShakti/PageHeader'
+import { createClient } from '@/utils/supabase/client'
+
+// Update FPO type definition to match API schema
+export type FPOType = {
+  id: string
+  name: string
+  location: string
+  description: string
+  _count: {
+    members: number
+  }
+  createdAt: Date
+}
 
 export default function SamudayShaktiPage() {
+  const supabase = createClient()
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
+  const [location, setLocation] = useState('Sonipat, Haryana')
+  const [activeTab, setActiveTab] = useState('fpoDashboard')
+  const [activeSection, setActiveSection] = useState('myFPO')
+  const [showAIAssistant, setShowAIAssistant] = useState(false)
+  const [selectedFPO, setSelectedFPO] = useState('')
+  const [joinedFPOs, setJoinedFPOs] = useState<FPOType[]>([])
+
+  useEffect(() => {
+    supabase.auth.getSession().then((session) => {
+      if (!session.data.session?.user.email) {
+        router.push('/auth/signin?callbackUrl=/samuday-shakti')
+      }
+      // do something here with the session like  ex: setState(session)
+    })
+  }, [router])
+
+  // Update the fetch FPOs function to use the new route
+  useEffect(() => {
+    const fetchFPOs = async () => {
+      try {
+        setIsLoading(true)
+        const response = await fetch('/api/samuday-shakti/fpo/joined')
+
+        if (!response.ok) {
+          throw new Error(`Error fetching joined FPOs: ${response.status}`)
+        }
+
+        const data: FPOType[] = await response.json()
+        setJoinedFPOs(data)
+
+        // Set the first FPO's ID as default if available
+        if (data.length > 0) {
+          setSelectedFPO(data[0].id) // Change this line to use ID
+          setLocation(data[0].location)
+        }
+      } catch (err) {
+        console.error('Failed to fetch joined FPOs:', err)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    if (status === 'authenticated') {
+      fetchFPOs()
+    }
+  }, [status])
+
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: { type: 'spring', stiffness: 100 },
+    },
+  }
+
+  // Handle FPO change
+  const handleFPOChange = (fpoId: string) => {
+    const fpo = joinedFPOs.find((f) => f.id === fpoId)
+    if (fpo) {
+      setSelectedFPO(fpo.id) // Change this line to store ID instead of name
+      setLocation(fpo.location)
+    }
+  }
+
+  // Handle joining a new FPO
+  const handleJoinFPO = (fpo) => {
+    if (!joinedFPOs.some((f) => f.id === fpo.id)) {
+      setJoinedFPOs([...joinedFPOs, fpo])
+      setSelectedFPO(fpo.name)
+      setLocation(fpo.location)
+      setActiveSection('myFPO')
+      setActiveTab('fpoDashboard')
+    }
+  }
+
+  // Handle leaving an FPO
+  const handleLeaveFPO = (fpoId) => {
+    const updatedFPOs = joinedFPOs.filter((f) => f.id !== fpoId)
+    setJoinedFPOs(updatedFPOs)
+
+    if (updatedFPOs.length > 0) {
+      setSelectedFPO(updatedFPOs[0].name)
+      setLocation(updatedFPOs[0].location)
+    }
+  }
+
+  if (status === 'loading') {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-700"></div>
+      </div>
+    )
+  }
+
   return (
-    <div className="container mx-auto px-2 py-2 space-y-4">
-      <HeroSection
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-amber-50">
+      {/* Header */}
+      <PageHeader
+        location={location}
         title="Samuday Shakti"
-        secondaryTitle="FPO"
-        info="Efficient FPO management for organizing resources, improving market access, and building networks for mutual growth and success"
-        badges={['Resource Management', 'Market Access', 'Community Growth']}
-        floatingIcon='👨‍👩‍👧‍👦'
+        subtitle="FPO Management & Community Collaboration"
       />
 
-      <div className="grid grid-cols-12 gap-4 pb-8">
-        <div className="col-span-3 bg-black/10 rounded-xl p-2">
-          <SidebarContent>
-            <SidebarGroup>
-              <SidebarGroupLabel className="text-lg font-bold">
-                FPO Hub
-              </SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {[
-                    'Rajputana Agro Alliance',
-                    'Kesar Krishi Samriddhi',
-                    'Pind Krishi Samiti',
-                    'Thar Bhoomi Sangh',
-                    'Sarbat Da Bhala FPO',
-                    'Haryana Haryali Sangh',
-                  ].map((eachFpo) => (
-                    <SidebarMenuItem key={eachFpo}>
-                      <SidebarMenuButton>
-                        <Users2Icon size={16} />
-                        <span>{eachFpo}</span>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-            <SidebarGroup>
-              <SidebarGroupLabel className="text-lg font-bold">
-                My FPO Groups
-              </SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton>
-                      <Globe2Icon size={16} />
-                      <span>Discover FPOs</span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton>
-                      <PlusIcon size={16} />
-                      <span>Create new FPO</span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-          </SidebarContent>
+      {/* FPO Selection Banner */}
+      <FPOSelector
+        selectedFPO={selectedFPO}
+        joinedFPOs={joinedFPOs}
+        onChangeFPO={handleFPOChange}
+        onLeaveFPO={handleLeaveFPO}
+      />
+
+      {/* Navigation Tabs */}
+      <div className="bg-white shadow-sm sticky top-0 z-10">
+        <div className="container mx-auto px-4">
+          <div className="flex overflow-x-auto hide-scrollbar">
+            <button
+              className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 flex items-center gap-1 ${
+                activeTab === 'fpoDashboard'
+                  ? 'border-green-600 text-green-700'
+                  : 'border-transparent text-gray-600 hover:text-gray-800'
+              }`}
+              onClick={() => setActiveTab('fpoDashboard')}
+            >
+              <BarChart2 size={16} />
+              <span>FPO Dashboard</span>
+            </button>
+            <button
+              className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 flex items-center gap-1 ${
+                activeTab === 'groupChat'
+                  ? 'border-green-600 text-green-700'
+                  : 'border-transparent text-gray-600 hover:text-gray-800'
+              }`}
+              onClick={() => setActiveTab('groupChat')}
+            >
+              <MessageSquare size={16} />
+              <span>Group Chat & Announcements</span>
+            </button>
+            <button
+              className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 flex items-center gap-1 ${
+                activeTab === 'equipment'
+                  ? 'border-green-600 text-green-700'
+                  : 'border-transparent text-gray-600 hover:text-gray-800'
+              }`}
+              onClick={() => setActiveTab('equipment')}
+            >
+              <Tractor size={16} />
+              <span>Equipment Rental</span>
+            </button>
+            <button
+              className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 flex items-center gap-1 ${
+                activeTab === 'members'
+                  ? 'border-green-600 text-green-700'
+                  : 'border-transparent text-gray-600 hover:text-gray-800'
+              }`}
+              onClick={() => setActiveTab('members')}
+            >
+              <Users size={16} />
+              <span>FPO Members</span>
+            </button>
+          </div>
         </div>
-        <div className="col-span-9">
-          <Tabs defaultValue="fpoDashboard" className="w-full">
-            <TabsList className="bg-black/10 w-full justify-start gap-2">
-              <TabsTrigger
-                className="flex items-center gap-2"
-                value="fpoDashboard"
-              >
-                <BarChart2Icon size={16} />
-                <span>FPO Dashboard</span>
-              </TabsTrigger>
-              <TabsTrigger
-                className="flex items-center gap-2"
-                value="fpoGroupChat"
-              >
-                <MessageSquareIcon size={16} />
-                <span>Group Chat & Announcements</span>
-              </TabsTrigger>
-              <TabsTrigger
-                className="flex items-center gap-2"
-                value="fpoEquipment"
-              >
-                <TractorIcon size={16} />
-                <span>Equipment Rental</span>
-              </TabsTrigger>
-              <TabsTrigger
-                className="flex items-center gap-2"
-                value="fpoMembers"
-              >
-                <UsersIcon size={16} />
-                <span>FPO Members</span>
-              </TabsTrigger>
-            </TabsList>
+      </div>
 
-            <TabsContent value="fpoDashboard" className="p-4">
-              <FPODashboard />
-            </TabsContent>
+      {/* Main Content */}
+      <div className="container mx-auto px-4 py-6">
+        {isLoading ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-700"></div>
+          </div>
+        ) : (
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+          >
+            {/* Left Sidebar - FPO Navigation */}
+            <motion.div
+              variants={itemVariants}
+              className="lg:col-span-1 space-y-4"
+            >
+              <div className="bg-white rounded-xl shadow-md p-4">
+                <h3 className="text-lg font-semibold text-gray-800 mb-3">
+                  FPO Hub
+                </h3>
+                <div className="space-y-2">
+                  <button
+                    onClick={() => setActiveSection('myFPO')}
+                    className={`w-full flex items-center justify-between p-3 rounded-lg text-left ${
+                      activeSection === 'myFPO'
+                        ? 'bg-green-50 text-green-700'
+                        : 'hover:bg-gray-50 text-gray-700'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Users size={18} />
+                      <span>My FPO Groups</span>
+                    </div>
+                    <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                      {joinedFPOs.length}
+                    </span>
+                  </button>
 
-            <TabsContent value="fpoGroupChat">
-              <Card>
-                <CardHeader className="flex flex-row items-center">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-10 h-10 bg-black flex items-center justify-center rounded-full text-white">
-                      <UserIcon className="size-5" />
+                  <button
+                    onClick={() => setActiveSection('discover')}
+                    className={`w-full flex items-center justify-between p-3 rounded-lg text-left ${
+                      activeSection === 'discover'
+                        ? 'bg-green-50 text-green-700'
+                        : 'hover:bg-gray-50 text-gray-700'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Globe size={18} />
+                      <span>Discover FPOs</span>
                     </div>
-                    <div>
-                      <p className="text-sm font-medium leading-none">
-                        Rajputana Agro Alliance
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        Group Chat
-                      </p>
+                    <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                      New
+                    </span>
+                  </button>
+
+                  <button
+                    onClick={() => setActiveSection('create')}
+                    className={`w-full flex items-center justify-between p-3 rounded-lg text-left ${
+                      activeSection === 'create'
+                        ? 'bg-green-50 text-green-700'
+                        : 'hover:bg-gray-50 text-gray-700'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Plus size={18} />
+                      <span>Create New FPO</span>
                     </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {[
-                      {
-                        role: 'agent',
-                        content: 'Hi, how can I help you today?',
-                      },
-                      {
-                        role: 'user',
-                        content: "Hey, I'm having trouble with my account.",
-                      },
-                      {
-                        role: 'agent',
-                        content: 'What seems to be the problem?',
-                      },
-                      {
-                        role: 'user',
-                        content: "I can't log in.",
-                      },
-                    ].map((message, index) => (
+                  </button>
+                </div>
+              </div>
+
+              {/* Joined FPOs List */}
+              {activeSection === 'myFPO' && joinedFPOs.length > 0 && (
+                <div className="bg-white rounded-xl shadow-md p-4">
+                  <h3 className="text-md font-medium text-gray-800 mb-3">
+                    My FPO Groups
+                  </h3>
+                  <div className="space-y-2">
+                    {joinedFPOs.map((fpo) => (
                       <div
-                        key={index}
-                        className={cn(
-                          'flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm font-semibold',
-                          message.role === 'user'
-                            ? 'ml-auto bg-primary text-primary-foreground'
-                            : 'bg-green-500 text-primary-foreground'
-                        )}
+                        key={fpo.id}
+                        className={`p-3 rounded-lg border ${
+                          selectedFPO === fpo.id // Change this line to compare IDs
+                            ? 'border-green-200 bg-green-50'
+                            : 'border-gray-100 hover:bg-gray-50'
+                        } cursor-pointer`}
+                        onClick={() => handleFPOChange(fpo.id)}
                       >
-                        {message.content}
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+                              <Users size={16} />
+                            </div>
+                            <div>
+                              <p className="font-medium text-gray-800">
+                                {fpo.name}
+                              </p>
+                              <p className="text-xs text-gray-500">
+                                {fpo._count.members} members
+                              </p>
+                            </div>
+                          </div>
+                          {selectedFPO === fpo.id && ( // Change this line to compare IDs
+                            <div className="h-3 w-3 rounded-full bg-green-500"></div>
+                          )}
+                        </div>
                       </div>
                     ))}
                   </div>
-                </CardContent>
-                <CardFooter>
-                  <form
-                    // onSubmit={(event) => {
-                    //   event.preventDefault()
-                    //   if (inputLength === 0) return
-                    //   setMessages([
-                    //     ...messages,
-                    //     {
-                    //       role: 'user',
-                    //       content: input,
-                    //     },
-                    //   ])
-                    //   setInput('')
-                    // }}
-                    className="flex w-full items-center space-x-2"
-                  >
-                    <button className="p-2 rounded-full hover:bg-gray-100">
-                      <PaperclipIcon size={18} className="text-gray-500" />
-                    </button>
-                    <button className="p-2 rounded-full hover:bg-gray-100">
-                      <ImageIcon size={18} className="text-gray-500" />
-                    </button>
-                    <Input
-                      id="message"
-                      placeholder="Type your message..."
-                      className="flex-1"
-                      autoComplete="off"
-                      // value={input}
-                      // onChange={(event) => setInput(event.target.value)}
-                    />
-                    <Button
-                      type="submit"
-                      size="icon"
-                      // disabled={inputLength === 0}
-                    >
-                      <SendIcon />
-                      <span className="sr-only">Send</span>
-                    </Button>
-                  </form>
-                </CardFooter>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="fpoEquipment">
-              <div className="py-4 px-2">
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <div className="relative flex-grow">
-                    <Input
-                      placeholder="Search equipment..."
-                      className="w-full pl-8"
-                      // value={searchTerm}
-                      // onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                    <div className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground">
-                      <SearchIcon className="h-4 w-4" />
-                    </div>
-                  </div>
-                  <Select
-                  // value="all"
-                  // onValueChange={(value) => setFilterType(value)}
-                  >
-                    <SelectTrigger className="w-48">
-                      <SelectValue placeholder="All Types" />
-                    </SelectTrigger>
-                    <SelectContent defaultValue="all">
-                      <SelectItem value="all">All Types</SelectItem>
-                      <SelectItem value="tractor">🚜 Tractors</SelectItem>
-                      <SelectItem value="implement">🔧 Implements</SelectItem>
-                      <SelectItem value="harvester">🌾 Harvesters</SelectItem>
-                      <SelectItem value="irrigation">💧 Irrigation</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Button className="bg-green-600 text-white hover:bg-green-500">
-                    <PlusIcon size={16} />
-                    <span>List Equipment</span>
-                  </Button>
                 </div>
-              </div>
-              <div className="grid gap-4 grid-cols-2">
-                {rentProducts.map((product) => (
-                  <ProductRentCard
-                    key={product.name}
-                    name={product.name}
-                    location={product.location}
-                    price={product.price}
-                    image={product.image}
-                    sellerName={product.sellerName}
-                  />
-                ))}
-              </div>
-            </TabsContent>
+              )}
+            </motion.div>
 
-            <TabsContent value="fpoMembers" className="p-4">
-              <EquipmentRental />
-            </TabsContent>
-          </Tabs>
-        </div>
+            {/* Main Content Area */}
+            <motion.div
+              variants={itemVariants}
+              className="lg:col-span-2 space-y-6"
+            >
+              {/* Conditional rendering based on active section and tab */}
+              {activeSection === 'myFPO' && (
+                <>
+                  {activeTab === 'fpoDashboard' && (
+                    <FPODashboard selectedFPO={selectedFPO} />
+                  )}
+                  {activeTab === 'groupChat' && (
+                    <GroupChatAnnouncements selectedFPO={selectedFPO} />
+                  )}
+                  {activeTab === 'equipment' && (
+                    <EquipmentRental selectedFPO={selectedFPO} />
+                  )}
+                  {activeTab === 'members' && (
+                    <FPOMembers selectedFPO={selectedFPO} />
+                  )}
+                </>
+              )}
+
+              {activeSection === 'discover' && (
+                <FPODiscovery onJoinFPO={handleJoinFPO} />
+              )}
+              {activeSection === 'create' && (
+                <FPOCreation onFPOCreated={handleJoinFPO} />
+              )}
+            </motion.div>
+          </motion.div>
+        )}
       </div>
     </div>
   )
