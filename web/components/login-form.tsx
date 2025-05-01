@@ -9,8 +9,7 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { GithubIcon } from 'lucide-react'
-import { ContinueWithOAuthButtonsGroup } from './OAuthButtons'
+import { ContinueWithOAuthButtonsGroup } from '@/components/OAuthButtons'
 
 export function LoginForm({
   className,

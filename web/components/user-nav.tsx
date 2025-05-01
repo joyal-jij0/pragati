@@ -5,13 +5,34 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react'
-import { Collapsible, CollapsibleTrigger } from '@/components/ui/collapsible'
+import { ChevronDownIcon, User2Icon } from 'lucide-react'
+import { createClient } from '@/utils/supabase/server'
+import { logout } from '@/app/(auth)/auth/logout/actions'
+import { Button, buttonVariants } from './ui/button'
+import Link from 'next/link'
+import { cn } from '@/lib/utils'
 
-export function UserNav({ name, info }: { name: string; info: string }) {
+export async function UserNav({ name, info }: { name: string; info: string }) {
+  const supabase = await createClient()
+  const { data } = await supabase.auth.getUser()
+
+  if (data.user === null) {
+    return (
+      <Link
+        href="/auth"
+        className={cn(
+          buttonVariants({ variant: 'default' }),
+          'flex items-center gap-2 cursor-pointer h-8'
+        )}
+      >
+        <User2Icon className="h-4 w-4" />
+        <span className="hidden md:inline">Sign In</span>
+      </Link>
+    )
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="py-1 px-2 group/collapsible">
@@ -26,9 +47,11 @@ export function UserNav({ name, info }: { name: string; info: string }) {
             <span className="text-sm">👤</span>
           </div>
           <div className="flex flex-col text-left">
-            <p className="text-sm font-medium leading-none">{name}</p>
+            <p className="text-sm font-medium leading-none">
+              {data.user?.user_metadata.full_name}
+            </p>
             <span className="text-xs leading-none text-muted-foreground">
-              {info}
+              Farmer
             </span>
           </div>
           <ChevronDownIcon className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-180" />
@@ -37,8 +60,12 @@ export function UserNav({ name, info }: { name: string; info: string }) {
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{name}</p>
-            <p className="text-xs leading-none text-muted-foreground">{info}</p>
+            <p className="text-sm font-medium leading-none">
+              {data.user?.user_metadata.full_name}
+            </p>
+            <p className="text-xs leading-none text-muted-foreground">
+              {data.user?.email}
+            </p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
@@ -47,7 +74,13 @@ export function UserNav({ name, info }: { name: string; info: string }) {
           <DropdownMenuItem>Settings</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Log out</DropdownMenuItem>
+        <form action={logout}>
+          <DropdownMenuItem className="cursor-pointer" asChild>
+            <button type="submit" className="w-full cursor-pointer">
+              Log Out
+            </button>
+          </DropdownMenuItem>
+        </form>
       </DropdownMenuContent>
     </DropdownMenu>
   )
