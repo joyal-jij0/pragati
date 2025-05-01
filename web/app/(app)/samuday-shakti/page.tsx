@@ -25,12 +25,15 @@ import { cn } from '@/lib/utils'
 import {
   AwardIcon,
   BarChart2Icon,
+  ChevronDownIcon,
   DollarSignIcon,
+  FilterIcon,
   Globe2Icon,
   ImageIcon,
   MessageSquareIcon,
   PaperclipIcon,
   PlusIcon,
+  SearchIcon,
   SendIcon,
   StarIcon,
   TractorIcon,
@@ -95,8 +98,8 @@ export default function SamudayShaktiPage() {
         badges={['Resource Management', 'Market Access', 'Community Growth']}
       />
 
-      <div className="grid grid-flow-col gap-4 pb-8">
-        <div className="col-span-2 bg-black/10 rounded-xl p-2">
+      <div className="grid grid-cols-12 gap-4 pb-8">
+        <div className="col-span-3 bg-black/10 rounded-xl p-2">
           <SidebarContent>
             <SidebarGroup>
               <SidebarGroupLabel className="text-lg font-bold">
@@ -145,7 +148,7 @@ export default function SamudayShaktiPage() {
             </SidebarGroup>
           </SidebarContent>
         </div>
-        <div className="col-span-6">
+        <div className="col-span-9">
           <Tabs defaultValue="fpoDashboard" className="w-full">
             <TabsList className="bg-black/10 w-full justify-start gap-2">
               <TabsTrigger
@@ -276,36 +279,56 @@ export default function SamudayShaktiPage() {
               </Card>
             </TabsContent>
 
-            <TabsContent value="fpoEquipment" className="p-4">
-              <div className="grid gap-4 grid-cols-4">
-                {rentProducts.map((product, index) => (
-                  <Card key={index} className="overflow-hidden p-0">
+            <TabsContent value="fpoEquipment">
+              <div className="bg-white rounded-xl shadow-md p-5 mb-6 border border-gray-100">
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="relative flex-grow">
+                    <SearchIcon
+                      className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                      size={18}
+                    />
+                    <input
+                      type="text"
+                      placeholder="Search equipment..."
+                      className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      // value={searchTerm}
+                      // onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                  </div>
+                  <div className="sm:w-48">
                     <div className="relative">
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="h-auto w-full aspect-video object-cover"
+                      <FilterIcon
+                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                        size={18}
                       />
-                    </div>
-                    <CardContent>
-                      <h3 className="text-lg font-bold">{product.name}</h3>
-                      <div className="mt-2 space-y-1">
-                        <p className="text-sm text-gray-600">
-                          {product.location}
-                        </p>
-                        <p className="text-sm font-medium">{product.price}</p>
-                        <p className="text-sm text-gray-600">
-                          Seller: {product.sellerName}
-                        </p>
+                      <select
+                        className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                        // value={filterType}
+                        // onChange={(e) => setFilterType(e.target.value)}
+                      >
+                        <option value="all">All Types</option>
+                        <option value="tractor">🚜 Tractors</option>
+                        <option value="implement">🔧 Implements</option>
+                        <option value="harvester">🌾 Harvesters</option>
+                        <option value="irrigation">💧 Irrigation</option>
+                      </select>
+                      <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                        <ChevronDownIcon size={16} />
                       </div>
-                    </CardContent>
-                    <CardFooter className="flex justify-between p-4 pt-0">
-                      <Button variant="outline" size="sm">
-                        Details
-                      </Button>
-                      <Button size="sm">Rent Now</Button>
-                    </CardFooter>
-                  </Card>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="grid gap-4 grid-cols-4">
+                {rentProducts.map((product) => (
+                  <ProductRentCard
+                    key={product.name}
+                    name={product.name}
+                    location={product.location}
+                    price={product.price}
+                    image={product.image}
+                    sellerName={product.sellerName}
+                  />
                 ))}
               </div>
             </TabsContent>
