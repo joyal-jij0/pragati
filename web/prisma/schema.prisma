@@ -28,7 +28,7 @@ model Message {
   content   String // The text content of the message
   createdAt DateTime @default(now()) // Timestamp of the message
   fpo       Fpo      @relation("FpoMessages", fields: [fpoId], references: [id])
-  fpoId     String // Foreign key for the FPO
+  fpoId     String   @db.Uuid // Updated to match Fpo's id type
   author    profiles @relation("UserMessages", fields: [authorId], references: [id])
-  authorId  String // Foreign key for the user (author of the message)
+  authorId  String   @db.Uuid
 }
