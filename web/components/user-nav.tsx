@@ -51,10 +51,11 @@ export async function UserNav({ name, info }: { name: string; info: string }) {
               {data.user?.user_metadata.full_name}
             </p>
             <span className="text-xs leading-none text-muted-foreground">
+              <span className="text-green-500">🌿</span>
               Farmer
             </span>
           </div>
-          <ChevronDownIcon className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-180" />
+          <ChevronDownIcon className="size-5 ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-180" />
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
