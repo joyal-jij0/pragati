@@ -21,6 +21,13 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from '@/components/ui/sidebar'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { cn } from '@/lib/utils'
 import {
   AwardIcon,
@@ -280,46 +287,41 @@ export default function SamudayShaktiPage() {
             </TabsContent>
 
             <TabsContent value="fpoEquipment">
-              <div className="bg-white rounded-xl shadow-md p-5 mb-6 border border-gray-100">
+              <div className="py-4 px-2">
                 <div className="flex flex-col sm:flex-row gap-4">
                   <div className="relative flex-grow">
-                    <SearchIcon
-                      className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                      size={18}
-                    />
-                    <input
-                      type="text"
+                    <Input
                       placeholder="Search equipment..."
-                      className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className="w-full pl-8"
                       // value={searchTerm}
                       // onChange={(e) => setSearchTerm(e.target.value)}
                     />
-                  </div>
-                  <div className="sm:w-48">
-                    <div className="relative">
-                      <FilterIcon
-                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                        size={18}
-                      />
-                      <select
-                        className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                        // value={filterType}
-                        // onChange={(e) => setFilterType(e.target.value)}
-                      >
-                        <option value="all">All Types</option>
-                        <option value="tractor">🚜 Tractors</option>
-                        <option value="implement">🔧 Implements</option>
-                        <option value="harvester">🌾 Harvesters</option>
-                        <option value="irrigation">💧 Irrigation</option>
-                      </select>
-                      <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                        <ChevronDownIcon size={16} />
-                      </div>
+                    <div className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground">
+                      <SearchIcon className="h-4 w-4" />
                     </div>
                   </div>
+                  <Select
+                  // value="all"
+                  // onValueChange={(value) => setFilterType(value)}
+                  >
+                    <SelectTrigger className="w-48">
+                      <SelectValue placeholder="All Types" />
+                    </SelectTrigger>
+                    <SelectContent defaultValue="all">
+                      <SelectItem value="all">All Types</SelectItem>
+                      <SelectItem value="tractor">🚜 Tractors</SelectItem>
+                      <SelectItem value="implement">🔧 Implements</SelectItem>
+                      <SelectItem value="harvester">🌾 Harvesters</SelectItem>
+                      <SelectItem value="irrigation">💧 Irrigation</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Button className="bg-green-600 text-white hover:bg-green-500">
+                    <PlusIcon size={16} />
+                    <span>List Equipment</span>
+                  </Button>
                 </div>
               </div>
-              <div className="grid gap-4 grid-cols-4">
+              <div className="grid gap-4 grid-cols-2">
                 {rentProducts.map((product) => (
                   <ProductRentCard
                     key={product.name}

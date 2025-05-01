@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { FC } from 'react'
 import { Card, CardContent, CardFooter } from './ui/card'
 import { Button } from './ui/button'
+import { Badge } from './ui/badge'
 
 interface ProductRentCardProps {
   name: string
@@ -27,16 +28,31 @@ const ProductRentCard: FC<ProductRentCardProps> = ({
           alt={name}
           className="aspect-video w-full object-cover"
         />
+        <div className="absolute top-0 right-0 px-2 py-1 z-100 flex justify-between text-xs">
+          <div className="size-8 bg-white items-center justify-center rounded-full text-muted-foreground flex flex-row">
+            <HeartIcon className="size-4" />
+          </div>
+        </div>
       </div>
-      <CardContent>
-        <h3 className="text-lg font-bold">{name}</h3>
-        <div className="mt-2 space-y-1">
-          <p className="text-sm text-gray-600">{location}</p>
+      <CardContent className="px-4">
+        <div className="flex justify-between">
+          <h3 className="text-lg font-bold">{name}</h3>
           <p className="text-sm font-medium">{price}</p>
-          <p className="text-sm text-gray-600">Seller: {sellerName}</p>
+        </div>
+        <div className="space-y-1">
+          <div className="flex justify-between">
+            <p className="text-sm text-gray-600 flex flex-row items-center">
+              <MapPinIcon size={14} className="mr-1" />
+              {location}
+            </p>
+            <p className="text-sm text-gray-600 flex flex-row items-center">
+              <UserIcon size={14} className="mr-1" />
+              {sellerName}
+            </p>
+          </div>
         </div>
       </CardContent>
-      <CardFooter className="flex justify-between p-4 pt-0">
+      <CardFooter className="flex justify-between p-2 pt-0">
         <Button variant="outline" size="sm">
           Details
         </Button>
