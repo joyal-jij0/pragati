@@ -86,9 +86,9 @@ const FasalDoctorPage = () => {
                 <DiseaseIdentification />
               </TabsContent>
 
-              <TabsContent value="treatment" className="mt-0">
+              {/* <TabsContent value="treatment" className="mt-0">
                 <TreatmentRecommendations />
-              </TabsContent>
+              </TabsContent> */}
 
               <TabsContent value="pests" className="mt-0">
                 <PestLibrary />
@@ -98,9 +98,9 @@ const FasalDoctorPage = () => {
                 <DiseaseLibrary />
               </TabsContent>
 
-              <TabsContent value="history" className="mt-0">
+              {/* <TabsContent value="history" className="mt-0">
                 <DiagnosisHistory />
-              </TabsContent>
+              </TabsContent> */}
 
               <TabsContent value="prevention" className="mt-0">
                 <PreventiveMeasures />
