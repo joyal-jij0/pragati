@@ -1,42 +1,22 @@
-// 'use client'
+'use client'
 
-// import HeroSection from '@/components/HeroSection'
-
-// export default function GyanDharaPage() {
-//   return (
-//     <div className="container mx-auto p-2">
-//       <HeroSection
-//         title="Fasal Doctor"
-//         secondaryTitle="AI"
-//         info="Your intelligent assistant for crop health monitoring, disease identification, and treatment recommendations"
-//         badges={['95% Accuracy', '100+ Diseases', '50+ Crops']}
-//       />
-//     </div>
-//   )
-// }
-
-
-
-
-"use client";
-
-import React, { useState } from "react";
-import { motion } from "framer-motion";
-import { MapPin, Search, Bell, Menu } from "lucide-react";
+import React, { useState } from 'react'
+import { motion } from 'framer-motion'
+import { MapPin, Search, Bell, Menu } from 'lucide-react'
 
 // Import components
-import WeatherOverview from "@/components/gyanDhara/WeatherOverview";
-import WeatherForecast from "@/components/gyanDhara/WeatherForecast";
-import CropAdvisory from "@/components/gyanDhara/CropAdvisory";
-import RainfallAnalysis from "@/components/gyanDhara/RainfallAnalysis";
-import WeatherAlerts from "@/components/gyanDhara/WeatherAlerts";
-import SoilMoisture from "@/components/gyanDhara/SoilMoisture";
-import FasalDoctorPreview from "@/components/gyanDhara/FasalDoctorPreview";
-import HeroSection from "@/components/HeroSection";
+import WeatherOverview from '@/components/gyanDhara/WeatherOverview'
+import WeatherForecast from '@/components/gyanDhara/WeatherForecast'
+import CropAdvisory from '@/components/gyanDhara/CropAdvisory'
+import RainfallAnalysis from '@/components/gyanDhara/RainfallAnalysis'
+import WeatherAlerts from '@/components/gyanDhara/WeatherAlerts'
+import SoilMoisture from '@/components/gyanDhara/SoilMoisture'
+import FasalDoctorPreview from '@/components/gyanDhara/FasalDoctorPreview'
+import HeroSection from '@/components/HeroSection'
 
 export default function GyanDharaPage() {
-  const [location, setLocation] = useState("सोनीपत, हरियाणा");
-  const [activeTab, setActiveTab] = useState("overview");
+  const [location, setLocation] = useState('Sonipat, Haryana')
+  const [activeTab, setActiveTab] = useState('overview')
 
   // Animation variants
   const containerVariants = {
@@ -44,19 +24,19 @@ export default function GyanDharaPage() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
-      }
-    }
-  };
+        staggerChildren: 0.1,
+      },
+    },
+  }
 
   const itemVariants = {
     hidden: { y: 20, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
-      transition: { type: "spring", stiffness: 100 }
-    }
-  };
+      transition: { type: 'spring', stiffness: 100 },
+    },
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-emerald-50">
@@ -78,41 +58,65 @@ export default function GyanDharaPage() {
       <div className="bg-white shadow-sm sticky top-0 z-10">
         <div className="container mx-auto px-4">
           <div className="flex overflow-x-auto hide-scrollbar">
-            <button 
-              className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 ${activeTab === 'overview' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-600 hover:text-gray-800'}`}
+            <button
+              className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 ${
+                activeTab === 'overview'
+                  ? 'border-emerald-500 text-emerald-600'
+                  : 'border-transparent text-gray-600 hover:text-gray-800'
+              }`}
               onClick={() => setActiveTab('overview')}
             >
-              मौसम अवलोकन
+              Weather Overview
             </button>
-            <button 
-              className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 ${activeTab === 'forecast' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-600 hover:text-gray-800'}`}
+            <button
+              className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 ${
+                activeTab === 'forecast'
+                  ? 'border-emerald-500 text-emerald-600'
+                  : 'border-transparent text-gray-600 hover:text-gray-800'
+              }`}
               onClick={() => setActiveTab('forecast')}
             >
-              पूर्वानुमान
+              Forecast
             </button>
-            <button 
-              className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 ${activeTab === 'advisory' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-600 hover:text-gray-800'}`}
+            <button
+              className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 ${
+                activeTab === 'advisory'
+                  ? 'border-emerald-500 text-emerald-600'
+                  : 'border-transparent text-gray-600 hover:text-gray-800'
+              }`}
               onClick={() => setActiveTab('advisory')}
             >
-              फसल सलाह
+              Crop Advisory
             </button>
-            <button 
-              className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 ${activeTab === 'rainfall' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-600 hover:text-gray-800'}`}
+            <button
+              className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 ${
+                activeTab === 'rainfall'
+                  ? 'border-emerald-500 text-emerald-600'
+                  : 'border-transparent text-gray-600 hover:text-gray-800'
+              }`}
               onClick={() => setActiveTab('rainfall')}
             >
-              वर्षा विश्लेषण
+              Rainfall Analysis
             </button>
-            <button 
-              className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 ${activeTab === 'soil' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-600 hover:text-gray-800'}`}
+            <button
+              className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 ${
+                activeTab === 'soil'
+                  ? 'border-emerald-500 text-emerald-600'
+                  : 'border-transparent text-gray-600 hover:text-gray-800'
+              }`}
               onClick={() => setActiveTab('soil')}
             >
-              मिट्टी की नमी
+              Soil Moisture
             </button>
-            <button 
-              className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 ${activeTab === 'alerts' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-600 hover:text-gray-800'}`}
+            <button
+              className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 ${
+                activeTab === 'alerts'
+                  ? 'border-emerald-500 text-emerald-600'
+                  : 'border-transparent text-gray-600 hover:text-gray-800'
+              }`}
               onClick={() => setActiveTab('alerts')}
             >
-              अलर्ट
+              Alerts
             </button>
           </div>
         </div>
@@ -127,7 +131,7 @@ export default function GyanDharaPage() {
           className="grid grid-cols-1 lg:grid-cols-3 gap-6"
         >
           {/* Main Content Area - Changes based on active tab */}
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="lg:col-span-2 space-y-6"
           >
@@ -140,28 +144,21 @@ export default function GyanDharaPage() {
           </motion.div>
 
           {/* Right Sidebar - Always visible */}
-          <motion.div 
-            variants={itemVariants}
-            className="space-y-6"
-          >
+          <motion.div variants={itemVariants} className="space-y-6">
             {/* Weather Alerts Section */}
             <WeatherAlerts compact={true} />
-            
+
             {/* Fasal Doctor Preview */}
             <FasalDoctorPreview />
-            
+
             {/* Crop Advisory Preview - Only show on non-advisory tabs */}
-            {activeTab !== 'advisory' && (
-              <CropAdvisory compact={true} />
-            )}
-            
+            {activeTab !== 'advisory' && <CropAdvisory compact={true} />}
+
             {/* Soil Moisture Preview - Only show on non-soil tabs */}
-            {activeTab !== 'soil' && (
-              <SoilMoisture compact={true} />
-            )}
+            {activeTab !== 'soil' && <SoilMoisture compact={true} />}
           </motion.div>
         </motion.div>
       </div>
     </div>
-  );
+  )
 }
