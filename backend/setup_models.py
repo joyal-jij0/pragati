@@ -29,3 +29,9 @@ if __name__ == "__main__":
     print(f"Downloading model to {DEST_PATH} ...")
     download_file_from_dropbox(DROPBOX_LINK, DEST_PATH)
     print("Download complete.")
+
+    PEST_MODEL_DROPBOX_LINK = "https://www.dropbox.com/scl/fi/vf79f4j6kd7nwvoi7ajco/pest_model.pth?rlkey=j9flmgo2h1rnl123uxayeteqh&st=cm4nxdph&dl=1"
+    PEST_DEST_PATH = os.path.join(MODEL_DIR, "pest_model.pth")
+    print(f"Downloading pest model to {PEST_DEST_PATH} ...")
+    download_file_from_dropbox(PEST_MODEL_DROPBOX_LINK, PEST_DEST_PATH)
+    print("Pest model download complete.")
