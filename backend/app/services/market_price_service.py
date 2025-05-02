@@ -8,6 +8,9 @@ MODEL_PATH = os.path.join(
     "ml_models", "market_price_model.pkl"
 )
 
+print(f"Resolved MODEL_PATH: {MODEL_PATH}")
+print(f"File exists: {os.path.exists(MODEL_PATH)}")
+
 model = load_model(MODEL_PATH)
 
 def predict_market_price(input_data: MarketPriceInput):
