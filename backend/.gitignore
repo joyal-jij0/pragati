@@ -11,4 +11,5 @@ app/db/__pycache__
 app/db/models/__pycache__
 app/core/__pycache__
 ml_models/market_price_model.pkl
+ml_models/pest_model.pth
 static/uploads/*
