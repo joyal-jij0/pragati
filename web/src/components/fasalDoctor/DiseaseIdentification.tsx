@@ -155,7 +155,7 @@ const DiseaseIdentification = () => {
       // Create a File object from the Blob
       const file = new File([blob], "image.jpg", { type: blob.type });
 
-      // Important: Use "file" as the field name, not "image"
+      
       formData.append("file", file);
 
       console.log("Sending request to API with file...");
