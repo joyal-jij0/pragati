@@ -92,12 +92,11 @@ const FPODiscovery = ({ onJoinFPO }: FPODiscoveryProps) => {
     }
 
     try {
-      const response = await fetch('/api/samuday-shakti/fpo/join', {
+      const response = await fetch(`/api/samuday-shakti/fpo/${fpo.id}/join`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ fpoId: fpo.id }),
       })
 
       const data = await response.json()

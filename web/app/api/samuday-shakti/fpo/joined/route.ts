@@ -1,52 +1,58 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
-import { getToken } from 'next-auth/jwt'
+import { createClient } from '@/utils/supabase/server'
 
 const prisma = new PrismaClient()
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    const token = await getToken({ 
-      req: request, 
-      secret: process.env.NEXTAUTH_SECRET 
-    })
-    
-    if (!token?.email) {
+    // Create Supabase server client
+    const supabase = await createClient()
+    const {
+      data: { session },
+    } = await supabase.auth.getSession()
+
+    if (!session?.user.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const user = await prisma.user.findFirst({
+    // Find the profile using the email from Supabase session
+    const profile = await prisma.profiles.findFirst({
       where: {
         email: {
+          equals: session.user.email,
           mode: 'insensitive',
-          equals: token.email
-        }
-      }
+        },
+      },
     })
 
-    if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    if (!profile) {
+      return NextResponse.json(
+        { error: 'User profile not found' },
+        { status: 404 }
+      )
     }
 
-    const joinedFpos = await prisma.fPO.findMany({
+    // Get FPOs the user has joined using the many-to-many relationship
+    const joinedFpos = await prisma.fpo.findMany({
       where: {
-        members: {
+        farmers: {
           some: {
-            userId: user.id
-          }
-        }
+            id: profile.id,
+          },
+        },
       },
       select: {
         id: true,
         name: true,
         location: true,
         description: true,
+        createdAt: true,
         _count: {
           select: {
-            members: true,
+            farmers: true, // Count farmers instead of members
           },
         },
-        createdAt: true,
       },
       orderBy: {
         createdAt: 'desc',

@@ -9,7 +9,7 @@ interface FPO {
 }
 
 interface FPOSelectorProps {
-  selectedFPO: string;
+  selectedFPO: FPO;
   joinedFPOs: FPO[];
   onChangeFPO: (fpoId: number) => void;
   onLeaveFPO: (fpoId: number) => void;
@@ -19,7 +19,7 @@ const FPOSelector = ({ selectedFPO, joinedFPOs, onChangeFPO, onLeaveFPO }: FPOSe
   const [showDropdown, setShowDropdown] = useState(false);
   const [isLeaving, setIsLeaving] = useState(false);
   
-  const currentFPO = joinedFPOs.find(fpo => fpo.name === selectedFPO);
+  const currentFPO = joinedFPOs.find(fpo => fpo.name === selectedFPO?.id);
 
   const handleLeaveFPO = async (fpo: FPO) => {
     if (!confirm(`Are you sure you want to leave ${fpo.name}?`)) {
@@ -79,7 +79,7 @@ const FPOSelector = ({ selectedFPO, joinedFPOs, onChangeFPO, onLeaveFPO }: FPOSe
             </div>
             <div>
               <p className="text-xs text-gray-500">Current FPO</p>
-              <h3 className="font-medium text-gray-800">{selectedFPO}</h3>
+              <h3 className="font-medium text-gray-800">{selectedFPO?.name}</h3>
             </div>
           </div>
           <div className="relative">
@@ -99,14 +99,14 @@ const FPOSelector = ({ selectedFPO, joinedFPOs, onChangeFPO, onLeaveFPO }: FPOSe
                   {joinedFPOs.map(fpo => (
                     <button
                       key={fpo.id}
-                      className={`w-full text-left px-3 py-2 text-sm rounded-md flex items-center justify-between ${fpo.name === selectedFPO ? 'bg-green-50 text-green-700' : 'hover:bg-gray-50'}`}
+                      className={`w-full text-left px-3 py-2 text-sm rounded-md flex items-center justify-between ${fpo.name === selectedFPO?.id ? 'bg-green-50 text-green-700' : 'hover:bg-gray-50'}`}
                       onClick={() => {
                         onChangeFPO(fpo.id);
                         setShowDropdown(false);
                       }}
                     >
                       <span>{fpo.name}</span>
-                      {fpo.name === selectedFPO && (
+                      {fpo.name === selectedFPO?.id && (
                         <div className="h-2 w-2 rounded-full bg-green-500"></div>
                       )}
                     </button>

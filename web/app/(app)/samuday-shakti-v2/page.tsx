@@ -107,8 +107,8 @@ export default function SamudayShaktiPage() {
       />
 
       <div className="grid grid-cols-12 gap-4 pb-8">
-        <div className="col-span-3 bg-black/10 rounded-xl p-2">
-          <SidebarContent>
+        <div className="col-span-3">
+          <SidebarContent className='bg-neutral-200 rounded-xl p-2 pb-8'>
             <SidebarGroup>
               <SidebarGroupLabel className="text-lg font-bold">
                 FPO Hub
@@ -158,7 +158,7 @@ export default function SamudayShaktiPage() {
         </div>
         <div className="col-span-9">
           <Tabs defaultValue="fpoDashboard" className="w-full">
-            <TabsList className="bg-black/10 w-full justify-start gap-2">
+            <TabsList className="bg-neutral-200 w-full justify-start gap-2">
               <TabsTrigger
                 className="flex items-center gap-2"
                 value="fpoDashboard"
@@ -189,7 +189,7 @@ export default function SamudayShaktiPage() {
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="fpoDashboard" className="p-4">
+            <TabsContent value="fpoDashboard" className="p-0">
               <FPODashboard />
             </TabsContent>
 

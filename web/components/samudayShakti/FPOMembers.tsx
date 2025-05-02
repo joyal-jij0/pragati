@@ -322,13 +322,13 @@ const FPOMembers = ({ selectedFPO }: FPOMembersProps) => {
                 }`}
               />
             </Button>
-            <Button
+            {/* <Button
               className="bg-green-600 hover:bg-green-700 text-white"
               onClick={() => setShowAddMemberForm(true)}
             >
               <UserPlus className="h-4 w-4 mr-2" />
               Add New Member
-            </Button>
+            </Button> */}
           </div>
         </motion.div>
 
@@ -444,13 +444,13 @@ const FPOMembers = ({ selectedFPO }: FPOMembersProps) => {
                         This FPO doesn't have any members yet or your search
                         filters don't match any members.
                       </p>
-                      <Button
+                      {/* <Button
                         className="mt-4 bg-green-600 hover:bg-green-700 text-white"
                         onClick={() => setShowAddMemberForm(true)}
                       >
                         <UserPlus className="h-4 w-4 mr-2" />
                         Add New Member
-                      </Button>
+                      </Button> */}
                     </div>
                   ) : (
                     /* Members List Component */

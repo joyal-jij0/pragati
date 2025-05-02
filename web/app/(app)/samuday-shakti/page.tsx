@@ -27,6 +27,7 @@ import GroupChatAnnouncements from '@/components/samudayShakti/GroupChatAnnounce
 import EquipmentRental from '@/components/samudayShakti/EquipmentRental'
 import PageHeader from '@/components/samudayShakti/PageHeader'
 import { createClient } from '@/utils/supabase/client'
+import HeroSection from '@/components/HeroSection'
 
 // Update FPO type definition to match API schema
 export type FPOType = {
@@ -48,7 +49,7 @@ export default function SamudayShaktiPage() {
   const [activeTab, setActiveTab] = useState('fpoDashboard')
   const [activeSection, setActiveSection] = useState('myFPO')
   const [showAIAssistant, setShowAIAssistant] = useState(false)
-  const [selectedFPO, setSelectedFPO] = useState('')
+  const [selectedFPO, setSelectedFPO] = useState<FPOType>()
   const [joinedFPOs, setJoinedFPOs] = useState<FPOType[]>([])
 
   useEffect(() => {
@@ -76,7 +77,7 @@ export default function SamudayShaktiPage() {
 
         // Set the first FPO's ID as default if available
         if (data.length > 0) {
-          setSelectedFPO(data[0].id) // Change this line to use ID
+          setSelectedFPO(data[0]) // Change this line to use ID
           setLocation(data[0].location)
         }
       } catch (err) {
@@ -86,10 +87,8 @@ export default function SamudayShaktiPage() {
       }
     }
 
-    if (status === 'authenticated') {
-      fetchFPOs()
-    }
-  }, [status])
+    fetchFPOs()
+  }, [])
 
   // Animation variants
   const containerVariants = {
@@ -115,7 +114,7 @@ export default function SamudayShaktiPage() {
   const handleFPOChange = (fpoId: string) => {
     const fpo = joinedFPOs.find((f) => f.id === fpoId)
     if (fpo) {
-      setSelectedFPO(fpo.id) // Change this line to store ID instead of name
+      setSelectedFPO(fpo) // Change this line to store ID instead of name
       setLocation(fpo.location)
     }
   }
@@ -124,7 +123,7 @@ export default function SamudayShaktiPage() {
   const handleJoinFPO = (fpo) => {
     if (!joinedFPOs.some((f) => f.id === fpo.id)) {
       setJoinedFPOs([...joinedFPOs, fpo])
-      setSelectedFPO(fpo.name)
+      setSelectedFPO(fpo)
       setLocation(fpo.location)
       setActiveSection('myFPO')
       setActiveTab('fpoDashboard')
@@ -137,27 +136,29 @@ export default function SamudayShaktiPage() {
     setJoinedFPOs(updatedFPOs)
 
     if (updatedFPOs.length > 0) {
-      setSelectedFPO(updatedFPOs[0].name)
+      setSelectedFPO(updatedFPOs[0])
       setLocation(updatedFPOs[0].location)
     }
-  }
-
-  if (status === 'loading') {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-700"></div>
-      </div>
-    )
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-amber-50">
       {/* Header */}
-      <PageHeader
+      {/* <PageHeader
         location={location}
         title="Samuday Shakti"
         subtitle="FPO Management & Community Collaboration"
-      />
+      /> */}
+
+      <div className="px-4">
+        <HeroSection
+          title="Samuday Shakti"
+          secondaryTitle="FPO"
+          info="Efficient FPO management for organizing resources, improving market access, and building networks for mutual growth and success"
+          badges={['Resource Management', 'Market Access', 'Community Growth']}
+          floatingIcon="👨‍👩‍👧‍👦"
+        />
+      </div>
 
       {/* FPO Selection Banner */}
       <FPOSelector
@@ -303,7 +304,7 @@ export default function SamudayShaktiPage() {
                       <div
                         key={fpo.id}
                         className={`p-3 rounded-lg border ${
-                          selectedFPO === fpo.id // Change this line to compare IDs
+                          selectedFPO?.id === fpo.id // Change this line to compare IDs
                             ? 'border-green-200 bg-green-50'
                             : 'border-gray-100 hover:bg-gray-50'
                         } cursor-pointer`}
@@ -323,7 +324,7 @@ export default function SamudayShaktiPage() {
                               </p>
                             </div>
                           </div>
-                          {selectedFPO === fpo.id && ( // Change this line to compare IDs
+                          {selectedFPO?.id === fpo.id && ( // Change this line to compare IDs
                             <div className="h-3 w-3 rounded-full bg-green-500"></div>
                           )}
                         </div>
@@ -343,16 +344,16 @@ export default function SamudayShaktiPage() {
               {activeSection === 'myFPO' && (
                 <>
                   {activeTab === 'fpoDashboard' && (
-                    <FPODashboard selectedFPO={selectedFPO} />
+                    <FPODashboard selectedFPO={selectedFPO?.id} />
                   )}
                   {activeTab === 'groupChat' && (
-                    <GroupChatAnnouncements selectedFPO={selectedFPO} />
+                    <GroupChatAnnouncements selectedFPO={selectedFPO?.id} />
                   )}
                   {activeTab === 'equipment' && (
-                    <EquipmentRental selectedFPO={selectedFPO} />
+                    <EquipmentRental selectedFPO={selectedFPO?.id} />
                   )}
                   {activeTab === 'members' && (
-                    <FPOMembers selectedFPO={selectedFPO} />
+                    <FPOMembers selectedFPO={selectedFPO?.id} />
                   )}
                 </>
               )}

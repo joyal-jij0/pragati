@@ -3,29 +3,27 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function GET({ params }: { params: { id: string } }) {
   try {
     const id = params.id
 
-    const fpo = await prisma.fPO.findUnique({
+    const fpo = await prisma.fpo.findUnique({
       where: {
         id: id,
       },
       select: {
         id: true,
         name: true,
-        location: true,
         description: true,
-        // members: true,
+        location: true,
+        createdAt: true,
+        farmers: true,
+        messages: true,
         _count: {
           select: {
-            members: true, // Only select the count of members
+            farmers: true,
           },
         },
-        createdAt: true,
       },
     })
 

@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
-import { getToken } from 'next-auth/jwt'
+import { createClient } from '@/utils/supabase/server'
 
-const prisma = new PrismaClient()
+// Create a single PrismaClient instance and export it
+// This prevents multiple instances during hot reloading
+const globalForPrisma = globalThis as unknown as { prisma: PrismaClient }
+const prisma = globalForPrisma.prisma || new PrismaClient()
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 
 // GET: Fetch messages for an FPO
 export async function GET(
@@ -10,78 +14,80 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET })
-    if (!token?.email) {
+    const supabase = await createClient()
+    const {
+      data: { session },
+    } = await supabase.auth.getSession()
+
+    if (!session?.user.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    // Type-safe params handling in Next.js 15
     const fpoId = params.id
+
     const page = Number(request.nextUrl.searchParams.get('page')) || 1
     const limit = Number(request.nextUrl.searchParams.get('limit')) || 50
 
-    // Get user
-    const user = await prisma.user.findUnique({
-      where: { email: token.email }
+    // Get user - ensure email exists before querying
+    if (!session.user.email) {
+      return NextResponse.json(
+        { error: 'User email not found' },
+        { status: 400 }
+      )
+    }
+
+    const profile = await prisma.profiles.findUnique({
+      where: { email: session.user.email },
     })
 
-    if (!user) {
+    if (!profile) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
     // Check if user is member of FPO
-    const membership = await prisma.member.findFirst({
+    const membership = await prisma.profiles.findFirst({
       where: {
-        userId: user.id,
-        fpoId: fpoId
-      }
+        id: profile.id,
+      },
+      include: {
+        fpos: {
+          where: { id: fpoId },
+        },
+      },
     })
 
-    if (!membership) {
+    if (!membership?.fpos || membership.fpos.length === 0) {
       return NextResponse.json({ error: 'Access denied' }, { status: 403 })
     }
 
     // Get messages
     const messages = await prisma.message.findMany({
-      where: { fpoId },
+      where: { fpoId: fpoId },
       orderBy: { createdAt: 'desc' },
       skip: (page - 1) * limit,
       take: limit,
       include: {
-        sender: {
+        author: {
           select: {
             id: true,
-            email: true
-          }
-        }
-      }
+            email: true,
+          },
+        },
+      },
     })
 
     // Get total count for pagination
     const total = await prisma.message.count({
-      where: { fpoId }
+      where: { fpoId },
     })
-
-    // Mark messages as read
-    await Promise.all(
-      messages.map(msg =>
-        prisma.message.update({
-          where: { id: msg.id },
-          data: {
-            readBy: {
-              set: [...new Set([...msg.readBy, user.id])]
-            }
-          }
-        })
-      )
-    )
 
     return NextResponse.json({
       messages: messages.reverse(),
       currentPage: page,
       pages: Math.ceil(total / limit),
-      total
+      total,
     })
-
   } catch (error) {
     console.error('Error fetching messages:', error)
     return NextResponse.json(
@@ -97,60 +103,87 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   try {
-    const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET })
-    if (!token?.email) {
+    const supabase = await createClient()
+    const {
+      data: { session },
+    } = await supabase.auth.getSession()
+
+    if (!session?.user.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    // Type-safe params handling in Next.js 15
     const fpoId = params.id
-    const { content } = await request.json()
+
+    const body = await request.json()
+    const content = body.content
 
     // Validate content
-    if (!content?.trim()) {
-      return NextResponse.json({ error: 'Message content is required' }, { status: 400 })
+    if (!content || typeof content !== 'string' || !content.trim()) {
+      return NextResponse.json(
+        { error: 'Message content is required' },
+        { status: 400 }
+      )
     }
 
-    // Get user
-    const user = await prisma.user.findUnique({
-      where: { email: token.email }
+    // Get user - ensure email exists before querying
+    if (!session.user.email) {
+      return NextResponse.json(
+        { error: 'User email not found' },
+        { status: 400 }
+      )
+    }
+
+    const profile = await prisma.profiles.findUnique({
+      where: { email: session.user.email },
     })
 
-    if (!user) {
+    if (!profile) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
     // Check if user is member of FPO
-    const membership = await prisma.member.findFirst({
+    const membership = await prisma.profiles.findFirst({
       where: {
-        userId: user.id,
-        fpoId: fpoId
-      }
+        id: profile.id,
+      },
+      include: {
+        fpos: {
+          where: { id: fpoId },
+        },
+      },
     })
 
-    if (!membership) {
+    if (!membership?.fpos || membership.fpos.length === 0) {
       return NextResponse.json({ error: 'Access denied' }, { status: 403 })
     }
 
     // Create message
     const message = await prisma.message.create({
       data: {
-        content,
-        fpoId,
-        senderId: user.id,
-        readBy: [user.id]
+        content: content,
+        author: {
+          connect: {
+            id: profile.id,
+          },
+        },
+        fpo: {
+          connect: {
+            id: fpoId,
+          },
+        },
       },
       include: {
-        sender: {
+        author: {
           select: {
             id: true,
-            email: true
-          }
-        }
-      }
+            email: true,
+          },
+        },
+      },
     })
 
     return NextResponse.json({ message })
-
   } catch (error) {
     console.error('Error creating message:', error)
     return NextResponse.json(

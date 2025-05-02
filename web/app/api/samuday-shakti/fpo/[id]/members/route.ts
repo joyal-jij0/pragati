@@ -5,13 +5,8 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 export type FPOMemberType = {
-  id: number
-  userId: number
-  role: string
-  joinedAt: Date
-  user: {
-    email: string
-  }
+  id: string // Updated to string/UUID
+  email: string
   // Optional fields that could be fetched through additional queries
   details?: {
     name?: string
@@ -34,7 +29,7 @@ export async function GET(
     const fpoId = params.id
 
     // Verify if FPO exists
-    const fpo = await prisma.fPO.findUnique({
+    const fpo = await prisma.fpo.findUnique({
       where: { id: fpoId },
       select: { id: true, name: true },
     })
@@ -44,26 +39,26 @@ export async function GET(
     }
 
     // Get members with user details
-    const members = await prisma.member.findMany({
-      where: { fpoId: fpoId },
+    // Using the many-to-many relationship between profiles and fpos
+    const fpoWithMembers = await prisma.fpo.findUnique({
+      where: { id: fpoId },
       include: {
-        user: {
-          select: {
-            id: true,
-            email: true,
-          },
-        },
-      },
-      orderBy: {
-        joinedAt: 'desc',
+        farmers: true, // This brings all profiles connected to this FPO
       },
     })
+
+    if (!fpoWithMembers) {
+      return NextResponse.json({ error: 'FPO not found' }, { status: 404 })
+    }
+
+    // Get the members from the relationship
+    const members = fpoWithMembers.farmers
 
     // In a real application, you might fetch additional user details from another table
     // For now, we'll enhance the data with some mock details
     const enhancedMembers = members.map((member) => {
       // Generate consistent mock data based on user ID
-      const mockDetails = generateMockMemberDetails(member.userId)
+      const mockDetails = generateMockMemberDetails(member.id)
 
       return {
         ...member,
@@ -83,7 +78,10 @@ export async function GET(
 
 // Helper function to generate mock member details for demo purposes
 // In a real application, this data would come from your database
-function generateMockMemberDetails(userId: number) {
+function generateMockMemberDetails(userId: string) {
+  // Create a numeric value from the UUID for deterministic mocking
+  const numericValue = parseInt(userId.replace(/[^0-9]/g, '').substring(0, 6))
+
   const crops = [
     'Wheat',
     'Rice',
@@ -96,7 +94,7 @@ function generateMockMemberDetails(userId: number) {
   const locations = ['Sonipat', 'Panipat', 'Karnal', 'Rohtak', 'Jhajjar']
 
   // Use userId to create deterministic mock data
-  const nameIndex = userId % 10
+  const nameIndex = numericValue % 10
   const names = [
     'Ramvir Singh',
     'Sunita Devi',
@@ -112,18 +110,20 @@ function generateMockMemberDetails(userId: number) {
 
   return {
     name: names[nameIndex],
-    phone: `+91 9${userId}${(userId * 7) % 10000}${userId % 10000}`.substring(
-      0,
-      14
-    ),
+    phone: `+91 9${numericValue}${(numericValue * 7) % 10000}${
+      numericValue % 10000
+    }`.substring(0, 14),
     avatar: `https://randomuser.me/api/portraits/${
-      userId % 2 === 0 ? 'men' : 'women'
-    }/${userId % 70}.jpg`,
-    location: `${locations[userId % locations.length]}, Haryana`,
-    landHolding: `${(userId % 10) + 1}.${userId % 10} Acres`,
-    crops: [crops[userId % crops.length], crops[(userId + 3) % crops.length]],
-    active: userId % 5 !== 0, // 80% of members are active
-    contributions: userId % 30,
-    rating: 3 + (userId % 20) / 10, // Rating between 3.0 and 5.0
+      numericValue % 2 === 0 ? 'men' : 'women'
+    }/${numericValue % 70}.jpg`,
+    location: `${locations[numericValue % locations.length]}, Haryana`,
+    landHolding: `${(numericValue % 10) + 1}.${numericValue % 10} Acres`,
+    crops: [
+      crops[numericValue % crops.length],
+      crops[(numericValue + 3) % crops.length],
+    ],
+    active: numericValue % 5 !== 0, // 80% of members are active
+    contributions: numericValue % 30,
+    rating: 3 + (numericValue % 20) / 10, // Rating between 3.0 and 5.0
   }
 }

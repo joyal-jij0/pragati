@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
 import { 
   MessageSquare, 
   Send, 
@@ -23,11 +22,10 @@ interface GroupChatAnnouncementsProps {
 interface Message {
   id: string;
   content: string;
-  sender: {
+  author: {
     id: number;
     email: string;
   };
-  readBy: number[];
   createdAt: string;
   fpoId: string;
 }
@@ -299,25 +297,25 @@ const GroupChatAnnouncements = ({ selectedFPO }: GroupChatAnnouncementsProps) =>
                     <motion.div
                       key={msg.id}
                       variants={itemVariants}
-                      className={`flex ${msg.sender.id === currentUser.current ? "justify-end" : "justify-start"}`}
+                      className={`flex ${msg.author.id === currentUser.current ? "justify-end" : "justify-start"}`}
                     >
                       <div className={`max-w-[80%] ${
-                        msg.sender.id === currentUser.current 
+                        msg.author.id === currentUser.current 
                           ? "bg-green-100 text-gray-800" 
                           : "bg-white border border-gray-200 text-gray-800"
                         } rounded-lg p-3 shadow-sm`}
                       >
-                        {msg.sender.id !== currentUser.current && (
+                        {msg.author.id !== currentUser.current && (
                           <div className="flex items-center gap-2 mb-1">
                             <div className="h-6 w-6 rounded-full bg-green-100 flex items-center justify-center text-green-800 text-xs font-medium">
-                              {msg.sender.email.substring(0, 2).toUpperCase()}
+                              {msg.author.email.substring(0, 2).toUpperCase()}
                             </div>
-                            <span className="text-sm font-medium">{msg.sender.email}</span>
+                            <span className="text-sm font-medium">{msg.author.email}</span>
                           </div>
                         )}
                         <p className="text-sm">{msg.content}</p>
                         <div className={`text-xs text-gray-500 mt-1 ${
-                          msg.sender.id === currentUser.current ? "text-right" : ""
+                          msg.author.id === currentUser.current ? "text-right" : ""
                         }`}>
                           {new Date(msg.createdAt).toLocaleTimeString()}
                         </div>

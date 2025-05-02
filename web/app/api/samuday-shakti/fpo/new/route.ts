@@ -18,7 +18,7 @@ export async function POST(request: Request) {
     }
 
     // Create new FPO
-    const newFPO = await prisma.fPO.create({
+    const newFPO = await prisma.fpo.create({
       data: {
         name,
         location,

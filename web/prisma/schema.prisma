@@ -8,23 +8,24 @@ datasource db {
 }
 
 model Fpo {
-  id          String     @id @db.Uuid
+  id          String     @id @db.Uuid @default(uuid())
   name        String
   description String
+  location    String
   createdAt   DateTime   @default(now())
   farmers     profiles[] @relation("UserFpo")
   messages    Message[]  @relation("FpoMessages") // New field for group chat messages
 }
 
 model profiles {
-  id       String    @id @db.Uuid
-  email    String?   @db.VarChar(256)
+  id       String    @id @db.Uuid @default(uuid())
+  email    String    @unique @db.VarChar(256)
   fpos     Fpo[]     @relation("UserFpo")
   messages Message[] @relation("UserMessages") // New field to track user messages
 }
 
 model Message {
-  id        String   @id @db.Uuid
+  id        String   @id @db.Uuid @default(uuid())
   content   String // The text content of the message
   createdAt DateTime @default(now()) // Timestamp of the message
   fpo       Fpo      @relation("FpoMessages", fields: [fpoId], references: [id])
