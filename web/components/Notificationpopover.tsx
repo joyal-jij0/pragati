@@ -5,7 +5,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
-import { BellIcon, Clock8Icon } from 'lucide-react'
+import { Bell, Clock8 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { ScrollArea } from '@/components/ui/scroll-area'
 
@@ -55,13 +55,13 @@ const NotificationPopover = () => {
           size="icon"
           className="relative w-9 px-0 bg-green-100 text-green-800 rounded-full border border-green-300 hover:bg-green-200"
         >
-          <BellIcon className="h-4 w-4" />
+          <Bell className="h-4 w-4" />
           {unreadCount > 0 && (
             <span className="absolute bg-green-500 animate-bounce h-2.5 w-2.5 top-0 right-0 rounded-full" />
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-80 p-0 -translate-x-1/2 bg-green-50 border border-green-200 shadow-lg">
+      <PopoverContent className="w-96 p-0 -translate-x-1/2 bg-green-50 border border-green-200 shadow-lg">
         <div className="flex items-center justify-between p-4 pb-2 border-b border-green-200">
           <h4 className="font-semibold text-green-800 flex items-center">
             <span className="mr-2">🌿</span> Farm Notifications
@@ -94,7 +94,7 @@ const NotificationPopover = () => {
                     {notification.title}
                   </p>
                   <div className="flex items-center text-xs text-green-600">
-                    <Clock8Icon className="mr-1 h-3 w-3" />
+                    <Clock8 className="mr-1 h-3 w-3" />
                     {notification.time}
                   </div>
                 </div>
