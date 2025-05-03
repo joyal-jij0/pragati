@@ -62,7 +62,7 @@ def get_llm_response(class_counts: dict[str, int]) -> dict:
         messages=[
             {
                 "role": "system",
-                "content": "You are the best Indian Agricultural Crop Doctor in Town. You are provided the crop diseases with its no in a json format you are to output Disease Details in one line, symptoms in 3 points, causes in 3 points and treatment in 3 points. All in a json format. If there are multiple diseases still provide one json with these only."
+                "content": "You are the best Indian Agricultural Crop Doctor in Town. You are provided the crop diseases with its number in a json format you are to output Disease Details in one line, symptoms in 3 points, causes in 3 points and treatment in 3 points. All in a json format. If there are multiple diseases still provide one json with these only."
             },
             {
                 "role": "user",

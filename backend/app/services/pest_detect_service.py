@@ -7,7 +7,8 @@ import os
 
 from PIL import Image 
 from app.utils.image_utils import valid_transform 
-from app.utils.pest_name import pest_name as PEST_NAME_MAP 
+from app.utils.pest_name import pest_name 
+from app.utils.pests import pests
 
 logger = logging.getLogger(__name__) 
 
@@ -80,6 +81,16 @@ class PredictService:
             logger.info(f"Raw model output logits, selected class index: {idx}") 
 
         class_id = _classes[idx] 
-        pest_name = PEST_NAME_MAP.get(class_id, class_id) 
+        predicted_pest_name = pest_name.get(class_id, class_id) 
         logger.info(f"Mapped class '{class_id}' to pest name '{pest_name}' ")
-        return pest_name
+        return predicted_pest_name 
+    
+    @staticmethod
+    def get_pest_info(img_bytes: bytes): 
+        pest_name_pred = PredictService.predict(img_bytes) 
+        pest_id = next((k for k, v in pest_name.items() if v == pest_name_pred), None)
+        pest_data = pests.get(pest_id, {}) 
+        images = [] 
+        if pest_data and 'pest_image' in pest_data: 
+            images = [f'/static/{img}' for img in pest_data['pest_image']] 
+        return pest_name_pred, pest_data, images 

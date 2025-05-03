@@ -3,6 +3,7 @@ import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.requests import Request
+from fastapi.staticfiles import StaticFiles
 
 from contextlib import asynccontextmanager 
 
@@ -50,6 +51,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 app.include_router(healthcheck, prefix="/api/v1", tags=["Health"])
