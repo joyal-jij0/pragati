@@ -71,7 +71,11 @@ export async function UserNav({ name, info }: { name: string; info: string }) {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>Your Profile</DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer" asChild>
+            <Link href="/profile" className="w-full cursor-pointer">
+              Your Profile
+            </Link>
+          </DropdownMenuItem>
           <DropdownMenuItem>Settings</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
