@@ -35,7 +35,7 @@ export async function UserNav({ name, info }: { name: string; info: string }) {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="py-1 px-2 group/collapsible">
+      <DropdownMenuTrigger className="!border-none !outline-none rounded-full group/collapsible">
         {/* <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-9 w-9">
             <AvatarImage src="/avatars/03.png" alt="@shadcn" />

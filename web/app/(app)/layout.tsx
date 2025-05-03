@@ -59,7 +59,7 @@ export default function DashboardLayout({
               <span className="text-xs text-gray-600">68%</span>
             </div>
           </div>
-          <div className="ml-auto px-2">
+          <div className="flex ml-auto px-2 justify-between items-center gap-2">
             <NotificationPopover />
             <UserNav name="Raghav" info="Farmer" />
           </div>
