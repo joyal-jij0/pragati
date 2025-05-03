@@ -46,7 +46,7 @@ const MarketPriceCard = ({ marketData }: MarketPriceCardProps) => {
   ]
   
   return (
-    <Card className="overflow-hidden border-amber-100 h-full shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col">
+    <Card className="py-0 overflow-hidden border-amber-100 h-full shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col">
       <div className="bg-gradient-to-r from-amber-50 to-amber-100/30 pt-2">
         <CardHeader className="py-3 flex items-center">
           <div className="flex justify-between items-center w-full">

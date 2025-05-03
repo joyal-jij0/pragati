@@ -64,7 +64,7 @@ const FarmStatistics = ({ farmStatData }: FarmStatisticsProps) => {
                           Object.values(farmStatData.soilHealth).length
   
   return (
-    <Card className="overflow-hidden border-indigo-100 h-[700px] shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col">
+    <Card className="py-0 overflow-hidden border-indigo-100 h-[700px] shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col">
       <div className="bg-gradient-to-r from-indigo-50 to-indigo-100/30 pt-2">
         <CardHeader className="py-3 flex items-center">
           <div className="flex justify-between items-center w-full">
