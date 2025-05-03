@@ -1,11 +1,19 @@
-FROM python:3.10-slim 
+FROM python:3.11-slim
 
-WORKDIR /app 
+WORKDIR /backend
 
-COPY requirements.txt . 
-RUN pip install --no-cache-dir -r requirements.txt 
-EXPOSE 8000
+# Install system dependencies for OpenCV and other tools
+RUN apt-get update && apt-get install -y \
+    git \
+    build-essential \
+    libgl1 \
+    libglib2.0-0 \
+    && rm -rf /var/lib/apt/lists/*
 
-COPY . . 
+COPY backend/ .
+RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ["uvicorn", "app.main.app", "--host", "0.0.0.0", "--port", "8000"]
+COPY . .
+
+# Run setup script first, then start the FastAPI app
+CMD ["bash", "-c", "python setup_models.py && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
