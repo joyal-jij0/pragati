@@ -34,15 +34,6 @@ const navItems = [
     href: "/fasal-doctor",
   },
   {
-    name: "Bazaar Bridge",
-    icon: (active) => (
-      <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${active ? "bg-yellow-100" : "bg-gray-50"} transition-all duration-300`}>
-        <span className="text-xl">🛒</span>
-      </div>
-    ),
-    href: "/bazaar-bridge",
-  },
-  {
     name: "Arthik Sahara",
     icon: (active) => (
       <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${active ? "bg-green-100" : "bg-gray-50"} transition-all duration-300`}>

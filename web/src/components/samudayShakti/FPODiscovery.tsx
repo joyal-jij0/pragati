@@ -11,7 +11,7 @@ import {
   Calendar,
   Tractor,
   Leaf,
-  ExclamationCircle
+  AlertCircle
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
@@ -160,7 +160,7 @@ const FPODiscovery = ({ onJoinFPO }: FPODiscoveryProps) => {
     return (
       <div className="text-center py-12">
         <div className="text-red-500 mb-4">
-          <ExclamationCircle className="h-12 w-12 mx-auto" />
+          <AlertCircle className="h-12 w-12 mx-auto" />
         </div>
         <h3 className="text-xl font-medium text-gray-700">{error}</h3>
         <p className="text-gray-500 mt-1">Please try again later</p>

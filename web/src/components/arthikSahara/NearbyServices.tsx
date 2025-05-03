@@ -40,7 +40,7 @@ const NearbyServices = ({ location }: NearbyServicesProps) => {
       rating: 4.5,
       reviews: 28,
       services: ["Seeds", "Fertilizers", "Pesticides", "Farm Tools"],
-      image: "https://images.unsplash.com/photo-1595344416261-11cfd9fd0175?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80"
+      image: "https://static.langimg.com/photo/101825517/101825517.jpg?imgsize=302594"
     },
     {
       id: 2,
@@ -79,7 +79,7 @@ const NearbyServices = ({ location }: NearbyServicesProps) => {
       rating: 4.0,
       reviews: 18,
       services: ["Crop Transport", "Cold Storage", "Logistics", "Rental Vehicles"],
-      image: "https://images.unsplash.com/photo-1530046339915-78e95328dd1f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80"
+      image: "https://indiainfrahub.com/wp-content/uploads/2021/02/goods-train-1580537992.jpg"
     },
     {
       id: 5,
@@ -92,7 +92,7 @@ const NearbyServices = ({ location }: NearbyServicesProps) => {
       rating: 4.3,
       reviews: 22,
       services: ["Drip Irrigation", "Sprinklers", "Water Pumps", "Installation Services"],
-      image: "https://images.unsplash.com/photo-1586771107445-d3ca888129ce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80"
+      image: "https://content.jdmagicbox.com/comp/def_content/irrigation-service/v3lvfn4tfj-irrigation-service-4-y9me0.jpg"
     }
   ];
 

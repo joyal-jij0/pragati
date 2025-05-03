@@ -35,6 +35,21 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  env: {
+    DATABASE_URL: process.env.DATABASE_URL,
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+    GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
+    GEMINI_API_KEY: process.env.GEMINI_API_KEY,
+    GROQ_API_KEY: process.env.GROQ_API_KEY,
+  },
+  // Enable API routes
+  api: {
+    bodyParser: {
+      sizeLimit: '1mb',
+    },
+    externalResolver: true,
+  },
 };
 
 export default nextConfig;

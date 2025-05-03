@@ -1,186 +1,217 @@
-'use client'
-import { useState } from 'react'
-import {
-  FaSeedling,
-  FaLeaf,
-  FaSearch,
-  FaPlus,
-  FaChevronDown,
-} from 'react-icons/fa'
-import { BsShield, BsThreeDots } from 'react-icons/bs'
-import { GiWheat, GiCorn } from 'react-icons/gi'
-import { MdOutlineWaterDrop } from 'react-icons/md'
-import { TbPlant } from 'react-icons/tb'
+"use client";
 
-export default function Home() {
-  const [inputValue, setInputValue] = useState('')
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { 
+  Bot, Send, Mic, Image as ImageIcon, 
+  Loader2, ChevronDown, X, ChevronRight,
+  MessageSquare, Settings, Save, Download,
+  CheckCircle2, Info, Camera, Leaf, Sun, CloudRain,
+  Tractor, Droplets, Sprout, Wheat, Users,
+} from "lucide-react";
+import { ChatInterface } from "@/components/ai-assistant/ChatInterface";
+import { FeatureCard } from "@/components/ai-assistant/FeatureCard";
+import { useAIAssistant } from "@/store/ai-assistant/useAIAssistant";
+import DashboardHeader from "@/components/DashboardHeader";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+export default function AIAssistantPage() {
+  const { messages, isLoading } = useAIAssistant();
+  const [showFeatures, setShowFeatures] = useState(true);
+
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { type: "spring", stiffness: 100 }
+    }
+  };
+
+  // Hide features when chat starts
+  useEffect(() => {
+    if (messages.length > 0) {
+      setShowFeatures(false);
+    }
+  }, [messages]);
+
+  // Sample success stories data
+  const successStories = {
+    title: "सफलता की कहानियां",
+    viewAllText: "सभी देखें",
+    stories: [
+      {
+        tag: "फसल अनुशंसा",
+        tagBg: "bg-green-100",
+        tagText: "text-green-800",
+        title: "गेहूं की उपज 30% बढ़ी",
+        description: "AI सहायक ने इष्टतम बुवाई समय और उर्वरक अनुप्रयोग की सिफारिश की, जिससे उपज में महत्वपूर्ण सुधार हुआ।",
+        date: "2 सप्ताह पहले",
+        readMoreText: "और पढ़ें",
+        buttonText: "text-green-600",
+        gradient: "from-green-50 to-green-100",
+        border: "border-green-200",
+        icon: "🌾"
+      },
+      {
+        tag: "रोग पहचान",
+        tagBg: "bg-amber-100",
+        tagText: "text-amber-800",
+        title: "आलू की फसल को अर्ली ब्लाइट से बचाया",
+        description: "किसान ने AI छवि पहचान का उपयोग करके अर्ली ब्लाइट की पहचान की और व्यापक क्षति से पहले उपचार लागू किया।",
+        date: "1 महीने पहले",
+        readMoreText: "और पढ़ें",
+        buttonText: "text-amber-600",
+        gradient: "from-amber-50 to-amber-100",
+        border: "border-amber-200",
+        icon: "🥔"
+      },
+      {
+        tag: "बाजार अंतर्दृष्टि",
+        tagBg: "bg-blue-100",
+        tagText: "text-blue-800",
+        title: "इष्टतम बिक्री समय से लाभ बढ़ा",
+        description: "मूल्य भविष्यवाणी ने किसान को बाजार में प्रवेश के समय का अनुमान लगाने में मदद की, जिससे उनकी उपज के लिए 25% अधिक बिक्री मूल्य मिला।",
+        date: "3 महीने पहले",
+        readMoreText: "और पढ़ें",
+        buttonText: "text-blue-600",
+        gradient: "from-blue-50 to-blue-100",
+        border: "border-blue-200",
+        icon: "📈"
+      }
+    ]
+  };
+
+  // Seasonal farming tips
+  const seasonalTips = {
+    title: "मौसमी खेती के टिप्स",
+    tips: [
+      {
+        title: "रबी फसलों के लिए मिट्टी की तैयारी",
+        description: "अपनी मिट्टी को रबी फसलों के लिए कैसे तैयार करें, इसके बारे में जानें",
+        icon: "🌱",
+        color: "green"
+      },
+      {
+        title: "जल प्रबंधन तकनीक",
+        description: "सूखे के मौसम में पानी के कुशल उपयोग के लिए सिंचाई रणनीतियां",
+        icon: "💧",
+        color: "blue"
+      },
+      {
+        title: "जैविक कीट नियंत्रण",
+        description: "रासायनिक कीटनाशकों के बिना कीटों से निपटने के प्राकृतिक तरीके",
+        icon: "🐞",
+        color: "amber"
+      }
+    ]
+  };
 
   return (
-    <div className="flex h-screen bg-white text-black pt-10">
-      {/* Left Sidebar */}
-      
+    <div className="min-h-screen bg-gradient-to-b from-green-50 to-emerald-50">
+      <DashboardHeader
+        title="कृषि AI सहायक"
+        subtitle="आपका बुद्धिमान खेती साथी"
+        icon={<Leaf className="h-6 w-6 text-green-600" />}
+      />
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col">
-        {/* Main content area */}
-        <div className="flex-1 overflow-y-auto bg-white p-4">
-          <div className="max-w-3xl mx-auto">
-            {/* Header with dropdown */}
-            <div className="flex items-center mb-4">
-              <span className="text-xl font-medium">Farming</span>
-              <FaChevronDown className="ml-2 text-green-600" />
+      <div className="container mx-auto px-4 py-6">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="space-y-6"
+        >
+          {/* Hero Section */}
+          <motion.div 
+            className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-green-600 to-green-500 text-white mb-10"
+            variants={itemVariants}
+          >
+            <div className="absolute inset-0 opacity-10">
+              <div className="absolute -right-20 -top-20 h-80 w-80 rounded-full bg-white/20"></div>
+              <div className="absolute -left-20 -bottom-20 h-80 w-80 rounded-full bg-white/20"></div>
+              <div className="grid grid-cols-10 grid-rows-10 gap-1 h-full w-full">
+                {Array.from({ length: 100 }).map((_, i) => (
+                  <div key={i} className="bg-white/5 rounded-sm"></div>
+                ))}
+              </div>
             </div>
-
-            {/* Main content */}
-            <div className="flex flex-col items-center mt-8">
-              <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mb-4">
-                <GiWheat className="text-green-600 text-4xl" />
+            
+            <div className="relative p-8 md:p-12 flex flex-col md:flex-row items-center">
+              <div className="md:w-2/3 mb-8 md:mb-0">
+                <h1 className="text-4xl md:text-5xl font-bold mb-4">
+                  कृषि AI सहायक <span className="text-green-200">Groq</span>
+                </h1>
+                <p className="text-xl text-green-100 mb-6 max-w-2xl">
+                  व्यक्तिगत सिफारिशें और अंतर्दृष्टि प्रदान करने के लिए उन्नत AI द्वारा संचालित आपका बुद्धिमान खेती साथी
+                </p>
+                <div className="flex flex-wrap gap-3 mb-6">
+                  <Badge className="bg-white/20 border-none text-white px-3 py-1 text-sm">
+                    <CheckCircle2 className="h-4 w-4 mr-1" />
+                    <span>तत्काल प्रतिक्रिया</span>
+                  </Badge>
+                  <Badge className="bg-white/20 border-none text-white px-3 py-1 text-sm">
+                    <CheckCircle2 className="h-4 w-4 mr-1" />
+                    <span>बहुभाषी समर्थन</span>
+                  </Badge>
+                  <Badge className="bg-white/20 border-none text-white px-3 py-1 text-sm">
+                    <CheckCircle2 className="h-4 w-4 mr-1" />
+                    <span>छवि विश्लेषण</span>
+                  </Badge>
+                </div>
+                <div className="flex flex-wrap gap-4">
+                  <Button size="lg" className="bg-white text-green-700 hover:bg-green-100">
+                    <MessageSquare className="h-5 w-5 mr-2" />
+                    <span>चैट शुरू करें</span>
+                  </Button>
+                  <Button size="lg" variant="outline" className="bg-white/10 text-white border-white/30 hover:bg-white/20">
+                    <Info className="h-5 w-5 mr-2" />
+                    <span>कैसे काम करता है</span>
+                  </Button>
+                </div>
               </div>
-
-              <h1 className="text-3xl font-bold mb-2">Farming</h1>
-              <div className="text-sm text-gray-600 mb-2 flex items-center">
-                By Krishi Sahayak Team
-              </div>
-
-              <p className="text-center text-sm max-w-lg mb-6">
-                Farming advice and analysis guide, educating on agricultural
-                practices and techniques. Learn how to interpret soil data and
-                grow crops like a professional farmer. Crop Generator for
-                Vegetables, Fruits, Grains, Herbs, Organic, and Sustainable
-                farming.
-              </p>
-
-              {/* Action cards */}
-              <div className="grid grid-cols-3 gap-4 w-full max-w-3xl">
-                <div className="border border-green-200 rounded-lg p-4 hover:bg-green-50 cursor-pointer">
-                  <div className="flex items-start">
-                    <div className="p-1 bg-green-100 rounded mr-2">
-                      <GiCorn className="text-green-600" />
-                    </div>
-                    <div className="text-sm">Crop plan for corn</div>
+              
+              <div className="md:w-1/3 flex justify-center">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-white rounded-full opacity-20 animate-pulse"></div>
+                  <div className="absolute inset-4 bg-white rounded-full opacity-30"></div>
+                  <div className="absolute inset-8 bg-white rounded-full opacity-40"></div>
+                  <div className="relative h-48 w-48 flex items-center justify-center">
+                    <motion.div
+                      animate={{ 
+                        rotate: [0, 5, 0, -5, 0],
+                        y: [0, -5, 0, 5, 0]
+                      }}
+                      transition={{ duration: 5, repeat: Infinity }}
+                      className="text-7xl"
+                    >
+                      🧑‍🌾
+                    </motion.div>
                   </div>
                 </div>
-
-                <div className="border border-green-200 rounded-lg p-4 hover:bg-green-50 cursor-pointer">
-                  <div className="flex items-start">
-                    <div className="p-1 bg-green-100 rounded mr-2">
-                      <FaLeaf className="text-green-600" />
-                    </div>
-                    <div className="text-sm">Pest control methods</div>
-                  </div>
-                </div>
-
-                <div className="border border-green-200 rounded-lg p-4 hover:bg-green-50 cursor-pointer">
-                  <div className="flex items-start">
-                    <div className="p-1 bg-green-100 rounded mr-2">
-                      <MdOutlineWaterDrop className="text-green-600" />
-                    </div>
-                    <div className="text-sm">Generate irrigation schedule</div>
-                  </div>
-                </div>
               </div>
             </div>
-          </div>
-        </div>
+          </motion.div>
 
-        {/* Input area */}
-        <div className="p-4 border-t border-green-100">
-          <div className="max-w-3xl mx-auto relative">
-            <div className="rounded-lg border border-green-200 bg-white p-2 shadow-sm">
-              <input
-                type="text"
-                placeholder="Ask anything"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                className="w-full p-2 outline-none"
-              />
-              <div className="absolute right-4 bottom-4 flex items-center space-x-2">
-                <button className="p-2 rounded-full hover:bg-green-100">
-                  <FaPlus />
-                </button>
-                <button className="p-2 rounded-full hover:bg-green-100">
-                  <BsThreeDots />
-                </button>
-                <button className="p-2 rounded-full hover:bg-green-100">
-                  <FaSearch />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="w-52 bg-green-50/50 border-r border-green-100 flex flex-col">
-        {/* Navigation items */}
-        <div className="flex-1 overflow-y-auto">
-          {/* <div className="p-2">
-            <div className="flex items-center p-2 rounded-lg hover:bg-green-100 cursor-pointer">
-              <div className="w-6 h-6 flex items-center justify-center mr-2">
-                <FaSeedling className="text-green-600" />
-              </div>
-              <span>AI Farming Assistant</span>
-            </div>
-
-            <div className="flex items-center p-2 rounded-lg bg-green-200 cursor-pointer">
-              <div className="w-6 h-6 flex items-center justify-center mr-2">
-                <GiWheat className="text-green-600" />
-              </div>
-              <span>Content translation</span>
-            </div>
-
-            <div className="flex items-center p-2 rounded-lg hover:bg-green-100 cursor-pointer">
-              <div className="w-6 h-6 flex items-center justify-center mr-2 text-green-600">
-                <TbPlant />
-              </div>
-              <span>FarmGPT Classic</span>
-            </div>
-
-            <div className="flex items-center p-2 rounded-lg hover:bg-green-100 cursor-pointer">
-              <div className="w-6 h-6 flex items-center justify-center mr-2">
-                <BsShield className="text-green-600" />
-              </div>
-              <span>Pest Checker</span>
-            </div>
-          </div> */}
-
-          {/* Yesterday section */}
-          <div className="mt-4 px-4 py-2">
-            <div className="text-xs text-gray-500 mb-2">Yesterday</div>
-            <div className="text-sm py-1 hover:bg-green-100 cursor-pointer rounded px-2">
-              Crop Rotation Guide
-            </div>
-            <div className="text-sm py-1 hover:bg-green-100 cursor-pointer rounded px-2">
-              Soil nutrient response
-            </div>
-            <div className="text-sm py-1 hover:bg-green-100 cursor-pointer rounded px-2">
-              Pests and disease risk
-            </div>
-            <div className="text-sm py-1 hover:bg-green-100 cursor-pointer rounded px-2">
-              Organic farming Request
-            </div>
-            <div className="text-sm py-1 hover:bg-green-100 cursor-pointer rounded px-2">
-              Irrigation Routine
-            </div>
-          </div>
-
-          {/* Previous 7 Days section */}
-          <div className="mt-4 px-4 py-2">
-            <div className="text-xs text-gray-500 mb-2">Previous 7 Days</div>
-            <div className="text-sm py-1 hover:bg-green-100 cursor-pointer rounded px-2">
-              Crop Journey Chart
-            </div>
-            <div className="text-sm py-1 hover:bg-green-100 cursor-pointer rounded px-2">
-              Greenhouse Design
-            </div>
-            <div className="text-sm py-1 hover:bg-green-100 cursor-pointer rounded px-2">
-              Enhance Soil Fertility
-            </div>
-            <div className="text-sm py-1 hover:bg-green-100 cursor-pointer rounded px-2">
-              Creating Sheets in Onshape
-            </div>
-          </div>
-        </div>
+          {/* Main Chat Interface */}
+          <motion.div variants={itemVariants}>
+            <ChatInterface />
+          </motion.div>
+        </motion.div>
       </div>
     </div>
-  )
+  );
 }

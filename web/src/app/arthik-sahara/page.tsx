@@ -1,34 +1,39 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { 
   MapPin, 
   Search, 
-  Bell, 
-  Menu, 
-  CreditCard, 
-  TrendingUp, 
+  Book, 
   FileText, 
-  Umbrella, 
-  BarChart2, 
-  AlertTriangle 
+  Map, 
+  Calendar,
+  Compass,
+  Briefcase,
+  Droplet,
+  Sun,
+  FileCheck,
+  ArrowRight,
+  TrendingUp,
+  AlertTriangle,
+  Clock,
+  Users
 } from "lucide-react";
 
 // Import components
-import CreditDashboard from "@/components/arthikSahara/CreditDashboard";
-import LoanMarketplace from "@/components/arthikSahara/LoanMarketplace";
-import ApplicationStatus from "@/components/arthikSahara/ApplicationStatus";
-import CreditImprovement from "@/components/arthikSahara/CreditImprovement";
-import InsuranceDashboard from "@/components/arthikSahara/InsuranceDashboard";
-import InsuranceProducts from "@/components/arthikSahara/InsuranceProducts";
-import ClaimStatus from "@/components/arthikSahara/ClaimStatus";
-import FinancialEducation from "@/components/arthikSahara/FinancialEducation";
+import PageHeader from "@/components/samudayShakti/PageHeader";
+import KrishiGyanHub from "@/components/arthikSahara/KrishiGyanHub";
+import SaralDocuments from "@/components/arthikSahara/SaralDocuments";
+import NearbyServices from "@/components/arthikSahara/NearbyServices";
+import MarketPriceTracker from "@/components/arthikSahara/MarketPriceTracker";
+import FinancialTools from "@/components/arthikSahara/FinancialTools";
 
 export default function ArthikSaharaPage() {
-  const [location, setLocation] = useState("सोनीपत, हरियाणा");
-  const [activeTab, setActiveTab] = useState("creditDashboard");
-  const [showAIAssistant, setShowAIAssistant] = useState(false);
+  const [location, setLocation] = useState("Sonipat, Haryana");
+  const [activeTab, setActiveTab] = useState("gyan-hub");
+  const [showWeatherAlert, setShowWeatherAlert] = useState(true);
+  const [showMarketAlert, setShowMarketAlert] = useState(true);
 
   // Animation variants
   const containerVariants = {
@@ -50,360 +55,221 @@ export default function ArthikSaharaPage() {
     }
   };
 
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-green-50">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-green-700 to-amber-600 text-white mt-10 shadow-lg">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Menu className="h-6 w-6 md:hidden" />
-              <h1 className="text-xl font-bold">आर्थिक सहारा</h1>
-              <span className="hidden md:inline text-sm opacity-75">| वित्तीय सेवाएँ और सुरक्षा</span>
-            </div>
-            
-            <div className="flex items-center space-x-3">
-              <div className="flex items-center bg-white/20 rounded-full px-3 py-1.5 text-sm">
-                <MapPin className="h-4 w-4 mr-1" />
-                <span>{location}</span>
-              </div>
-              <button className="p-2 rounded-full bg-white/20 hover:bg-white/30">
-                <Search className="h-5 w-5" />
-              </button>
-              <button className="p-2 rounded-full bg-white/20 hover:bg-white/30 relative">
-                <Bell className="h-5 w-5" />
-                <span className="absolute top-0 right-0 h-2 w-2 bg-amber-400 rounded-full"></span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="min-h-screen bg-gray-50 pb-20">
+      {/* Page Header */}
+      <PageHeader 
+        location={location}
+        title="Arthik Sahara"
+        subtitle="Complete Farming Support System"
+      />
 
-      {/* Navigation Tabs */}
-      <div className="bg-white shadow-sm sticky top-0 z-10">
-        <div className="container mx-auto px-4">
-          <div className="flex overflow-x-auto hide-scrollbar">
-            {/* Credit Scoring Tabs */}
-            <button 
-              className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 flex items-center gap-1 ${activeTab === 'creditDashboard' ? 'border-green-600 text-green-700' : 'border-transparent text-gray-600 hover:text-gray-800'}`}
-              onClick={() => setActiveTab('creditDashboard')}
-            >
-              <CreditCard size={16} />
-              <span>क्रेडिट प्रोफाइल</span>
-            </button>
-            <button 
-              className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 flex items-center gap-1 ${activeTab === 'loanMarketplace' ? 'border-green-600 text-green-700' : 'border-transparent text-gray-600 hover:text-gray-800'}`}
-              onClick={() => setActiveTab('loanMarketplace')}
-            >
-              <BarChart2 size={16} />
-              <span>ऋण बाज़ार</span>
-            </button>
-            <button 
-              className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 flex items-center gap-1 ${activeTab === 'applications' ? 'border-green-600 text-green-700' : 'border-transparent text-gray-600 hover:text-gray-800'}`}
-              onClick={() => setActiveTab('applications')}
-            >
-              <FileText size={16} />
-              <span>आवेदन स्थिति</span>
-            </button>
-            <button 
-              className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 flex items-center gap-1 ${activeTab === 'improve' ? 'border-green-600 text-green-700' : 'border-transparent text-gray-600 hover:text-gray-800'}`}
-              onClick={() => setActiveTab('improve')}
-            >
-              <TrendingUp size={16} />
-              <span>स्कोर सुधारें</span>
-            </button>
-            
-            {/* Divider */}
-            <div className="border-r border-gray-200 mx-2"></div>
-            
-            {/* Insurance Tabs */}
-            <button 
-              className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 flex items-center gap-1 ${activeTab === 'insuranceDashboard' ? 'border-green-600 text-green-700' : 'border-transparent text-gray-600 hover:text-gray-800'}`}
-              onClick={() => setActiveTab('insuranceDashboard')}
-            >
-              <Umbrella size={16} />
-              <span>बीमा डैशबोर्ड</span>
-            </button>
-            <button 
-              className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 flex items-center gap-1 ${activeTab === 'insuranceProducts' ? 'border-green-600 text-green-700' : 'border-transparent text-gray-600 hover:text-gray-800'}`}
-              onClick={() => setActiveTab('insuranceProducts')}
-            >
-              <AlertTriangle size={16} />
-              <span>बीमा योजनाएँ</span>
-            </button>
-            <button 
-              className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 flex items-center gap-1 ${activeTab === 'claims' ? 'border-green-600 text-green-700' : 'border-transparent text-gray-600 hover:text-gray-800'}`}
-              onClick={() => setActiveTab('claims')}
-            >
-              <FileText size={16} />
-              <span>दावा स्थिति</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="container mx-auto px-4 py-6">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="grid grid-cols-1 lg:grid-cols-3 gap-6"
-        >
-
-          <motion.div 
-            variants={itemVariants}
-            className="lg:col-span-2 space-y-6"
+      <div className="container mx-auto px-4 -mt-6">
+        {/* Main Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          {/* Left Sidebar - Quick Access */}
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="lg:col-span-1 space-y-6"
           >
-         
-            {activeTab === 'creditDashboard' && <CreditDashboard />}
-            {activeTab === 'loanMarketplace' && <LoanMarketplace />}
-            {activeTab === 'applications' && <ApplicationStatus />}
-            {activeTab === 'improve' && <CreditImprovement />}
+            <motion.div 
+              variants={itemVariants}
+              className="bg-white rounded-xl shadow-sm p-5 border border-gray-100"
+            >
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">Quick Access</h3>
+              <div className="space-y-3">
+                <button className="w-full flex items-center justify-between p-3 rounded-lg bg-green-50 hover:bg-green-100 transition-colors">
+                  <div className="flex items-center">
+                    <div className="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center mr-3">
+                      <FileCheck className="h-4 w-4 text-green-600" />
+                    </div>
+                    <span className="text-sm font-medium text-gray-700">Document Checker</span>
+                  </div>
+                  <ArrowRight className="h-4 w-4 text-gray-400" />
+                </button>
+                
+                <button className="w-full flex items-center justify-between p-3 rounded-lg bg-blue-50 hover:bg-blue-100 transition-colors">
+                  <div className="flex items-center">
+                    <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center mr-3">
+                      <Map className="h-4 w-4 text-blue-600" />
+                    </div>
+                    <span className="text-sm font-medium text-gray-700">Nearby Services</span>
+                  </div>
+                  <ArrowRight className="h-4 w-4 text-gray-400" />
+                </button>
+                
+                <button className="w-full flex items-center justify-between p-3 rounded-lg bg-amber-50 hover:bg-amber-100 transition-colors">
+                  <div className="flex items-center">
+                    <div className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center mr-3">
+                      <TrendingUp className="h-4 w-4 text-amber-600" />
+                    </div>
+                    <span className="text-sm font-medium text-gray-700">Market Prices</span>
+                  </div>
+                  <ArrowRight className="h-4 w-4 text-gray-400" />
+                </button>
+                
+                
+                <button className="w-full flex items-center justify-between p-3 rounded-lg bg-red-50 hover:bg-red-100 transition-colors">
+                  <div className="flex items-center">
+                    <div className="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center mr-3">
+                      <Users className="h-4 w-4 text-red-600" />
+                    </div>
+                    <span className="text-sm font-medium text-gray-700">Expert Connect</span>
+                  </div>
+                  <ArrowRight className="h-4 w-4 text-gray-400" />
+                </button>
+              </div>
+            </motion.div>
             
-            {/* Insurance Feature Tabs */}
-            {activeTab === 'insuranceDashboard' && <InsuranceDashboard />}
-            {activeTab === 'insuranceProducts' && <InsuranceProducts />}
-            {activeTab === 'claims' && <ClaimStatus />}
+            {/* Alerts Section */}
+            <motion.div 
+              variants={itemVariants}
+              className="bg-white rounded-xl shadow-sm p-5 border border-gray-100"
+            >
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">Important Alerts</h3>
+              
+              {showWeatherAlert && (
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-3">
+                  <div className="flex items-start">
+                    <div className="h-8 w-8 rounded-full bg-amber-100 flex items-center justify-center mr-3 mt-0.5">
+                      <span className="text-xl">⛈️</span>
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="text-sm font-medium text-gray-800">Heavy Rain Expected</h4>
+                      <p className="text-xs text-gray-600 mt-1">Heavy rainfall predicted in your area for the next 3 days. Consider delaying any fertilizer application.</p>
+                      <div className="flex justify-end mt-2">
+                        <button 
+                          onClick={() => setShowWeatherAlert(false)}
+                          className="text-xs text-amber-700 font-medium"
+                        >
+                          Dismiss
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {showMarketAlert && (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                  <div className="flex items-start">
+                    <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-0.5">
+                      <span className="text-xl">📈</span>
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="text-sm font-medium text-gray-800">Price Alert: Wheat</h4>
+                      <p className="text-xs text-gray-600 mt-1">Wheat prices have increased by 8% in the last week at Sonipat Mandi. Consider selling now.</p>
+                      <div className="flex justify-end mt-2">
+                        <button 
+                          onClick={() => setShowMarketAlert(false)}
+                          className="text-xs text-green-700 font-medium"
+                        >
+                          Dismiss
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </motion.div>
           </motion.div>
-
-          {/* Right Sidebar - Always visible */}
-          <motion.div 
-            variants={itemVariants}
-            className="space-y-6"
+          
+          {/* Main Content Area */}
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="lg:col-span-3 bg-white rounded-xl shadow-md overflow-hidden"
           >
-            {/* Financial Education Section */}
-            <FinancialEducation />
-            
-            {/* AI Financial Assistant */}
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="bg-gradient-to-r from-green-600 to-green-700 px-4 py-3">
-                <h3 className="text-white font-medium flex items-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                    <path d="M16.5 7.5h-9v9h9v-9z" />
-                    <path fillRule="evenodd" d="M8.25 2.25A.75.75 0 019 3v.75h2.25V3a.75.75 0 011.5 0v.75H15V3a.75.75 0 011.5 0v.75h.75a3 3 0 013 3v.75H21A.75.75 0 0121 9h-.75v2.25H21a.75.75 0 010 1.5h-.75V15H21a.75.75 0 010 1.5h-.75v.75a3 3 0 01-3 3h-.75V21a.75.75 0 01-1.5 0v-.75h-2.25V21a.75.75 0 01-1.5 0v-.75H9V21a.75.75 0 01-1.5 0v-.75h-.75a3 3 0 01-3-3v-.75H3A.75.75 0 013 15h.75v-2.25H3a.75.75 0 010-1.5h.75V9H3a.75.75 0 010-1.5h.75v-.75a3 3 0 013-3h.75V3a.75.75 0 01.75-.75zM6 6.75A.75.75 0 016.75 6h10.5a.75.75 0 01.75.75v10.5a.75.75 0 01-.75.75H6.75a.75.75 0 01-.75-.75V6.75z" clipRule="evenodd" />
-                  </svg>
-                  वित्तीय सहायक AI
-                </h3>
-              </div>
-              <div className="p-4">
-                <p className="text-sm text-gray-600 mb-3">आपके वित्तीय प्रश्नों के उत्तर पाएं या ऋण और बीमा के बारे में जानकारी प्राप्त करें।</p>
-                <button 
-                  onClick={() => setShowAIAssistant(true)}
-                  className="w-full bg-green-100 hover:bg-green-200 text-green-800 py-2 rounded-md text-sm font-medium transition-colors flex items-center justify-center gap-2"
+            {/* Navigation Tabs */}
+            <div className="border-b border-gray-200">
+              <div className="flex overflow-x-auto hide-scrollbar">
+                <button
+                  onClick={() => setActiveTab("gyan-hub")}
+                  className={`px-4 py-3 flex items-center gap-2 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
+                    activeTab === "gyan-hub"
+                      ? "border-green-600 text-green-600"
+                      : "border-transparent text-gray-600 hover:text-gray-900"
+                  }`}
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                    <path d="M4.913 2.658c2.075-.27 4.19-.408 6.337-.408 2.147 0 4.262.139 6.337.408 1.922.25 3.291 1.861 3.405 3.727a4.403 4.403 0 00-1.032-.211 50.89 50.89 0 00-8.42 0c-2.358.196-4.04 2.19-4.04 4.434v4.286a4.47 4.47 0 002.433 3.984L7.28 21.53A.75.75 0 016 21v-4.03a48.527 48.527 0 01-1.087-.128C2.905 16.58 1.5 14.833 1.5 12.862V6.638c0-1.97 1.405-3.718 3.413-3.979z" />
-                    <path d="M15.75 7.5c-1.376 0-2.739.057-4.086.169C10.124 7.797 9 9.103 9 10.609v4.285c0 1.507 1.128 2.814 2.67 2.94 1.243.102 2.5.157 3.768.165l2.782 2.781a.75.75 0 001.28-.53v-2.39l.33-.026c1.542-.125 2.67-1.433 2.67-2.94v-4.286c0-1.505-1.125-2.811-2.664-2.94A49.392 49.392 0 0015.75 7.5z" />
-                  </svg>
-                  सहायक से बात करें
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-green-100 text-green-600">
+                    <Book className="h-4 w-4" />
+                  </div>
+                  <span>Krishi Gyan Hub</span>
+                </button>
+                
+                <button
+                  onClick={() => setActiveTab("saral-docs")}
+                  className={`px-4 py-3 flex items-center gap-2 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
+                    activeTab === "saral-docs"
+                      ? "border-green-600 text-green-600"
+                      : "border-transparent text-gray-600 hover:text-gray-900"
+                  }`}
+                >
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-blue-100 text-blue-600">
+                    <FileText className="h-4 w-4" />
+                  </div>
+                  <span>Saral Documents</span>
+                </button>
+                
+                <button
+                  onClick={() => setActiveTab("nearby-services")}
+                  className={`px-4 py-3 flex items-center gap-2 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
+                    activeTab === "nearby-services"
+                      ? "border-green-600 text-green-600"
+                      : "border-transparent text-gray-600 hover:text-gray-900"
+                  }`}
+                >
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-amber-100 text-amber-600">
+                    <Compass className="h-4 w-4" />
+                  </div>
+                  <span>Nearby Services</span>
+                </button>
+
+                
+                <button
+                  onClick={() => setActiveTab("market-prices")}
+                  className={`px-4 py-3 flex items-center gap-2 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
+                    activeTab === "market-prices"
+                      ? "border-green-600 text-green-600"
+                      : "border-transparent text-gray-600 hover:text-gray-900"
+                  }`}
+                >
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-red-100 text-red-600">
+                    <TrendingUp className="h-4 w-4" />
+                  </div>
+                  <span>Market Price Tracker</span>
+                </button>
+                
+                <button
+                  onClick={() => setActiveTab("financial-tools")}
+                  className={`px-4 py-3 flex items-center gap-2 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
+                    activeTab === "financial-tools"
+                      ? "border-green-600 text-green-600"
+                      : "border-transparent text-gray-600 hover:text-gray-900"
+                  }`}
+                >
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-indigo-100 text-indigo-600">
+                    <Briefcase className="h-4 w-4" />
+                  </div>
+                  <span>Financial Tools</span>
                 </button>
               </div>
             </div>
             
-            {/* Personalized Recommendations */}
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="bg-gradient-to-r from-amber-500 to-amber-600 px-4 py-3">
-                <h3 className="text-white font-medium flex items-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                    <path fillRule="evenodd" d="M9 4.5a.75.75 0 01.721.544l.813 2.846a3.75 3.75 0 002.576 2.576l2.846.813a.75.75 0 010 1.442l-2.846.813a3.75 3.75 0 00-2.576 2.576l-.813 2.846a.75.75 0 01-1.442 0l-.813-2.846a3.75 3.75 0 00-2.576-2.576l-2.846-.813a.75.75 0 010-1.442l2.846-.813A3.75 3.75 0 007.466 7.89l.813-2.846A.75.75 0 019 4.5zM18 1.5a.75.75 0 01.728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 010 1.456l-1.036.258c-.94.236-1.674.97-1.91 1.91l-.258 1.036a.75.75 0 01-1.456 0l-.258-1.036a2.625 2.625 0 00-1.91-1.91l-1.036-.258a.75.75 0 010-1.456l1.036-.258a2.625 2.625 0 001.91-1.91l.258-1.036A.75.75 0 0118 1.5zM16.5 15a.75.75 0 01.712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 010 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 01-1.422 0l-.395-1.183a1.5 1.5 0 00-.948-.948l-1.183-.395a.75.75 0 010-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0116.5 15z" clipRule="evenodd" />
-                  </svg>
-                  आपके लिए अनुशंसाएँ
-                </h3>
-              </div>
-              <div className="p-4 space-y-3">
-                <div className="flex items-start gap-3 pb-3 border-b border-gray-100">
-                  <div className="bg-green-100 p-2 rounded-full">
-                    <CreditCard size={16} className="text-green-600" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800">फसल ऋण के लिए पात्र</p>
-                    <p className="text-xs text-gray-500">आपका क्रेडिट स्कोर अब फसल ऋण के लिए पात्र है</p>
-                    <button className="mt-1 text-green-600 text-xs font-medium">देखें →</button>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="bg-amber-100 p-2 rounded-full">
-                    <Umbrella size={16} className="text-amber-600" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800">मौसम आधारित बीमा</p>
-                    <p className="text-xs text-gray-500">आने वाले मानसून के लिए फसल बीमा करवाएं</p>
-                    <button className="mt-1 text-amber-600 text-xs font-medium">जानकारी पाएं →</button>
-                  </div>
-                </div>
-              </div>
+            {/* Tab Content */}
+            <div className="p-6">
+              {activeTab === "gyan-hub" && <KrishiGyanHub />}
+              {activeTab === "saral-docs" && <SaralDocuments />}
+              {activeTab === "nearby-services" && <NearbyServices location={location} />}
+              {activeTab === "market-prices" && <MarketPriceTracker location={location} />}
+              {activeTab === "financial-tools" && <FinancialTools />}
+
             </div>
           </motion.div>
-        </motion.div>
-      </div>
-      
-      {/* AI Assistant Modal */}
-      {showAIAssistant && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end md:items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-t-lg md:rounded-lg max-w-lg w-full max-h-[80vh] flex flex-col">
-            <div className="bg-gradient-to-r from-green-600 to-green-700 px-4 py-3 rounded-t-lg flex justify-between items-center">
-              <h3 className="text-white font-medium flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                  <path d="M4.913 2.658c2.075-.27 4.19-.408 6.337-.408 2.147 0 4.262.139 6.337.408 1.922.25 3.291 1.861 3.405 3.727a4.403 4.403 0 00-1.032-.211 50.89 50.89 0 00-8.42 0c-2.358.196-4.04 2.19-4.04 4.434v4.286a4.47 4.47 0 002.433 3.984L7.28 21.53A.75.75 0 016 21v-4.03a48.527 48.527 0 01-1.087-.128C2.905 16.58 1.5 14.833 1.5 12.862V6.638c0-1.97 1.405-3.718 3.413-3.979z" />
-                  <path d="M15.75 7.5c-1.376 0-2.739.057-4.086.169C10.124 7.797 9 9.103 9 10.609v4.285c0 1.507 1.128 2.814 2.67 2.94 1.243.102 2.5.157 3.768.165l2.782 2.781a.75.75 0 001.28-.53v-2.39l.33-.026c1.542-.125 2.67-1.433 2.67-2.94v-4.286c0-1.505-1.125-2.811-2.664-2.94A49.392 49.392 0 0015.75 7.5z" />
-                </svg>
-                वित्तीय सहायक AI
-              </h3>
-              <button 
-                onClick={() => setShowAIAssistant(false)}
-                className="text-white hover:text-gray-200"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
-              {/* AI Messages */}
-              <div className="flex items-start gap-3">
-                <div className="bg-green-100 p-2 rounded-full">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-green-600">
-                    <path d="M16.5 7.5h-9v9h9v-9z" />
-                    <path fillRule="evenodd" d="M8.25 2.25A.75.75 0 019 3v.75h2.25V3a.75.75 0 011.5 0v.75H15V3a.75.75 0 011.5 0v.75h.75a3 3 0 013 3v.75H21A.75.75 0 0121 9h-.75v2.25H21a.75.75 0 010 1.5h-.75V15H21a.75.75 0 010 1.5h-.75v.75a3 3 0 01-3 3h-.75V21a.75.75 0 01-1.5 0v-.75h-2.25V21a.75.75 0 01-1.5 0v-.75H9V21a.75.75 0 01-1.5 0v-.75h-.75a3 3 0 01-3-3v-.75H3A.75.75 0 013 15h.75v-2.25H3a.75.75 0 010-1.5h.75V9H3a.75.75 0 010-1.5h.75v-.75a3 3 0 013-3h.75V3a.75.75 0 01.75-.75zM6 6.75A.75.75 0 016.75 6h10.5a.75.75 0 01.75.75v10.5a.75.75 0 01-.75.75H6.75a.75.75 0 01-.75-.75V6.75z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <div className="bg-gray-100 rounded-lg p-3 text-sm text-gray-700 max-w-[85%]">
-                  नमस्ते! मैं आपका वित्तीय सहायक हूँ। मैं आपको ऋण, बीमा, या आपके क्रेडिट स्कोर के बारे में जानकारी दे सकता हूँ। आप मुझसे क्या पूछना चाहेंगे?
-                </div>
-              </div>
-              
-              <div className="flex items-start gap-3 justify-end">
-                <div className="bg-green-600 rounded-lg p-3 text-sm text-white max-w-[85%]">
-                  मुझे फसल ऋण के बारे में जानकारी चाहिए
-                </div>
-                <div className="bg-green-100 p-2 rounded-full">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-green-600">
-                    <path fillRule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clipRule="evenodd" />
-                  </svg>
-                </div>
-              </div>
-              
-              <div className="flex items-start gap-3">
-                <div className="bg-green-100 p-2 rounded-full">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-green-600">
-                    <path d="M16.5 7.5h-9v9h9v-9z" />
-                    <path fillRule="evenodd" d="M8.25 2.25A.75.75 0 019 3v.75h2.25V3a.75.75 0 011.5 0v.75H15V3a.75.75 0 011.5 0v.75h.75a3 3 0 013 3v.75H21A.75.75 0 0121 9h-.75v2.25H21a.75.75 0 010 1.5h-.75V15H21a.75.75 0 010 1.5h-.75v.75a3 3 0 01-3 3h-.75V21a.75.75 0 01-1.5 0v-.75h-2.25V21a.75.75 0 01-1.5 0v-.75H9V21a.75.75 0 01-1.5 0v-.75h-.75a3 3 0 01-3-3v-.75H3A.75.75 0 013 15h.75v-2.25H3a.75.75 0 010-1.5h.75V9H3a.75.75 0 010-1.5h.75v-.75a3 3 0 013-3h.75V3a.75.75 0 01.75-.75zM6 6.75A.75.75 0 016.75 6h10.5a.75.75 0 01.75.75v10.5a.75.75 0 01-.75.75H6.75a.75.75 0 01-.75-.75V6.75z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <div className="bg-gray-100 rounded-lg p-3 text-sm text-gray-700 max-w-[85%]">
-                  <p>फसल ऋण किसानों के लिए विशेष रूप से डिज़ाइन किए गए ऋण हैं जो फसल उत्पादन के लिए आवश्यक खर्चों को कवर करते हैं।</p>
-                  <p className="mt-2">हमारे प्लेटफॉर्म पर उपलब्ध फसल ऋण:</p>
-                  <ul className="list-disc pl-5 mt-1 space-y-1">
-                    <li>किसान क्रेडिट कार्ड (KCC) - 7% ब्याज दर</li>
-                    <li>फसल उत्पादन ऋण - 9.5% ब्याज दर</li>
-                    <li>छोटे किसान विकास ऋण - 8.75% ब्याज दर</li>
-                  </ul>
-                  <p className="mt-2">आपका वर्तमान क्रेडिट स्कोर 68/100 है, जो आपको इन ऋणों के लिए पात्र बनाता है।</p>
-                  <div className="mt-3 flex gap-2">
-                    <button className="bg-green-600 text-white text-xs px-3 py-1 rounded-full">ऋण बाज़ार देखें</button>
-                    <button className="bg-white border border-gray-300 text-gray-700 text-xs px-3 py-1 rounded-full">पात्रता जांचें</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="p-4 border-t">
-              <div className="flex gap-2">
-                <input 
-                  type="text" 
-                  placeholder="अपना प्रश्न यहां टाइप करें..."
-                  className="flex-1 border border-gray-300 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                />
-                <button className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-full transition-colors">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                    <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Data Consent Modal - For Alternative Credit Scoring */}
-      <div className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 transition-opacity duration-300 ${false ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-        <div className="bg-white rounded-lg max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto">
-          <div className="flex justify-between items-start mb-4">
-            <h2 className="text-lg font-bold text-gray-800">डेटा सहमति</h2>
-            <button className="text-gray-500 hover:text-gray-700">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-          
-          <div className="space-y-4">
-            <p className="text-sm text-gray-600">
-              आपके वैकल्पिक क्रेडिट स्कोर को बनाने के लिए, हमें आपके प्लेटफॉर्म डेटा का उपयोग करने की आवश्यकता है। यह आपको पारंपरिक क्रेडिट इतिहास के बिना भी वित्तीय सेवाओं तक पहुंच प्राप्त करने में मदद करेगा।
-            </p>
-            
-            <div className="bg-amber-50 border-l-4 border-amber-500 p-4">
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-amber-500">
-                    <path fillRule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm text-amber-700">
-                    आपका डेटा केवल आपकी सहमति से साझा किया जाएगा और केवल वित्तीय संस्थानों के साथ जिन्हें आप ऋण के लिए आवेदन करते हैं।
-                  </p>
-                </div>
-              </div>
-            </div>
-            
-            <div>
-              <h3 className="font-medium text-gray-800 mb-2">हम निम्न डेटा एकत्र करेंगे:</h3>
-              <ul className="space-y-2">
-                <li className="flex items-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-green-500">
-                    <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
-                  </svg>
-                  <span className="text-sm text-gray-700">फसल और खेती का विवरण</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-green-500">
-                    <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
-                  </svg>
-                  <span className="text-sm text-gray-700">बाजार लेनदेन और बिक्री रिकॉर्ड</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-green-500">
-                    <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
-                  </svg>
-                  <span className="text-sm text-gray-700">सलाह अपनाने का इतिहास</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-green-500">
-                    <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
-                  </svg>
-                  <span className="text-sm text-gray-700">ऐप उपयोग और सहभागिता</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-green-500">
-                    <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
-                  </svg>
-                  <span className="text-sm text-gray-700">FPO सदस्यता और गतिविधियां</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-          
-          <div className="mt-6 flex flex-col gap-3">
-            <button className="bg-green-600 hover:bg-green-700 text-white py-2 rounded-md text-sm font-medium transition-colors">
-              मैं सहमत हूँ और जारी रखना चाहता हूँ
-            </button>
-            <button className="border border-gray-300 hover:border-gray-400 text-gray-700 py-2 rounded-md text-sm font-medium transition-colors">
-              अभी नहीं
-            </button>
-          </div>
         </div>
       </div>
     </div>

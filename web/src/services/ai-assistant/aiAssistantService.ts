@@ -1,9 +1,8 @@
 import { Message } from "@/types/ai-assistant";
 import { groqService } from "./groqService";
 
-// Your Groq API key - in a production app, this should be stored securely
-// For development, you can set it here temporarily
-const GROQ_API_KEY = "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"; // Add your Groq API key here
+// Get API key from environment variables
+const GROQ_API_KEY = process.env.GROQ_API_KEY || "";
 
 export const aiAssistantService = {
   getResponse: async (text: string, images: File[] = [], messages: Message[] = []): Promise<string> => {

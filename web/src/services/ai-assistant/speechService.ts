@@ -5,11 +5,9 @@ const GOOGLE_STT_API_URL = "https://speech.googleapis.com/v1/speech:recognize";
 // Google Cloud Text-to-Speech API endpoint
 const GOOGLE_TTS_API_URL = "https://texttospeech.googleapis.com/v1/text:synthesize";
 
-// Your Google Cloud API key - in a production app, this should be stored securely
-// For development, you can set it here temporarily
-const GOOGLE_API_KEY = "AIzaSyBE0SIN-Vm73ntz-_i36EvAo0AmDVTNno8";
+// Get API key from environment variables
+const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY || "";
 
-// Language code mapping for Google TTS/STT (may differ from our app's language codes)
 const googleLanguageCodes: Record<string, string> = {
   "hi": "hi-IN", // Hindi
   "en": "en-US", // English
@@ -35,10 +33,10 @@ export const speechService = {
       // Prepare the request payload
       const payload = {
         config: {
-          encoding: "WEBM_OPUS", // Changed from LINEAR16 to WEBM_OPUS which is more compatible with browser recordings
-          sampleRateHertz: 48000, // Changed from 16000 to 48000 which is more common for browser recordings
+          encoding: "WEBM_OPUS", 
+          sampleRateHertz: 48000, 
           languageCode: googleLangCode,
-          model: "default", // Changed from command_and_search to default for better general recognition
+          model: "default",
           speechContexts: [
             {
               phrases: ["crop", "weather", "market", "price", "scheme", "subsidy", "disease", 

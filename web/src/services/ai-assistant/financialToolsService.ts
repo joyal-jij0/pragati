@@ -4,9 +4,8 @@ import { CropCalculationResult } from "@/components/arthikSahara/CropFinanceCalc
 const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent";
 const GEMINI_MODEL = "gemini-1.5-pro"; // Using Gemini 1.5 Pro for best performance
 
-// Your Gemini API key - in a production app, this should be stored securely
-// For development, you can set it here temporarily
-const GEMINI_API_KEY = "AIzaSyCBPKfBLV54IN1xp70sJ-ySt5lIq_UJb74"; // Replace with your actual Gemini API key
+// Get API key from environment variables
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
 
 // Define the interface for the Gemini API request
 interface GeminiRequest {
