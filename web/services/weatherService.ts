@@ -75,7 +75,7 @@ export interface WeatherData {
 // --- API Service ---
 
 // Use environment variable for backend URL (especially in production)
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 const WEATHER_ENDPOINT = `${API_BASE_URL}/api/v1/weather`;
 
 export const getWeatherData = async (location: string): Promise<WeatherData> => {
