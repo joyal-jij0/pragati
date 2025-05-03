@@ -112,15 +112,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <a
                     href={item.url}
                     className={cn(
-                      `flex items-center gap-3 px-4 py-5 rounded-xl transition-all duration-300 group/menu-item relative overflow-hidden`,
+                      `flex items-center gap-3 px-4 py-5 rounded-xl group-data-[collapsible=icon]:rounded-sm justify-start transition-all duration-300 group/menu-item relative overflow-hidden`,
                       pathname?.startsWith(item.url)
-                        ? 'bg-gradient-to-r from-green-500/10 to-green-600/5 text-green-700 font-medium'
+                        ? 'bg-gradient-to-r from-green-500/10 group-data-[collapsible=icon]:from-green-500/30 to-green-600/5 group-data-[collapsible=icon]:to-green-500/20 text-green-700 font-medium'
                         : 'text-gray-700 group-hover/menu-item:bg-green-50'
                     )}
                     title={item.title}
                   >
                     {pathname?.startsWith(item.url) && (
-                      <span className="absolute inset-0 bg-gradient-to-r from-green-500/10 to-transparent opacity-80 rounded-xl"></span>
+                      <span className="absolute inset-0 bg-gradient-to-r from-green-500/10 to-transparent opacity-80 rounded-xl group-data-[collapsible=icon]:rounded-sm"></span>
                     )}
                     <span className="relative z-10 font-['Poppins',_sans-serif] text-base transition-all duration-300 group-hover/menu-item:translate-x-1">
                       {item.icon}
@@ -129,7 +129,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                       {item.title}
                     </span>
                     {pathname?.startsWith(item.url) && (
-                      <span className="absolute left-0 top-0 bottom-0 w-1.5 bg-green-500 rounded-r-full"></span>
+                      <span className="group-data-[collapsible=icon]:hidden absolute left-0 top-0 bottom-0 w-1.5 bg-green-500 rounded-r-full"></span>
                     )}
                   </a>
                 </SidebarMenuButton>
@@ -150,9 +150,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <a
                     href={item.url}
                     className={cn(
-                      `flex items-center gap-3 px-4 py-5 rounded-xl transition-all duration-300 group/menu-item relative overflow-hidden`,
+                      `flex items-center gap-3 px-4 py-5 rounded-xl group-data-[collapsible=icon]:rounded-sm justify-start transition-all duration-300 group/menu-item relative overflow-hidden`,
                       pathname?.startsWith(item.url)
-                        ? 'bg-gradient-to-r from-green-500/10 to-green-600/5 text-green-700 font-medium'
+                        ? 'bg-gradient-to-r from-green-500/10 group-data-[collapsible=icon]:from-green-500/30 to-green-600/5 group-data-[collapsible=icon]:to-green-500/20 text-green-700 font-medium'
                         : 'text-gray-700 group-hover/menu-item:bg-green-50'
                     )}
                     title={item.title}
@@ -167,7 +167,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                       {item.title}
                     </span>
                     {pathname?.startsWith(item.url) && (
-                      <span className="absolute left-0 top-0 bottom-0 w-1.5 bg-green-500 rounded-r-full"></span>
+                      <span className="group-data-[collapsible=icon]:hidden absolute left-0 top-0 bottom-0 w-1.5 bg-green-500 rounded-r-full"></span>
                     )}
                   </a>
                 </SidebarMenuButton>
