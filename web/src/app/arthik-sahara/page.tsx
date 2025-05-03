@@ -21,8 +21,8 @@ import {
   Users
 } from "lucide-react";
 
-// Import components
-import PageHeader from "@/components/samudayShakti/PageHeader";
+
+import DashboardHeader from "@/components/arthikSahara/DashboardHeader";
 import KrishiGyanHub from "@/components/arthikSahara/KrishiGyanHub";
 import SaralDocuments from "@/components/arthikSahara/SaralDocuments";
 import NearbyServices from "@/components/arthikSahara/NearbyServices";
@@ -58,14 +58,11 @@ export default function ArthikSaharaPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
-      {/* Page Header */}
-      <PageHeader 
-        location={location}
-        title="Arthik Sahara"
-        subtitle="Complete Farming Support System"
-      />
-
-      <div className="container mx-auto px-4 -mt-6">
+      {/* Dashboard Header */}
+      <DashboardHeader />
+      
+      {/* Remove PageHeader and add padding-top to account for fixed header */}
+      <div className="container mx-auto px-4 pt-20">
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Left Sidebar - Quick Access */}
