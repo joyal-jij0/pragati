@@ -28,6 +28,7 @@ import SaralDocuments from "@/components/arthikSahara/SaralDocuments";
 import NearbyServices from "@/components/arthikSahara/NearbyServices";
 import MarketPriceTracker from "@/components/arthikSahara/MarketPriceTracker";
 import FinancialTools from "@/components/arthikSahara/FinancialTools";
+import HeroSection from "@/components/HeroSection";
 
 export default function ArthikSaharaPage() {
   const [location, setLocation] = useState("Sonipat, Haryana");
@@ -59,13 +60,17 @@ export default function ArthikSaharaPage() {
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
       {/* Page Header */}
-      <PageHeader 
-        location={location}
-        title="Arthik Sahara"
-        subtitle="Complete Farming Support System"
-      />
+      <div className="pb-4 px-4">
+        <HeroSection
+          title="Arthik"
+          secondaryTitle="Sahara"
+          info="Your trusted companion for financial guidance, helping you find the best loan options while ensuring transparency, affordability, and protection from scams."
+          badges={['Verified Lenders', 'No Hidden Fees', 'Tailored Advice']}
+          floatingIcon="💰"
+        />
+      </div>
 
-      <div className="container mx-auto px-4 -mt-6">
+      <div className="container mx-auto px-4 pt-2">
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Left Sidebar - Quick Access */}
