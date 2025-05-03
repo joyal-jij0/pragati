@@ -19,9 +19,9 @@ import {
 } from "lucide-react";
 import debounce from 'lodash/debounce';
 
-// API Keys
-const YOUTUBE_API_KEY = 'AIzaSyBE0SIN-Vm73ntz-_i36EvAo0AmDVTNno8';
-const NEWS_API_KEY = '142eed9a51b047a58f853bcb5f68b727';
+// API Keys from environment variables
+const YOUTUBE_API_KEY = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY || '';
+const NEWS_API_KEY = process.env.NEXT_PUBLIC_NEWS_API_KEY || '';
 
 // Types
 interface Video {

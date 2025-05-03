@@ -42,6 +42,8 @@ const nextConfig: NextConfig = {
     GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
     GEMINI_API_KEY: process.env.GEMINI_API_KEY,
     GROQ_API_KEY: process.env.GROQ_API_KEY,
+    NEXT_PUBLIC_YOUTUBE_API_KEY: process.env.NEXT_PUBLIC_YOUTUBE_API_KEY,
+    NEXT_PUBLIC_NEWS_API_KEY: process.env.NEXT_PUBLIC_NEWS_API_KEY,
   },
   // Enable API routes
   api: {
