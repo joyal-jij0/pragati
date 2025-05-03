@@ -105,7 +105,7 @@ export default function Dashboard() {
 
   return (
     <motion.div
-      className="p-4 space-y-6 bg-gradient-to-b from-green-50 to-white min-h-screen"
+      className="p-4 pt-0 space-y-6 bg-gradient-to-b from-green-50 to-white min-h-screen"
       initial="hidden"
       animate="visible"
       variants={containerVariants}

@@ -54,7 +54,7 @@ const FasalDoctorPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-emerald-50">
-      <div className="container mx-auto px-4 py-6">
+      <div className="mx-auto px-4 pb-6">
         <motion.div
           variants={containerVariants}
           initial="hidden"
