@@ -366,7 +366,7 @@ const DiseaseIdentification = () => {
         <TabsContent value="upload" className="mt-0">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="md:col-span-2">
-              <Card className="border-green-100 shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+              <Card className="py-0 border-green-100 shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
                 <CardHeader className="bg-gradient-to-r from-green-600 to-green-500 text-white py-5">
                   <CardTitle className="flex items-center gap-3 text-xl">
                     <motion.div
@@ -497,7 +497,7 @@ const DiseaseIdentification = () => {
             </div>
 
             <div className="md:col-span-1">
-              <Card className="border-green-100 shadow-md h-full">
+              <Card className="py-0 border-green-100 shadow-md h-full">
                 <CardHeader className="bg-green-50 py-4">
                   <CardTitle className="text-green-800 flex items-center gap-2 text-base">
                     <Info className="h-5 w-5 text-green-600" />
