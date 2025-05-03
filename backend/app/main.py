@@ -9,7 +9,7 @@ from contextlib import asynccontextmanager
 
 from app.utils.api_models import ApiError
 from app.db.session import create_db_and_tables
-from app.api.v1.endpoints import healthcheck, users, weather, market_price_predict, disease_detect, pest_detect
+from app.api.v1.endpoints import healthcheck, users, weather, market_price_predict, disease_detect, pest_detect, get_schemes
 
 # Configure logging
 logging.basicConfig(
@@ -61,3 +61,4 @@ app.include_router(weather, prefix="/api/v1/weather", tags=["Weather"])
 app.include_router(market_price_predict, prefix="/api/v1/market-price", tags=["Market-Price"])
 app.include_router(disease_detect, prefix="/api/v1/disease-detect", tags=["Disease-Detect"])
 app.include_router(pest_detect, prefix="/api/v1/pest-detect", tags=["Pest-Detect"])
+app.include_router(get_schemes, prefix="/api/v1/schemes", tags=['Schemes'])
