@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/breadcrumb'
 import { Separator } from '@/components/ui/separator'
 import { UserNav } from '@/components/user-nav'
+import NotificationPopover from '@/components/Notificationpopover'
 
 export default function DashboardLayout({
   children, // will be a page or nested layout
@@ -59,6 +60,7 @@ export default function DashboardLayout({
             </div>
           </div>
           <div className="ml-auto px-2">
+            <NotificationPopover />
             <UserNav name="Raghav" info="Farmer" />
           </div>
         </header>

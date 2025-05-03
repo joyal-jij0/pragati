@@ -387,10 +387,10 @@ export const fasalDoctorData = {
       },
       tabs: [
         { label: "Disease Identification", value: "diagnosis" },
-        { label: "Treatment", value: "treatment" },
+        // { label: "Treatment", value: "treatment" },
         { label: "Pests", value: "pests" },
         { label: "Diseases", value: "diseases" },
-        { label: "History", value: "history" },
+        // { label: "History", value: "history" },
         { label: "Prevention", value: "prevention" },
         { label: "Community", value: "community" }
       ],

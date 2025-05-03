@@ -70,7 +70,7 @@ const FasalDoctorPage = () => {
           {/* Main Tabs */}
           <motion.div variants={itemVariants}>
             <Tabs defaultValue="diagnosis" className="w-full">
-              <TabsList className="grid grid-cols-7 mb-6 bg-white/50 p-1 rounded-lg">
+              <TabsList className="grid grid-cols-5 w-full mb-6 bg-white/50 p-1 rounded-lg">
                 {mainPage.tabs.map((tab) => (
                   <TabsTrigger
                     key={tab.value}
