@@ -30,87 +30,87 @@ const FinancialEducation = () => {
 
   // Categories
   const categories = [
-    { id: "all", name: "सभी" },
-    { id: "credit", name: "क्रेडिट" },
-    { id: "loans", name: "ऋण" },
-    { id: "insurance", name: "बीमा" },
-    { id: "savings", name: "बचत" },
-    { id: "market", name: "बाज़ार" }
+    { id: "all", name: "All" },
+    { id: "credit", name: "Credit" },
+    { id: "loans", name: "Loans" },
+    { id: "insurance", name: "Insurance" },
+    { id: "savings", name: "Savings" },
+    { id: "market", name: "Market" }
   ];
 
   // Educational resources
   const resources = [
     {
       id: 1,
-      title: "क्रेडिट स्कोर को कैसे सुधारें",
+      title: "How to Improve Credit Score",
       type: "article",
       category: "credit",
       thumbnail: "https://images.unsplash.com/photo-1579621970795-87facc2f976d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80",
-      duration: "5 मिनट",
-      author: "वित्तीय सलाहकार टीम",
+      duration: "5 mins",
+      author: "Financial Advisory Team",
       rating: 4.8,
       completed: true,
-      description: "अपने क्रेडिट स्कोर को बेहतर बनाने के लिए प्रभावी रणनीतियां सीखें।"
+      description: "Learn effective strategies to improve your credit score."
     },
     {
       id: 2,
-      title: "फसल बीमा का महत्व",
+      title: "Importance of Crop Insurance",
       type: "video",
       category: "insurance",
       thumbnail: "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80",
-      duration: "12 मिनट",
-      author: "कृषि विशेषज्ञ",
+      duration: "12 mins",
+      author: "Agriculture Expert",
       rating: 4.5,
       completed: false,
-      description: "फसल बीमा क्यों महत्वपूर्ण है और यह आपको कैसे सुरक्षा प्रदान करता है।"
+      description: "Why crop insurance is important and how it provides protection."
     },
     {
       id: 3,
-      title: "किसान क्रेडिट कार्ड गाइड",
+      title: "Kisan Credit Card Guide",
       type: "pdf",
       category: "credit",
       thumbnail: "https://images.unsplash.com/photo-1556742393-d75f468bfcb0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80",
-      duration: "8 पेज",
-      author: "वित्तीय सेवा विभाग",
+      duration: "8 pages",
+      author: "Financial Services Department",
       rating: 4.7,
       completed: false,
-      description: "किसान क्रेडिट कार्ड के लाभों और आवेदन प्रक्रिया के बारे में जानें।"
+      description: "Learn about Kisan Credit Card benefits and application process."
     },
     {
       id: 4,
-      title: "कृषि ऋण के प्रकार",
+      title: "Types of Agricultural Loans",
       type: "article",
       category: "loans",
       thumbnail: "https://images.unsplash.com/photo-1601599963565-b7f49deb352a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80",
-      duration: "7 मिनट",
-      author: "ग्रामीण बैंक",
+      duration: "7 mins",
+      author: "Rural Bank",
       rating: 4.3,
       completed: false,
-      description: "किसानों के लिए उपलब्ध विभिन्न प्रकार के ऋणों का विवरण।"
+      description: "Details of various types of loans available for farmers."
     },
     {
       id: 5,
-      title: "बचत की आदतें विकसित करना",
+      title: "Developing Savings Habits",
       type: "video",
       category: "savings",
       thumbnail: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80",
-      duration: "15 मिनट",
-      author: "वित्तीय शिक्षक",
+      duration: "15 mins",
+      author: "Financial Educator",
       rating: 4.9,
       completed: false,
-      description: "अपनी आय का प्रबंधन करने और बचत की आदतें विकसित करने के तरीके।"
+      description: "Ways to manage your income and develop saving habits."
     },
     {
       id: 6,
-      title: "कृषि उपज के लिए बाज़ार खोजना",
+      title: "Finding Markets for Agricultural Produce",
       type: "article",
       category: "market",
       thumbnail: "https://images.unsplash.com/photo-1488459716781-31db52582fe9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80",
-      duration: "6 मिनट",
-      author: "बाज़ार विशेषज्ञ",
+      duration: "6 mins",
+      author: "Market Expert",
       rating: 4.6,
       completed: false,
-      description: "अपनी फसल के लिए सर्वोत्तम बाज़ार और मूल्य कैसे प्राप्त करें।"
+      description: "How to find the best market and price for your crops."
     }
   ];
 
@@ -123,18 +123,18 @@ const FinancialEducation = () => {
   const upcomingWebinars = [
     {
       id: 1,
-      title: "फसल बीमा दावों को सफलतापूर्वक कैसे दर्ज करें",
-      date: "15 नवंबर, 2023",
-      time: "दोपहर 2:00 बजे",
-      speaker: "राजेश शर्मा, बीमा विशेषज्ञ",
+      title: "How to Successfully File Crop Insurance Claims",
+      date: "November 15, 2023",
+      time: "2:00 PM",
+      speaker: "Rajesh Sharma, Insurance Expert",
       participants: 45
     },
     {
       id: 2,
-      title: "छोटे किसानों के लिए वित्तीय प्रबंधन",
-      date: "20 नवंबर, 2023",
-      time: "सुबह 11:00 बजे",
-      speaker: "अनिता पटेल, वित्तीय सलाहकार",
+      title: "Financial Management for Small Farmers",
+      date: "November 20, 2023",
+      time: "11:00 AM",
+      speaker: "Anita Patel, Financial Advisor",
       participants: 32
     }
   ];
@@ -157,9 +157,9 @@ const FinancialEducation = () => {
     <div className="space-y-6">
       {/* Section Title */}
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-medium text-gray-800">वित्तीय शिक्षा</h3>
+        <h3 className="text-lg font-medium text-gray-800">Financial Education</h3>
         <button className="text-sm text-green-600 hover:text-green-700 font-medium flex items-center gap-1">
-          <span>सभी देखें</span>
+          <span>View All</span>
           <ChevronRight className="h-4 w-4" />
         </button>
       </div>
@@ -215,7 +215,7 @@ const FinancialEducation = () => {
                   }`}>
                     <div className="flex items-center gap-1">
                       {getResourceIcon(resource.type)}
-                      <span>{resource.type === 'article' ? 'लेख' : resource.type === 'video' ? 'वीडियो' : 'पीडीएफ'}</span>
+                      <span>{resource.type === 'article' ? 'Article' : resource.type === 'video' ? 'Video' : 'PDF'}</span>
                     </div>
                   </span>
                   <span className="text-xs text-gray-500 flex items-center gap-1">
@@ -236,11 +236,11 @@ const FinancialEducation = () => {
                   {resource.completed ? (
                     <span className="text-xs text-green-600 flex items-center gap-1">
                       <CheckCircle className="h-3 w-3" />
-                      पूरा किया गया
+                      Completed
                     </span>
                   ) : (
                     <button className="text-xs text-green-600 font-medium">
-                      {resource.type === 'pdf' ? 'डाउनलोड करें' : 'पढ़ें'}
+                      {resource.type === 'pdf' ? 'Download' : 'Read'}
                     </button>
                   )}
                 </div>
@@ -255,10 +255,10 @@ const FinancialEducation = () => {
         <div className="px-4 py-3 border-b border-gray-100 flex justify-between items-center">
           <h4 className="font-medium text-gray-800 flex items-center gap-1">
             <Video className="h-4 w-4 text-green-600" />
-            आगामी वेबिनार
+            Upcoming Webinars
           </h4>
           <button className="text-xs text-green-600 hover:text-green-700 font-medium">
-            सभी देखें
+            View All
           </button>
         </div>
         
@@ -274,12 +274,12 @@ const FinancialEducation = () => {
                   <span className="text-xs text-gray-500">{webinar.date}, {webinar.time}</span>
                   <span className="text-xs text-gray-500 flex items-center gap-1">
                     <Users className="h-3 w-3" />
-                    {webinar.participants} प्रतिभागी
+                    {webinar.participants} participants
                   </span>
                 </div>
-                <p className="text-xs text-gray-600 mt-1">प्रस्तुतकर्ता: {webinar.speaker}</p>
+                <p className="text-xs text-gray-600 mt-1">Speaker: {webinar.speaker}</p>
                 <button className="mt-2 text-xs bg-green-600 text-white px-3 py-1 rounded-full hover:bg-green-700 transition-colors">
-                  रजिस्टर करें
+                  Register
                 </button>
               </div>
             </div>
@@ -294,14 +294,14 @@ const FinancialEducation = () => {
             <TrendingUp className="h-5 w-5" />
           </div>
           <div>
-            <h4 className="font-medium text-gray-800 mb-1">आज का वित्तीय टिप</h4>
-            <p className="text-sm text-gray-700">अपनी आय का कम से कम 10% हमेशा बचत के लिए अलग रखें। यह आपको आपातकालीन स्थितियों के लिए तैयार रहने में मदद करेगा।</p>
+            <h4 className="font-medium text-gray-800 mb-1">Financial Tip of the Day</h4>
+            <p className="text-sm text-gray-700">Always set aside at least 10% of your income for savings. This will help you stay prepared for emergency situations.</p>
             <div className="mt-3 flex gap-2">
               <button className="text-xs bg-amber-600 text-white px-3 py-1 rounded-full hover:bg-amber-700 transition-colors">
-                और टिप्स पाएं
+                Get More Tips
               </button>
               <button className="text-xs bg-white text-amber-700 px-3 py-1 rounded-full border border-amber-300 hover:bg-amber-50 transition-colors">
-                शेयर करें
+                Share
               </button>
             </div>
           </div>
@@ -311,7 +311,7 @@ const FinancialEducation = () => {
       {/* Download Resources */}
       <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100">
         <div className="px-4 py-3 border-b border-gray-100">
-          <h4 className="font-medium text-gray-800">डाउनलोड करने योग्य संसाधन</h4>
+          <h4 className="font-medium text-gray-800">Downloadable Resources</h4>
         </div>
         
         <div className="p-4 space-y-3">
@@ -319,7 +319,7 @@ const FinancialEducation = () => {
             <div className="flex items-center gap-3">
               <BookOpen className="h-5 w-5 text-blue-600" />
               <div>
-                <h5 className="text-sm font-medium text-gray-800">वित्तीय नियोजन वर्कबुक</h5>
+                <h5 className="text-sm font-medium text-gray-800">Financial Planning Workbook</h5>
                 <p className="text-xs text-gray-500">PDF, 2.5 MB</p>
               </div>
             </div>
@@ -332,7 +332,7 @@ const FinancialEducation = () => {
             <div className="flex items-center gap-3">
               <FileText className="h-5 w-5 text-green-600" />
               <div>
-                <h5 className="text-sm font-medium text-gray-800">ऋण आवेदन चेकलिस्ट</h5>
+                <h5 className="text-sm font-medium text-gray-800">Loan Application Checklist</h5>
                 <p className="text-xs text-gray-500">PDF, 1.8 MB</p>
               </div>
             </div>
@@ -345,7 +345,7 @@ const FinancialEducation = () => {
             <div className="flex items-center gap-3">
               <FileText className="h-5 w-5 text-amber-600" />
               <div>
-                <h5 className="text-sm font-medium text-gray-800">बीमा दावा प्रक्रिया गाइड</h5>
+                <h5 className="text-sm font-medium text-gray-800">Insurance Claim Process Guide</h5>
                 <p className="text-xs text-gray-500">PDF, 3.2 MB</p>
               </div>
             </div>

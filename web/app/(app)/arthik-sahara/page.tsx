@@ -27,7 +27,7 @@ import FinancialEducation from '@/components/arthikSahara/FinancialEducation'
 import HeroSection from '@/components/HeroSection'
 
 export default function ArthikSaharaPage() {
-  const [location, setLocation] = useState('सोनीपत, हरियाणा')
+  const [location, setLocation] = useState('Sonipat, Haryana')
   const [activeTab, setActiveTab] = useState('creditDashboard')
   const [showAIAssistant, setShowAIAssistant] = useState(false)
 
@@ -78,7 +78,7 @@ export default function ArthikSaharaPage() {
               onClick={() => setActiveTab('creditDashboard')}
             >
               <CreditCard size={16} />
-              <span>क्रेडिट प्रोफाइल</span>
+              <span>Credit Profile</span>
             </button>
             <button
               className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 flex items-center gap-1 ${
@@ -89,7 +89,7 @@ export default function ArthikSaharaPage() {
               onClick={() => setActiveTab('loanMarketplace')}
             >
               <BarChart2 size={16} />
-              <span>ऋण बाज़ार</span>
+              <span>Loan Marketplace</span>
             </button>
             <button
               className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 flex items-center gap-1 ${
@@ -100,7 +100,7 @@ export default function ArthikSaharaPage() {
               onClick={() => setActiveTab('applications')}
             >
               <FileText size={16} />
-              <span>आवेदन स्थिति</span>
+              <span>Application Status</span>
             </button>
             <button
               className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 flex items-center gap-1 ${
@@ -111,7 +111,7 @@ export default function ArthikSaharaPage() {
               onClick={() => setActiveTab('improve')}
             >
               <TrendingUp size={16} />
-              <span>स्कोर सुधारें</span>
+              <span>Improve Score</span>
             </button>
 
             {/* Divider */}
@@ -127,7 +127,7 @@ export default function ArthikSaharaPage() {
               onClick={() => setActiveTab('insuranceDashboard')}
             >
               <Umbrella size={16} />
-              <span>बीमा डैशबोर्ड</span>
+              <span>Insurance Dashboard</span>
             </button>
             <button
               className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 flex items-center gap-1 ${
@@ -138,7 +138,7 @@ export default function ArthikSaharaPage() {
               onClick={() => setActiveTab('insuranceProducts')}
             >
               <AlertTriangle size={16} />
-              <span>बीमा योजनाएँ</span>
+              <span>Insurance Plans</span>
             </button>
             <button
               className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 flex items-center gap-1 ${
@@ -149,7 +149,7 @@ export default function ArthikSaharaPage() {
               onClick={() => setActiveTab('claims')}
             >
               <FileText size={16} />
-              <span>दावा स्थिति</span>
+              <span>Claim Status</span>
             </button>
           </div>
         </div>
@@ -200,13 +200,13 @@ export default function ArthikSaharaPage() {
                       clipRule="evenodd"
                     />
                   </svg>
-                  वित्तीय सहायक AI
+                  Financial Assistant AI
                 </h3>
               </div>
               <div className="p-4">
                 <p className="text-sm text-gray-600 mb-3">
-                  आपके वित्तीय प्रश्नों के उत्तर पाएं या ऋण और बीमा के बारे में
-                  जानकारी प्राप्त करें।
+                  Get answers to your financial questions or learn about loans
+                  and insurance.
                 </p>
                 <button
                   onClick={() => setShowAIAssistant(true)}
@@ -221,7 +221,7 @@ export default function ArthikSaharaPage() {
                     <path d="M4.913 2.658c2.075-.27 4.19-.408 6.337-.408 2.147 0 4.262.139 6.337.408 1.922.25 3.291 1.861 3.405 3.727a4.403 4.403 0 00-1.032-.211 50.89 50.89 0 00-8.42 0c-2.358.196-4.04 2.19-4.04 4.434v4.286a4.47 4.47 0 002.433 3.984L7.28 21.53A.75.75 0 016 21v-4.03a48.527 48.527 0 01-1.087-.128C2.905 16.58 1.5 14.833 1.5 12.862V6.638c0-1.97 1.405-3.718 3.413-3.979z" />
                     <path d="M15.75 7.5c-1.376 0-2.739.057-4.086.169C10.124 7.797 9 9.103 9 10.609v4.285c0 1.507 1.128 2.814 2.67 2.94 1.243.102 2.5.157 3.768.165l2.782 2.781a.75.75 0 001.28-.53v-2.39l.33-.026c1.542-.125 2.67-1.433 2.67-2.94v-4.286c0-1.505-1.125-2.811-2.664-2.94A49.392 49.392 0 0015.75 7.5z" />
                   </svg>
-                  सहायक से बात करें
+                  Chat with Assistant
                 </button>
               </div>
             </div>
@@ -242,7 +242,7 @@ export default function ArthikSaharaPage() {
                       clipRule="evenodd"
                     />
                   </svg>
-                  आपके लिए अनुशंसाएँ
+                  Recommendations for You
                 </h3>
               </div>
               <div className="p-4 space-y-3">
@@ -252,13 +252,13 @@ export default function ArthikSaharaPage() {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-800">
-                      फसल ऋण के लिए पात्र
+                      Eligible for Crop Loan
                     </p>
                     <p className="text-xs text-gray-500">
-                      आपका क्रेडिट स्कोर अब फसल ऋण के लिए पात्र है
+                      Your credit score now qualifies for crop loans
                     </p>
                     <button className="mt-1 text-green-600 text-xs font-medium">
-                      देखें →
+                      View →
                     </button>
                   </div>
                 </div>
@@ -268,13 +268,13 @@ export default function ArthikSaharaPage() {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-800">
-                      मौसम आधारित बीमा
+                      Weather-based Insurance
                     </p>
                     <p className="text-xs text-gray-500">
-                      आने वाले मानसून के लिए फसल बीमा करवाएं
+                      Get crop insurance for the upcoming monsoon
                     </p>
                     <button className="mt-1 text-amber-600 text-xs font-medium">
-                      जानकारी पाएं →
+                      Learn More →
                     </button>
                   </div>
                 </div>
@@ -299,7 +299,7 @@ export default function ArthikSaharaPage() {
                   <path d="M4.913 2.658c2.075-.27 4.19-.408 6.337-.408 2.147 0 4.262.139 6.337.408 1.922.25 3.291 1.861 3.405 3.727a4.403 4.403 0 00-1.032-.211 50.89 50.89 0 00-8.42 0c-2.358.196-4.04 2.19-4.04 4.434v4.286a4.47 4.47 0 002.433 3.984L7.28 21.53A.75.75 0 016 21v-4.03a48.527 48.527 0 01-1.087-.128C2.905 16.58 1.5 14.833 1.5 12.862V6.638c0-1.97 1.405-3.718 3.413-3.979z" />
                   <path d="M15.75 7.5c-1.376 0-2.739.057-4.086.169C10.124 7.797 9 9.103 9 10.609v4.285c0 1.507 1.128 2.814 2.67 2.94 1.243.102 2.5.157 3.768.165l2.782 2.781a.75.75 0 001.28-.53v-2.39l.33-.026c1.542-.125 2.67-1.433 2.67-2.94v-4.286c0-1.505-1.125-2.811-2.664-2.94A49.392 49.392 0 0015.75 7.5z" />
                 </svg>
-                वित्तीय सहायक AI
+                Financial Assistant AI
               </h3>
               <button
                 onClick={() => setShowAIAssistant(false)}
@@ -341,15 +341,15 @@ export default function ArthikSaharaPage() {
                   </svg>
                 </div>
                 <div className="bg-gray-100 rounded-lg p-3 text-sm text-gray-700 max-w-[85%]">
-                  नमस्ते! मैं आपका वित्तीय सहायक हूँ। मैं आपको ऋण, बीमा, या आपके
-                  क्रेडिट स्कोर के बारे में जानकारी दे सकता हूँ। आप मुझसे क्या
-                  पूछना चाहेंगे?
+                  Hello! I am your financial assistant. I can provide
+                  information about loans, insurance, or your credit score. What
+                  would you like to ask me?
                 </div>
               </div>
 
               <div className="flex items-start gap-3 justify-end">
                 <div className="bg-green-600 rounded-lg p-3 text-sm text-white max-w-[85%]">
-                  मुझे फसल ऋण के बारे में जानकारी चाहिए
+                  I need information about crop loans
                 </div>
                 <div className="bg-green-100 p-2 rounded-full">
                   <svg
@@ -385,25 +385,25 @@ export default function ArthikSaharaPage() {
                 </div>
                 <div className="bg-gray-100 rounded-lg p-3 text-sm text-gray-700 max-w-[85%]">
                   <p>
-                    फसल ऋण किसानों के लिए विशेष रूप से डिज़ाइन किए गए ऋण हैं जो
-                    फसल उत्पादन के लिए आवश्यक खर्चों को कवर करते हैं।
+                    Crop loans are specially designed loans for farmers to cover
+                    the expenses required for crop production.
                   </p>
-                  <p className="mt-2">हमारे प्लेटफॉर्म पर उपलब्ध फसल ऋण:</p>
+                  <p className="mt-2">Crop loans available on our platform:</p>
                   <ul className="list-disc pl-5 mt-1 space-y-1">
-                    <li>किसान क्रेडिट कार्ड (KCC) - 7% ब्याज दर</li>
-                    <li>फसल उत्पादन ऋण - 9.5% ब्याज दर</li>
-                    <li>छोटे किसान विकास ऋण - 8.75% ब्याज दर</li>
+                    <li>Farmer Credit Card (KCC) - 7% interest rate</li>
+                    <li>Crop Production Loan - 9.5% interest rate</li>
+                    <li>Small Farmer Development Loan - 8.75% interest rate</li>
                   </ul>
                   <p className="mt-2">
-                    आपका वर्तमान क्रेडिट स्कोर 68/100 है, जो आपको इन ऋणों के लिए
-                    पात्र बनाता है।
+                    Your current credit score is 68/100, which makes you
+                    eligible for these loans.
                   </p>
                   <div className="mt-3 flex gap-2">
                     <button className="bg-green-600 text-white text-xs px-3 py-1 rounded-full">
-                      ऋण बाज़ार देखें
+                      View Loan Marketplace
                     </button>
                     <button className="bg-white border border-gray-300 text-gray-700 text-xs px-3 py-1 rounded-full">
-                      पात्रता जांचें
+                      Check Eligibility
                     </button>
                   </div>
                 </div>
@@ -414,7 +414,7 @@ export default function ArthikSaharaPage() {
               <div className="flex gap-2">
                 <input
                   type="text"
-                  placeholder="अपना प्रश्न यहां टाइप करें..."
+                  placeholder="Type your question here..."
                   className="flex-1 border border-gray-300 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 />
                 <button className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-full transition-colors">
@@ -441,7 +441,7 @@ export default function ArthikSaharaPage() {
       >
         <div className="bg-white rounded-lg max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto">
           <div className="flex justify-between items-start mb-4">
-            <h2 className="text-lg font-bold text-gray-800">डेटा सहमति</h2>
+            <h2 className="text-lg font-bold text-gray-800">Data Consent</h2>
             <button className="text-gray-500 hover:text-gray-700">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -462,9 +462,9 @@ export default function ArthikSaharaPage() {
 
           <div className="space-y-4">
             <p className="text-sm text-gray-600">
-              आपके वैकल्पिक क्रेडिट स्कोर को बनाने के लिए, हमें आपके प्लेटफॉर्म
-              डेटा का उपयोग करने की आवश्यकता है। यह आपको पारंपरिक क्रेडिट इतिहास
-              के बिना भी वित्तीय सेवाओं तक पहुंच प्राप्त करने में मदद करेगा।
+              To build your alternative credit score, we need to use your
+              platform data. This will help you access financial services even
+              without a traditional credit history.
             </p>
 
             <div className="bg-amber-50 border-l-4 border-amber-500 p-4">
@@ -485,8 +485,8 @@ export default function ArthikSaharaPage() {
                 </div>
                 <div className="ml-3">
                   <p className="text-sm text-amber-700">
-                    आपका डेटा केवल आपकी सहमति से साझा किया जाएगा और केवल वित्तीय
-                    संस्थानों के साथ जिन्हें आप ऋण के लिए आवेदन करते हैं।
+                    Your data will only be shared with your consent and only
+                    with financial institutions you apply for loans with.
                   </p>
                 </div>
               </div>
@@ -494,7 +494,7 @@ export default function ArthikSaharaPage() {
 
             <div>
               <h3 className="font-medium text-gray-800 mb-2">
-                हम निम्न डेटा एकत्र करेंगे:
+                We will collect the following data:
               </h3>
               <ul className="space-y-2">
                 <li className="flex items-center gap-2">
@@ -511,7 +511,7 @@ export default function ArthikSaharaPage() {
                     />
                   </svg>
                   <span className="text-sm text-gray-700">
-                    फसल और खेती का विवरण
+                    Crop and farming details
                   </span>
                 </li>
                 <li className="flex items-center gap-2">
@@ -528,7 +528,7 @@ export default function ArthikSaharaPage() {
                     />
                   </svg>
                   <span className="text-sm text-gray-700">
-                    बाजार लेनदेन और बिक्री रिकॉर्ड
+                    Market transactions and sales records
                   </span>
                 </li>
                 <li className="flex items-center gap-2">
@@ -545,7 +545,7 @@ export default function ArthikSaharaPage() {
                     />
                   </svg>
                   <span className="text-sm text-gray-700">
-                    सलाह अपनाने का इतिहास
+                    History of advice adoption
                   </span>
                 </li>
                 <li className="flex items-center gap-2">
@@ -562,7 +562,7 @@ export default function ArthikSaharaPage() {
                     />
                   </svg>
                   <span className="text-sm text-gray-700">
-                    ऐप उपयोग और सहभागिता
+                    App usage and engagement
                   </span>
                 </li>
                 <li className="flex items-center gap-2">
@@ -579,7 +579,7 @@ export default function ArthikSaharaPage() {
                     />
                   </svg>
                   <span className="text-sm text-gray-700">
-                    FPO सदस्यता और गतिविधियां
+                    FPO membership and activities
                   </span>
                 </li>
               </ul>
@@ -588,10 +588,10 @@ export default function ArthikSaharaPage() {
 
           <div className="mt-6 flex flex-col gap-3">
             <button className="bg-green-600 hover:bg-green-700 text-white py-2 rounded-md text-sm font-medium transition-colors">
-              मैं सहमत हूँ और जारी रखना चाहता हूँ
+              I Agree and Want to Proceed
             </button>
             <button className="border border-gray-300 hover:border-gray-400 text-gray-700 py-2 rounded-md text-sm font-medium transition-colors">
-              अभी नहीं
+              Not Now
             </button>
           </div>
         </div>
