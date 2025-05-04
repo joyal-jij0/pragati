@@ -181,7 +181,7 @@ export const financialToolsService = {
       if (!GEMINI_API_KEY || GEMINI_API_KEY === "YOUR_GEMINI_API_KEY") {
         console.warn("No Gemini API key provided, using mock responses");
         // Return mock data if no API key is provided
-        return getMockLoanRecommendationsForProfile(farmerProfile);
+        return getMockLoanRecommendations(farmerProfile);
       }
 
       // Format the prompt for the Gemini API
@@ -259,7 +259,7 @@ export const financialToolsService = {
       }
     } catch (error) {
       console.error("Error calling Gemini API for loan recommendations:", error);
-      return getMockLoanRecommendationsForProfile(farmerProfile);
+      return getMockLoanRecommendations(farmerProfile);
     }
   },
 
