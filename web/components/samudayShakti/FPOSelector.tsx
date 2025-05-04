@@ -48,7 +48,6 @@ const FPOSelector = ({ selectedFPO, joinedFPOs, onChangeFPO, onLeaveFPO }: FPOSe
       toast.success(`Successfully left ${fpo.name}`);
     } catch (error) {
       console.error('Error leaving FPO:', error);
-      {/* @ts-expect-error - prototype error */}
       toast.error(error.message || 'Failed to leave FPO');
     } finally {
       setIsLeaving(false);
