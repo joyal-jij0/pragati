@@ -63,10 +63,11 @@ export default function ProfilePage() {
 
   useEffect(() => {
     supabase.auth.getSession().then((session) => {
-      session.data.session?.user && setUser(session.data.session?.user)
-      // do something here with the session like  ex: setState(session)
+      if (session.data.session?.user) {
+        setUser(session.data.session.user)
+      }
     })
-  }, [])
+  }, [supabase.auth])
 
   // Update profile data if session exists
   useEffect(() => {
