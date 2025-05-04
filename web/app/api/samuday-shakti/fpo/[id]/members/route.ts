@@ -1,15 +1,13 @@
-// app/api/samuday-shakti/fpo/[id]/members/route.ts
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
 export type FPOMemberType = {
-  id: string // Updated to string/UUID
+  id: string
   email: string
-  // Optional fields that could be fetched through additional queries
+  // Optional fields that are generated synthetically
   details?: {
-    name?: string
     phone?: string
     avatar?: string
     location?: string
@@ -39,7 +37,6 @@ export async function GET(
     }
 
     // Get members with user details
-    // Using the many-to-many relationship between profiles and fpos
     const fpoWithMembers = await prisma.fpo.findUnique({
       where: { id: fpoId },
       include: {
@@ -54,8 +51,7 @@ export async function GET(
     // Get the members from the relationship
     const members = fpoWithMembers.farmers
 
-    // In a real application, you might fetch additional user details from another table
-    // For now, we'll enhance the data with some mock details
+    // Enhance the data with synthetic details
     const enhancedMembers = members.map((member) => {
       // Generate consistent mock data based on user ID
       const mockDetails = generateMockMemberDetails(member.id)
@@ -77,7 +73,6 @@ export async function GET(
 }
 
 // Helper function to generate mock member details for demo purposes
-// In a real application, this data would come from your database
 function generateMockMemberDetails(userId: string) {
   // Create a numeric value from the UUID for deterministic mocking
   const numericValue = parseInt(userId.replace(/[^0-9]/g, '').substring(0, 6))
@@ -93,23 +88,8 @@ function generateMockMemberDetails(userId: string) {
   ]
   const locations = ['Sonipat', 'Panipat', 'Karnal', 'Rohtak', 'Jhajjar']
 
-  // Use userId to create deterministic mock data
-  const nameIndex = numericValue % 10
-  const names = [
-    'Ramvir Singh',
-    'Sunita Devi',
-    'Prakash Kumar',
-    'Kavita Sharma',
-    'Rajesh Verma',
-    'Anita Yadav',
-    'Surender Malik',
-    'Pooja Devi',
-    'Manoj Kumar',
-    'Rekha Tomar',
-  ]
-
   return {
-    name: names[nameIndex],
+    // No name field since it doesn't exist in the schema
     phone: `+91 9${numericValue}${(numericValue * 7) % 10000}${
       numericValue % 10000
     }`.substring(0, 14),
