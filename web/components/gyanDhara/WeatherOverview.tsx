@@ -116,7 +116,7 @@ const WeatherOverview = () => {
         <div className="p-6">
           <div className="flex justify-between items-start">
             <div>
-              <h2 className="text-2xl font-bold">Today's Weather</h2>
+              <h2 className="text-2xl font-bold">Today&apos;s Weather</h2>
               <p className="text-blue-100">{weatherData.resolvedAddress}</p>
               <p className="text-blue-100">{formatDateInEnglish(new Date())}</p>
             </div>
