@@ -231,6 +231,11 @@ const PestLibrary: React.FC = () => {
         throw new Error('Invalid API response format: missing data object')
       }
 
+      // Get images from API response and add base URL
+      const pestImages = data.images 
+        ? data.images.map(img => img.startsWith('http') ? img : `http://127.0.0.1:8000${img}`)
+        : [];
+
       // Map the API response to our component's data structure
       const mappedResults: AnalysisResults = {
         pestName: pestName,
@@ -240,7 +245,7 @@ const PestLibrary: React.FC = () => {
         causes: data.data.causes || [],
         severity: determineSeverity(data.data),
         treatments: data.data.pesticides ? [data.data.pesticides] : [],
-        images: data.images || [],
+        images: pestImages,
       }
 
       // Complete the analysis
