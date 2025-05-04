@@ -6,6 +6,7 @@ const prisma = new PrismaClient()
 export type FPOMemberType = {
   id: string
   email: string
+  name: string // Added name field
   // Optional fields that are generated synthetically
   details?: {
     phone?: string
@@ -40,7 +41,13 @@ export async function GET(
     const fpoWithMembers = await prisma.fpo.findUnique({
       where: { id: fpoId },
       include: {
-        farmers: true, // This brings all profiles connected to this FPO
+        farmers: {
+          select: {
+            id: true,
+            email: true,
+            display_name: true,
+          },
+        },
       },
     })
 
