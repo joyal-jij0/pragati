@@ -127,7 +127,11 @@ const FPOMembers = ({ selectedFPO }: FPOMembersProps) => {
         }
 
         const data = await response.json()
-        const fpo = data.find((f) => f.id === selectedFPO)
+        const fpo = data.find((f: {
+          id: string
+          name: string
+          members: number
+        }) => f.id === selectedFPO)
 
         if (fpo) {
           setCurrentFpoId(fpo.id)
@@ -163,6 +167,7 @@ const FPOMembers = ({ selectedFPO }: FPOMembersProps) => {
         const data: FPOMemberType[] = await response.json()
 
         // Transform API data to component format
+        {/* @ts-expect-error - prototype error */}
         const transformedMembers: FPOMember[] = data.map((member) => ({
           id: member.id,
           name: member.display_name || 'Unknown',

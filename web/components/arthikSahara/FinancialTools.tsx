@@ -724,39 +724,6 @@ const FinancialTools = () => {
                 </div>
               </div>
               
-              <div className="space-y-3">
-                {financialFaqs.map((faq) => (
-                  <motion.div
-                    key={faq.id}
-                    variants={itemVariants}
-                    className="bg-white rounded-lg shadow-sm overflow-hidden"
-                  >
-                    <button
-                      onClick={() => toggleFaq(faq.id)}
-                      className="w-full flex items-center justify-between p-4 text-left"
-                    >
-                      <h4 className="font-medium text-gray-800">{faq.question}</h4>
-                      <ChevronDown
-                        className={`h-5 w-5 text-gray-500 transition-transform ${
-                          expandedFaq === faq.id ? "transform rotate-180" : ""
-                        }`}
-                      />
-                    </button>
-                    
-                    {expandedFaq === faq.id && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        className="px-4 pb-4"
-                      >
-                        <p className="text-gray-600 text-sm">{faq.answer}</p>
-                      </motion.div>
-                    )}
-                  </motion.div>
-                ))}
-              </div>
-              
               <div className="mt-6 flex justify-center">
                 <button className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg transition-colors">
                   <HelpCircle className="h-4 w-4" />
