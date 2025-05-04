@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Fpo {
-  id          String     @id @db.Uuid @default(uuid())
+  id          String     @id @default(uuid()) @db.Uuid
   name        String
   description String
   location    String
@@ -18,14 +18,15 @@ model Fpo {
 }
 
 model profiles {
-  id       String    @id @db.Uuid @default(uuid())
-  email    String    @unique @db.VarChar(256)
-  fpos     Fpo[]     @relation("UserFpo")
-  messages Message[] @relation("UserMessages") // New field to track user messages
+  id           String    @id @default(uuid()) @db.Uuid
+  email        String    @unique @db.VarChar(256)
+  display_name String?
+  fpos         Fpo[]     @relation("UserFpo")
+  messages     Message[] @relation("UserMessages") // New field to track user messages
 }
 
 model Message {
-  id        String   @id @db.Uuid @default(uuid())
+  id        String   @id @default(uuid()) @db.Uuid
   content   String // The text content of the message
   createdAt DateTime @default(now()) // Timestamp of the message
   fpo       Fpo      @relation("FpoMessages", fields: [fpoId], references: [id])

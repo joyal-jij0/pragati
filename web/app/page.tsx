@@ -165,7 +165,7 @@ export default function LandingPage() {
                   className="w-full h-auto hover:scale-105 transition-transform duration-500"
                 /> */}
                 <img
-                  src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
+                  src="https://media.istockphoto.com/id/1333908015/photo/myanmar-hpa-han-workers-in-the-fields.jpg?s=612x612&w=0&k=20&c=b1E1qrxKsIMK7m1JGSNYTK4Pf8kLYGLH-2WKPWpvtDE="
                   alt="Farmer using Krishi Sahayak"
                   // width={800}
                   // height={600}
