@@ -21,7 +21,6 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "suppressImplicitAnyIndexErrors": true,
     "allowUnusedLabels": true,
     "noErrorTruncation": true,
     "plugins": [
