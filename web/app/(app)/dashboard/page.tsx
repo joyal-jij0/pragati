@@ -135,7 +135,7 @@ export default function Dashboard() {
 
         {/* Advisory Card */}
         <motion.div variants={itemVariants}>
-          {/* @ts-expect-error */}
+          {/* @ts-expect-error - Advisory component expects a strict type for advisories prop */}
           <AdvisoryCard advisories={advisoryData} />
         </motion.div>
 
@@ -162,7 +162,7 @@ export default function Dashboard() {
           variants={itemVariants}
           className="md:col-span-2 lg:col-span-2"
         >
-          {/* @ts-expect-error */}
+          {/* @ts-expect-error - RecommendationCard component expects a strict type for recommendations prop */}
           <RecommendationCard recommendations={recommendationData} />
         </motion.div>
 
