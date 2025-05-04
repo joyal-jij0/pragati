@@ -3,9 +3,9 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-export async function GET({ params }: { params: Promise<{ id: string }> }) {
+export async function GET({ params }: { params: { id: string } }) {
   try {
-    const id = (await params).id
+    const id = params.id
 
     const fpo = await prisma.fpo.findUnique({
       where: {
