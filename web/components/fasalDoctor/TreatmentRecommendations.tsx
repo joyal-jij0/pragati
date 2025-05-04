@@ -365,7 +365,7 @@ const TreatmentRecommendations = () => {
                         सुरक्षा सावधानियां
                       </h5>
                       <ul className="text-sm text-gray-600 space-y-1 mb-4">
-                        {/* @ts-expect-error - prototype error */}
+                        {/* prototype error */}
                         {treatment.safetyPrecautions.map((precaution, index) => (
                           <li key={index} className="flex items-start gap-2">
                             <Check className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
@@ -394,7 +394,7 @@ const TreatmentRecommendations = () => {
                     <>
                       <h5 className="text-sm font-medium text-gray-800 mb-2">अतिरिक्त लाभ</h5>
                       <ul className="text-sm text-gray-600 space-y-1">
-                        {/* @ts-expect-error - prototype error */}
+                        {/* prototype error */}
                         {treatment.additionalBenefits.map((benefit, index) => (
                           <li key={index} className="flex items-start gap-2">
                             <Check className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
@@ -409,7 +409,7 @@ const TreatmentRecommendations = () => {
                     <>
                       <h5 className="text-sm font-medium text-gray-800 mb-2">अतिरिक्त लाभ</h5>
                       <ul className="text-sm text-gray-600 space-y-1">
-                        {/* @ts-expect-error - prototype error */}
+                        {/* prototype error */}
                         {treatment.additionalBenefits.map((benefit, index) => (
                           <li key={index} className="flex items-start gap-2">
                             <Check className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />

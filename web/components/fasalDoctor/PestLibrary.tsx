@@ -1086,16 +1086,16 @@ const PestLibrary: React.FC = () => {
                         >
                           <Avatar className="h-8 w-8">
                             <AvatarImage
-                            // @ts-expect-error - supressing error for prototype build
+                            // supressing error for prototype build
                               src={insight.farmerAvatar}
-                              // @ts-expect-error - supressing error for prototype build
+                              // supressing error for prototype build
                               alt={insight.farmerName}
                             />
                             <AvatarFallback className="bg-green-100 text-green-800 text-xs">
-                              {/* @ts-expect-error - supressing error for prototype build */}
+                              {/* supressing error for prototype build */}
                               {insight.farmerName
                                 .split(' ')
-                                // @ts-expect-error - supressing error for prototype build
+                                // supressing error for prototype build
                                 .map((n) => n[0])
                                 .join('')}
                             </AvatarFallback>
@@ -1103,7 +1103,7 @@ const PestLibrary: React.FC = () => {
                           <div>
                             <div className="flex items-center gap-2">
                               <h4 className="text-sm font-medium text-gray-800">
-{/* @ts-expect-error - supressing error for prototype build */}
+{/* supressing error for prototype build */}
                                 {insight.farmerName}
                               </h4>
                               <span className="text-xs text-gray-500">
@@ -1111,7 +1111,7 @@ const PestLibrary: React.FC = () => {
                               </span>
                             </div>
                             <p className="text-xs text-gray-600 mt-1">
-{/* @ts-expect-error - supressing error for prototype build */}
+{/* supressing error for prototype build */}
                               "{insight.comment}"
                             </p>
                             <div className="flex items-center gap-2 mt-2">
