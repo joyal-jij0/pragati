@@ -38,8 +38,9 @@ export default function Dashboard() {
 
   useEffect(() => {
     supabase.auth.getSession().then((session) => {
-      session.data.session?.user.user_metadata.full_name &&
-        setfarmerName(session.data.session?.user.user_metadata.full_name)
+      if (session.data.session?.user.user_metadata.full_name) {
+        setfarmerName(session.data.session.user.user_metadata.full_name)
+      }
       // do something here with the session like  ex: setState(session)
     })
   }, [])
