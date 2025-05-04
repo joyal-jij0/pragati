@@ -328,19 +328,15 @@ export default function SamudayShaktiPage() {
               {activeSection === 'myFPO' && (
                 <>
                   {activeTab === 'fpoDashboard' && (
-                    // @ts-expect-error - fpo is used in a simple filter operation
                     <FPODashboard selectedFPO={selectedFPO?.id} />
                   )}
                   {activeTab === 'groupChat' && (
-                    // @ts-expect-error - fpo is used in a simple filter operation
                     <GroupChatAnnouncements selectedFPO={selectedFPO?.id} />
                   )}
                   {activeTab === 'equipment' && (
-                    // @ts-expect-error - fpo is used in a simple filter operation
                     <EquipmentRental selectedFPO={selectedFPO?.id} />
                   )}
                   {activeTab === 'members' && (
-                    // @ts-expect-error - fpo is used in a simple filter operation
                     <FPOMembers selectedFPO={selectedFPO?.id} />
                   )}
                 </>
