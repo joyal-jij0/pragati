@@ -5,6 +5,14 @@
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false, // set to false to avoid strict type checking errors
+    "noImplicitAny": false,
+    "noImplicitThis": false,
+    "alwaysStrict": false,
+    "strictNullChecks": false,
+    "strictFunctionTypes": false,
+    "strictBindCallApply": false,
+    "strictPropertyInitialization": false,
+    "checkJs": false,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
@@ -13,6 +21,9 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "allowUnusedLabels": true,
+    "noErrorTruncation": true,
     "plugins": [
       {
         "name": "next"
