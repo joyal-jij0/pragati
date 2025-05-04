@@ -71,6 +71,11 @@ const data = {
       url: '/samuday-shakti',
       icon: '👨‍👩‍👧‍👦',
     },
+    {
+      title: 'Krishi Sahayak AI',
+      url: '/ai-assistant',
+      icon: '🧑‍🌾',
+    },
   ],
 }
 

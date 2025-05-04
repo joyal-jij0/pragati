@@ -271,8 +271,8 @@ export const ChatInterface: React.FC = () => {
                 <span className="text-xl">🤖</span>
               </div>
               <div>
-                <h3 className="font-bold text-gray-800 text-lg">किसान सहायक</h3>
-                <p className="text-xs text-gray-500">AI द्वारा संचालित</p>
+                <h3 className="font-bold text-gray-800 text-lg">Krishi Sahayak Assistant</h3>
+                <p className="text-xs text-gray-500">Powered by AI</p>
               </div>
             </div>
             
