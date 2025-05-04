@@ -1,3 +1,14 @@
+.git
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+ml_models/
+static/uploads/
+*.zip
+*.tar
+*.tar.gz
+.elasticbeanstalk/
 .env
 .venv
 app/api/__pycache__
