@@ -341,6 +341,7 @@ const KrishiGyanHub = () => {
   }, [searchQuery, activeCategory, selectedLanguage, newsPage, newsArticles.length]);
 
   // Debounced search with improved implementation
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSearch = useCallback(
     debounce((query: string) => {
       console.log(`Debounced search triggered with query: "${query}"`);

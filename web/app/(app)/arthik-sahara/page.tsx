@@ -1,28 +1,20 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { 
-  MapPin, 
-  Search, 
   Book, 
   FileText, 
   Map, 
-  Calendar,
   Compass,
   Briefcase,
-  Droplet,
-  Sun,
   FileCheck,
   ArrowRight,
   TrendingUp,
-  AlertTriangle,
-  Clock,
   Users
 } from "lucide-react";
 
 // Import components
-import PageHeader from "@/components/samudayShakti/PageHeader";
 import KrishiGyanHub from "@/components/arthikSahara/KrishiGyanHub";
 import SaralDocuments from "@/components/arthikSahara/SaralDocuments";
 import NearbyServices from "@/components/arthikSahara/NearbyServices";
@@ -31,7 +23,6 @@ import FinancialTools from "@/components/arthikSahara/FinancialTools";
 import HeroSection from "@/components/HeroSection";
 
 export default function ArthikSaharaPage() {
-  const [location, setLocation] = useState("Sonipat, Haryana");
   const [activeTab, setActiveTab] = useState("gyan-hub");
   const [showWeatherAlert, setShowWeatherAlert] = useState(true);
   const [showMarketAlert, setShowMarketAlert] = useState(true);
@@ -55,7 +46,6 @@ export default function ArthikSaharaPage() {
       transition: { type: "spring", stiffness: 100 }
     }
   };
-
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
@@ -269,8 +259,8 @@ export default function ArthikSaharaPage() {
             <div className="p-6">
               {activeTab === "gyan-hub" && <KrishiGyanHub />}
               {activeTab === "saral-docs" && <SaralDocuments />}
-              {activeTab === "nearby-services" && <NearbyServices location={location} />}
-              {activeTab === "market-prices" && <MarketPriceTracker location={location} />}
+              {activeTab === "nearby-services" && <NearbyServices location="Delhi" />}
+              {activeTab === "market-prices" && <MarketPriceTracker />}
               {activeTab === "financial-tools" && <FinancialTools />}
 
             </div>

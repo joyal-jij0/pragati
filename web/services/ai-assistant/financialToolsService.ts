@@ -181,7 +181,7 @@ export const financialToolsService = {
       if (!GEMINI_API_KEY || GEMINI_API_KEY === "YOUR_GEMINI_API_KEY") {
         console.warn("No Gemini API key provided, using mock responses");
         // Return mock data if no API key is provided
-        return getMockLoanRecommendationsForProfile(farmerProfile);
+        return getMockLoanRecommendations(farmerProfile);
       }
 
       // Format the prompt for the Gemini API
@@ -259,7 +259,7 @@ export const financialToolsService = {
       }
     } catch (error) {
       console.error("Error calling Gemini API for loan recommendations:", error);
-      return getMockLoanRecommendationsForProfile(farmerProfile);
+      return getMockLoanRecommendations(farmerProfile);
     }
   },
 
@@ -594,7 +594,7 @@ function getMockFinancialAdvice(cropResults: CropCalculationResult): FinancialAd
     
     profitabilityAnalysis: `The investment of ₹${cropResults.totalInvestment.toFixed(2)} is expected to generate revenue of ₹${cropResults.expectedRevenue.toFixed(2)}, resulting in a ${profit > 0 ? "profit" : "loss"} of ₹${Math.abs(profit).toFixed(2)}. Your break-even price is ₹${cropResults.breakEvenPrice.toFixed(2)} per unit, which is ${cropResults.breakEvenPrice < cropResults.crop.currentPrice ? "below" : "above"} the current market price of ₹${cropResults.crop.currentPrice}.`,
     
-    riskAssessment: `${cropName} has ${riskLevel} sensitivity to weather conditions. Your current weather assumption is "${cropResults.weatherCondition}" which affects yield by ${cropResults.weatherCondition === "favorable" ? "+20%" : cropResults.weatherCondition === "unfavorable" ? "-20%" : "0%"}. Market price fluctuations and unexpected pest/disease outbreaks remain additional risk factors.`,
+    riskAssessment: `${cropName} has ${riskLevel} sensitivity to weather conditions. Market price fluctuations and unexpected pest/disease outbreaks remain additional risk factors.`,
     
     recommendations: [
       `Consider ${cropResults.interestRate > 7 ? "refinancing at a lower interest rate" : "maintaining your current loan terms"} to optimize financial outcomes.`,

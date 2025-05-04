@@ -63,16 +63,16 @@ export const groqService = {
         if (messages[i].role === "user") {
           const content = typeof messages[i].content === 'string' 
             ? messages[i].content 
-            : messages[i].content.text;
+            : messages[i].content.text || '';
           
           // Extract language code from [LANG:xx] format
-          const langMatch = content.match(/\[LANG:([a-z]{2})\]/);
+          const langMatch = content.toString().match(/\[LANG:([a-z]{2})\]/);
           if (langMatch && langMatch[1]) {
             languageCode = langMatch[1];
           }
           
           // Store the user query (without the language tag)
-          userQuery = content.replace(/\[LANG:[a-z]{2}\]\s*/, "");
+          userQuery = (typeof content === 'string' ? content : content.text || '').replace(/\[LANG:[a-z]{2}\]\s*/, "");
           break;
         }
       }
@@ -81,7 +81,7 @@ export const groqService = {
       const languageName = languageNames[languageCode] || languageNames["hi"];
       
       // Format messages for the Groq API
-      const formattedMessages = [
+      const formattedMessages: GroqRequest['messages'] = [
         {
           role: "system",
           content: `You are a knowledgeable agricultural assistant for Indian farmers. Provide helpful, accurate, and practical advice about farming, crops, weather, market prices, government schemes, and agricultural best practices.

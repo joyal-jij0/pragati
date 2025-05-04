@@ -2,38 +2,8 @@
 
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import {
-  Bot,
-  Send,
-  Mic,
-  Image as ImageIcon,
-  Loader2,
-  ChevronDown,
-  X,
-  ChevronRight,
-  MessageSquare,
-  Settings,
-  Save,
-  Download,
-  CheckCircle2,
-  Info,
-  Camera,
-  Leaf,
-  Sun,
-  CloudRain,
-  Tractor,
-  Droplets,
-  Sprout,
-  Wheat,
-  Users,
-} from 'lucide-react'
 import { ChatInterface } from '@/components/ai-assistant/ChatInterface'
-import { FeatureCard } from '@/components/ai-assistant/FeatureCard'
 import { useAIAssistant } from '@/store/ai-assistant/useAIAssistant'
-// import DashboardHeader from "@/components/DashboardHeader";
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import HeroSection from '@/components/HeroSection'
 
 export default function AIAssistantPage() {

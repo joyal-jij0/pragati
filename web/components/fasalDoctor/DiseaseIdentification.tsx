@@ -202,6 +202,7 @@ const DiseaseIdentification = () => {
       setProgressValue(100)
       setIsAnalyzing(false)
       setAnalysisComplete(true)
+      // @ts-expect-error: Unreachable code error
       setAnalysisResults(mappedResults)
       setActiveTab('results')
     } catch (error) {

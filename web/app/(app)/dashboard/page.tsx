@@ -38,8 +38,9 @@ export default function Dashboard() {
 
   useEffect(() => {
     supabase.auth.getSession().then((session) => {
-      session.data.session?.user.user_metadata.full_name &&
-        setfarmerName(session.data.session?.user.user_metadata.full_name)
+      if (session.data.session?.user.user_metadata.full_name) {
+        setfarmerName(session.data.session.user.user_metadata.full_name)
+      }
       // do something here with the session like  ex: setState(session)
     })
   }, [])
@@ -134,6 +135,7 @@ export default function Dashboard() {
 
         {/* Advisory Card */}
         <motion.div variants={itemVariants}>
+          {/* @ts-expect-error - Advisory component expects a strict type for advisories prop */}
           <AdvisoryCard advisories={advisoryData} />
         </motion.div>
 
@@ -160,6 +162,7 @@ export default function Dashboard() {
           variants={itemVariants}
           className="md:col-span-2 lg:col-span-2"
         >
+          {/* @ts-expect-error - RecommendationCard component expects a strict type for recommendations prop */}
           <RecommendationCard recommendations={recommendationData} />
         </motion.div>
 

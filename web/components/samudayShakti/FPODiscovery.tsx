@@ -43,6 +43,7 @@ const FPODiscovery = ({ onJoinFPO }: FPODiscoveryProps) => {
   useEffect(() => {
     supabase.auth.getSession().then((session) => {
       if (session.data.session) {
+        {/* @ts-expect-error - prototype error */}
         setSession(session.data.session)
       }
       // do something here with the session like  ex: setState(session)

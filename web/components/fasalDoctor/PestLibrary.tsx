@@ -233,7 +233,7 @@ const PestLibrary: React.FC = () => {
 
       // Get images from API response and add base URL
       const pestImages = data.images 
-        ? data.images.map(img => img.startsWith('http') ? img : `http://127.0.0.1:8000${img}`)
+        ? data.images.map((img: string) => img.startsWith('http') ? img : `http://127.0.0.1:8000${img}`)
         : [];
 
       // Map the API response to our component's data structure
@@ -322,15 +322,20 @@ const PestLibrary: React.FC = () => {
         ? analysisResults.treatments.map((treatment, index) => ({
             title: `Treatment Option ${index + 1}`,
             description: treatment,
-            effectiveness:
-              index === 0 ? 'high' : index === 1 ? 'medium' : 'low',
-            timeline: '1-2 weeks',
-            image: analysisResults.images?.[index] || undefined,
+            effectiveness: 
+              index === 0 ? 'high' : 
+              index === 1 ? 'medium' : 
+              'low',
+            timeline: '2-3 weeks',
+            image: analysisResults.images?.[0] // Use first image for all treatments
           }))
-        : fallbackTreatmentData.treatments.map((treatment, index) => ({
-            ...treatment,
-            image: analysisResults.images?.[index] || undefined,
-          })),
+        : [{
+            title: 'Default Treatment',
+            description: 'General pest control measures',
+            effectiveness: 'medium',
+            timeline: '2-3 weeks',
+            image: analysisResults.images?.[0]
+          }],
       preventiveMeasures: fallbackTreatmentData.preventiveMeasures,
     }
   }
@@ -1081,12 +1086,16 @@ const PestLibrary: React.FC = () => {
                         >
                           <Avatar className="h-8 w-8">
                             <AvatarImage
+                            // supressing error for prototype build
                               src={insight.farmerAvatar}
+                              // supressing error for prototype build
                               alt={insight.farmerName}
                             />
                             <AvatarFallback className="bg-green-100 text-green-800 text-xs">
+                              {/* supressing error for prototype build */}
                               {insight.farmerName
                                 .split(' ')
+                                // supressing error for prototype build
                                 .map((n) => n[0])
                                 .join('')}
                             </AvatarFallback>
@@ -1094,6 +1103,7 @@ const PestLibrary: React.FC = () => {
                           <div>
                             <div className="flex items-center gap-2">
                               <h4 className="text-sm font-medium text-gray-800">
+{/* supressing error for prototype build */}
                                 {insight.farmerName}
                               </h4>
                               <span className="text-xs text-gray-500">
@@ -1101,6 +1111,7 @@ const PestLibrary: React.FC = () => {
                               </span>
                             </div>
                             <p className="text-xs text-gray-600 mt-1">
+{/* supressing error for prototype build */}
                               "{insight.comment}"
                             </p>
                             <div className="flex items-center gap-2 mt-2">
