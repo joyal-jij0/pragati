@@ -165,7 +165,7 @@ const DiseaseLibrary = () => {
                     </div>
                     <div>
                       <h4 className="font-medium text-gray-700 mb-2 flex items-center">
-                        <BsVirus className="h-4 w-4 mr-2 text-red-600" />
+                        <WormIcon className="h-4 w-4 mr-2 text-red-600" />
                         कारण
                       </h4>
                       <p className="text-gray-600">{disease.causes}</p>
