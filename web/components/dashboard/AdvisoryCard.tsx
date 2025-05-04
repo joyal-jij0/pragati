@@ -2,19 +2,7 @@ import React, { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { motion } from 'framer-motion'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-
-interface Advisory {
-  id: number
-  title: string
-  description: string
-  translation: string
-  icon: string
-  color: string
-  timestamp: string
-  severity?: 'high' | 'medium' | 'low'
-  actionRequired?: string
-  source?: string
-}
+import { Advisory } from '@/types/advisory'
 
 interface AdvisoryCardProps {
   advisories: Advisory[]
