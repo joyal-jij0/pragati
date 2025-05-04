@@ -30,7 +30,7 @@ export type FPOType = {
   location: string
   description: string
   _count: {
-    members: number
+    farmers: number
   }
   createdAt: Date
 }
@@ -304,7 +304,7 @@ export default function SamudayShaktiPage() {
                                 {fpo.name}
                               </p>
                               <p className="text-xs text-gray-500">
-                                {fpo._count.members} members
+                                {fpo._count.farmers} members
                               </p>
                             </div>
                           </div>
