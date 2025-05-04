@@ -23,10 +23,10 @@ export type FPOMemberType = {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const fpoId = params.id
+    const fpoId = (await params).id
 
     // Verify if FPO exists
     const fpo = await prisma.fpo.findUnique({

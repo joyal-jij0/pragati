@@ -11,7 +11,7 @@ if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 // GET: Fetch messages for an FPO
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const supabase = await createClient()
@@ -23,8 +23,8 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Type-safe params handling in Next.js 15
-    const fpoId = params.id
+    // Extract the FPO ID from the params object
+    const fpoId = (await params).id
 
     const page = Number(request.nextUrl.searchParams.get('page')) || 1
     const limit = Number(request.nextUrl.searchParams.get('limit')) || 50
@@ -100,7 +100,7 @@ export async function GET(
 // POST: Send a new message
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const supabase = await createClient()
@@ -112,8 +112,8 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Type-safe params handling in Next.js 15
-    const fpoId = params.id
+    // Extract the FPO ID from the params object
+    const fpoId = (await params).id
 
     const body = await request.json()
     const content = body.content
