@@ -3,17 +3,12 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import {
-  MapPin,
-  Search,
-  Bell,
-  Menu,
   BarChart2,
   Users,
   MessageSquare,
   Tractor,
   Plus,
   Globe,
-  UserPlus,
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
@@ -25,9 +20,8 @@ import FPODiscovery from '@/components/samudayShakti/FPODiscovery'
 import FPOCreation from '@/components/samudayShakti/FPOCreation'
 import GroupChatAnnouncements from '@/components/samudayShakti/GroupChatAnnouncements'
 import EquipmentRental from '@/components/samudayShakti/EquipmentRental'
-import PageHeader from '@/components/samudayShakti/PageHeader'
-import { createClient } from '@/utils/supabase/client'
 import HeroSection from '@/components/HeroSection'
+import { createClient } from '@/utils/supabase/client'
 
 // Update FPO type definition to match API schema
 export type FPOType = {
@@ -45,10 +39,8 @@ export default function SamudayShaktiPage() {
   const supabase = createClient()
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
-  const [location, setLocation] = useState('Sonipat, Haryana')
   const [activeTab, setActiveTab] = useState('fpoDashboard')
   const [activeSection, setActiveSection] = useState('myFPO')
-  const [showAIAssistant, setShowAIAssistant] = useState(false)
   const [selectedFPO, setSelectedFPO] = useState<FPOType>()
   const [joinedFPOs, setJoinedFPOs] = useState<FPOType[]>([])
 
@@ -57,9 +49,8 @@ export default function SamudayShaktiPage() {
       if (!session.data.session?.user.email) {
         router.push('/auth/signin?callbackUrl=/samuday-shakti')
       }
-      // do something here with the session like  ex: setState(session)
     })
-  }, [router])
+  }, [router, supabase.auth])
 
   // Update the fetch FPOs function to use the new route
   useEffect(() => {
@@ -77,8 +68,7 @@ export default function SamudayShaktiPage() {
 
         // Set the first FPO's ID as default if available
         if (data.length > 0) {
-          setSelectedFPO(data[0]) // Change this line to use ID
-          setLocation(data[0].location)
+          setSelectedFPO(data[0])
         }
       } catch (err) {
         console.error('Failed to fetch joined FPOs:', err)
@@ -114,8 +104,7 @@ export default function SamudayShaktiPage() {
   const handleFPOChange = (fpoId: string) => {
     const fpo = joinedFPOs.find((f) => f.id === fpoId)
     if (fpo) {
-      setSelectedFPO(fpo) // Change this line to store ID instead of name
-      setLocation(fpo.location)
+      setSelectedFPO(fpo)
     }
   }
 
@@ -124,7 +113,6 @@ export default function SamudayShaktiPage() {
     if (!joinedFPOs.some((f) => f.id === fpo.id)) {
       setJoinedFPOs([...joinedFPOs, fpo])
       setSelectedFPO(fpo)
-      setLocation(fpo.location)
       setActiveSection('myFPO')
       setActiveTab('fpoDashboard')
     }
@@ -137,19 +125,11 @@ export default function SamudayShaktiPage() {
 
     if (updatedFPOs.length > 0) {
       setSelectedFPO(updatedFPOs[0])
-      setLocation(updatedFPOs[0].location)
     }
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-amber-50">
-      {/* Header */}
-      {/* <PageHeader
-        location={location}
-        title="Samuday Shakti"
-        subtitle="FPO Management & Community Collaboration"
-      /> */}
-
       <div className="px-4">
         <HeroSection
           title="Samuday Shakti"
@@ -304,7 +284,7 @@ export default function SamudayShaktiPage() {
                       <div
                         key={fpo.id}
                         className={`p-3 rounded-lg border ${
-                          selectedFPO?.id === fpo.id // Change this line to compare IDs
+                          selectedFPO?.id === fpo.id
                             ? 'border-green-200 bg-green-50'
                             : 'border-gray-100 hover:bg-gray-50'
                         } cursor-pointer`}
@@ -324,7 +304,7 @@ export default function SamudayShaktiPage() {
                               </p>
                             </div>
                           </div>
-                          {selectedFPO?.id === fpo.id && ( // Change this line to compare IDs
+                          {selectedFPO?.id === fpo.id && (
                             <div className="h-3 w-3 rounded-full bg-green-500"></div>
                           )}
                         </div>
