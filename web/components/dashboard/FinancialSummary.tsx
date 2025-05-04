@@ -456,17 +456,12 @@ const FinancialSummary = ({ financialData }: FinancialSummaryProps) => {
                         animationEasing="ease-out"
                       >
                         {expenseBreakdown.map((entry, index) => (
-                          <motion.cell 
+                          <Cell 
                             key={`cell-${index}`} 
                             fill={entry.color} 
+                            opacity={hoveredItem === entry.category ? 1 : 0.7}
                             onMouseEnter={() => setHoveredItem(entry.category)}
                             onMouseLeave={() => setHoveredItem(null)}
-                            initial={{ opacity: 0.7 }}
-                            animate={{ 
-                              opacity: hoveredItem === entry.category ? 1 : 0.7,
-                              scale: hoveredItem === entry.category ? [1, 1.05, 1] : 1
-                            }}
-                            transition={{ duration: 0.3 }}
                           />
                         ))}
                       </Bar>
@@ -813,4 +808,3 @@ const FinancialSummary = ({ financialData }: FinancialSummaryProps) => {
 }
 
 export default FinancialSummary
-                    
