@@ -259,7 +259,7 @@ export default function ArthikSaharaPage() {
             <div className="p-6">
               {activeTab === "gyan-hub" && <KrishiGyanHub />}
               {activeTab === "saral-docs" && <SaralDocuments />}
-              {activeTab === "nearby-services" && <NearbyServices />}
+              {activeTab === "nearby-services" && <NearbyServices location="Delhi" />}
               {activeTab === "market-prices" && <MarketPriceTracker />}
               {activeTab === "financial-tools" && <FinancialTools />}
 
