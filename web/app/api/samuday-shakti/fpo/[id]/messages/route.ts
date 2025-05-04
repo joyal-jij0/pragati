@@ -68,12 +68,7 @@ export async function GET(
       skip: (page - 1) * limit,
       take: limit,
       include: {
-        author: {
-          select: {
-            id: true,
-            email: true,
-          },
-        },
+        author: true,
       },
     })
 

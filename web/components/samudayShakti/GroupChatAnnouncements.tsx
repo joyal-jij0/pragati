@@ -25,6 +25,7 @@ interface Message {
   author: {
     id: number;
     email: string;
+    display_name: string;
   };
   createdAt: string;
   fpoId: string;
@@ -310,7 +311,7 @@ const GroupChatAnnouncements = ({ selectedFPO }: GroupChatAnnouncementsProps) =>
                             <div className="h-6 w-6 rounded-full bg-green-100 flex items-center justify-center text-green-800 text-xs font-medium">
                               {msg.author.email.substring(0, 2).toUpperCase()}
                             </div>
-                            <span className="text-sm font-medium">{msg.author.email}</span>
+                            <span className="text-sm font-medium">{msg.author.display_name}</span>
                           </div>
                         )}
                         <p className="text-sm">{msg.content}</p>
